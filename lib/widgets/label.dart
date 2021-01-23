@@ -14,13 +14,13 @@ class Label extends StatelessWidget {
           key: UniqueKey(),
           onDismissed: (_) {},
           child: Container(
-            width: MediaQuery.of(context).size.width,
+            //width: MediaQuery.of(context).size.width,
             child: Card(
               child: Stack(children: [
-                CustomPaint(
-                  painter: LabelCustomPainter(),
-                  size: Size(100, 100),
-                ),
+                // CustomPaint(
+                //   painter: LabelCustomPainter(),
+                //   size: Size(10, 10),
+                // ),
                 ListTile(
                   dense: true,
                   contentPadding: EdgeInsets.symmetric(horizontal: 0),

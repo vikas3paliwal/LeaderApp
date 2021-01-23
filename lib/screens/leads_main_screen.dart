@@ -1,5 +1,6 @@
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/screens/add_label_screen.dart';
+import 'package:Leader/screens/add_task_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -205,6 +206,11 @@ class LeadProfileScreen extends StatelessWidget {
                           ),
                           ListTile(
                             //dense: true,
+                            onTap: () => pushNewScreen(context,
+                                screen: AddTaskScreen(),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.fade,
+                                withNavBar: false),
                             leading: Container(
                               height: 60,
                               width: 60,

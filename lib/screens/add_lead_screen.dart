@@ -402,6 +402,7 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(1965, 7),
                                         lastDate: DateTime(2101));
+                                    print(eventDate);
                                   }),
                               contentPadding: EdgeInsets.fromLTRB(
                                   20.0,
@@ -428,9 +429,13 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                                       color: Theme.of(context).accentColor,
                                       width: 2)),
                             ),
+                            focusNode: eventnode,
                             validator: (value) {
-                              if (value.trim().isEmpty)
-                                return 'This field can\'t be empty';
+                              // if (value.trim().isEmpty)
+                              //   return 'This field can\'t be empty';
+                              if (value.isNotEmpty && eventDate == null) {
+                                return 'please select event date';
+                              }
                               return null;
                             },
                             onSaved: (value) {},
@@ -439,30 +444,43 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () => addLead(),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Container(
-                        width: 100,
-                        height: 30,
-                        color: Theme.of(context).primaryColor,
-                        child: Center(
-                          child: Text(
-                            "Add Lead",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () => addLead(),
+                  //   child: ClipRRect(
+                  //     borderRadius: BorderRadius.circular(50),
+                  //     child: Container(
+                  //       width: 100,
+                  //       height: 30,
+                  //       color: Theme.of(context).primaryColor,
+                  //       child: Center(
+                  //         child: Text(
+                  //           "Add Lead",
+                  //           style: TextStyle(
+                  //               color: Colors.white,
+                  //               fontSize: 18,
+                  //               fontWeight: FontWeight.w500),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             )),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => addLead(),
+        label: Text(
+          'Add',
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+        icon: Icon(
+          Icons.add,
+          size: 30,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

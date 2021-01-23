@@ -27,6 +27,8 @@ dependencies:
   flutter_colorpicker: ^0.3.4
   hexagon: ^0.0.4
   provider: ^4.3.2+3
+  flutter_rounded_date_picker: ^1.0.5+1
+  intl: ^0.16.1
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -54,6 +56,7 @@ flutter:
     - assets/images/empty_pin.png
     - assets/images/filled_pin.png
     - assets/images/filled_pin_2.png
+    - assets/images/night.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

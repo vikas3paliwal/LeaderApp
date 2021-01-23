@@ -1,6 +1,7 @@
 import 'package:Leader/models/customer.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
+import 'package:Leader/providers/tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:Leader/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Customers(),
         ),
+        ChangeNotifierProvider(create: (context) => Tasks()),
         // StreamProvider<Labels>(
         //   create: (context) => Stream.value(Labels()),
         // ),
