@@ -22,9 +22,6 @@ class MyApp extends StatelessWidget {
           create: (context) => Customers(),
         ),
         ChangeNotifierProvider(create: (context) => Tasks()),
-        // StreamProvider<Labels>(
-        //   create: (context) => Stream.value(Labels()),
-        // ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

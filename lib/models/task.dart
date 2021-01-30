@@ -1,12 +1,14 @@
+import 'package:flutter/material.dart';
+
 enum Importance { Urgent, ImportantButNotUrgent, RoutineTask }
 
 class Task {
   DateTime day;
-  DateTime time;
+  TimeOfDay time;
   String customerId;
   String task;
   bool completed;
-  Importance importance;
+  Map<int, Importance> importance;
   Task(
       {this.customerId,
       this.day,

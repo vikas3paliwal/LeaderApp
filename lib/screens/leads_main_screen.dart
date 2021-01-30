@@ -207,7 +207,7 @@ class LeadProfileScreen extends StatelessWidget {
                           ListTile(
                             //dense: true,
                             onTap: () => pushNewScreen(context,
-                                screen: AddTaskScreen(),
+                                screen: AddTaskScreen(customerId),
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                                 withNavBar: false),

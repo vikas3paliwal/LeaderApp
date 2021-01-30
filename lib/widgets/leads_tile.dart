@@ -30,12 +30,14 @@ class LeadTile extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: EdgeInsets.all(0),
-            onTap: () => pushNewScreen(
-              context,
-              screen: LeadProfileScreen(id),
-              pageTransitionAnimation: PageTransitionAnimation.slideUp,
-              withNavBar: false,
-            ),
+            onTap: id == null
+                ? null
+                : () => pushNewScreen(
+                      context,
+                      screen: LeadProfileScreen(id),
+                      pageTransitionAnimation: PageTransitionAnimation.slideUp,
+                      withNavBar: false,
+                    ),
             leading: Container(
               width: 60,
               height: 55.5,

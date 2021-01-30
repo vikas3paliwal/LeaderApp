@@ -1,3 +1,4 @@
+import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/add_task_screen.dart';
 import 'package:Leader/widgets/checked_task_item.dart';
 import 'package:Leader/widgets/customAppbar.dart';
@@ -6,6 +7,7 @@ import 'package:Leader/widgets/task_item.dart';
 
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class TaskScreen extends StatefulWidget {
   static const routeName = '/task';
@@ -18,6 +20,7 @@ class _TaskScreenState extends State<TaskScreen> {
   bool allchecked = false;
   @override
   Widget build(BuildContext context) {
+    final tasks = Provider.of<Tasks>(context);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -33,7 +36,7 @@ class _TaskScreenState extends State<TaskScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: GridView(
+        child: GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             mainAxisSpacing: 8,
@@ -41,20 +44,9 @@ class _TaskScreenState extends State<TaskScreen> {
             crossAxisCount: 2,
             childAspectRatio: 1,
           ),
-          children: [
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-            TaskItem(),
-          ],
+          itemBuilder: (ctx, i) =>
+              tasks.tasks.map((e) => TaskItem(e)).toList()[i],
+          itemCount: tasks.tasks.length,
         ),
       ),
       drawer: SideDrawer(),

@@ -11,4 +11,8 @@ class Tasks with ChangeNotifier {
     _tasks.add(task);
     notifyListeners();
   }
+
+  Task findById(String id) {
+    return _tasks.firstWhere((element) => element.customerId == id);
+  }
 }

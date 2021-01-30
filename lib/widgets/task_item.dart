@@ -1,7 +1,11 @@
 import 'package:Leader/customs/task_painter.dart';
+import 'package:Leader/models/task.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TaskItem extends StatelessWidget {
+  final Task task;
+  TaskItem(this.task);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -52,11 +56,13 @@ class TaskItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "27/12/2020",
+                        DateFormat.MMMd().format(task.day),
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                       Text(
-                        "12:45",
+                        task.time.hour.toString() +
+                            ' : ' +
+                            task.time.minute.toString(),
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ],
@@ -80,7 +86,7 @@ class TaskItem extends StatelessWidget {
               ),
               // color: Colors.pink,
               child: Text(
-                'Today i read a book on my favorite subject, it felt like i was doing something that i was happy about for the first time',
+                task.task,
                 style: TextStyle(color: Color(0xff3f3f40), fontSize: 16),
                 overflow: TextOverflow.fade,
                 softWrap: true,
