@@ -89,6 +89,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _bottomTabController = PersistentTabController(
       initialIndex: 0,
     );
+    // _bottomTabController.addListener(() {
+    //   setState(() {});
+    // });
     super.initState();
   }
 
@@ -111,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
           bevel: 1,
         ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(routes: {
-          CustomerScreen.routeName: (ctx) => CustomerScreen(),
+          // CustomerScreen.routeName: (ctx) => CustomerScreen(),
           Leads.routeName: (ctx) => Leads(UniqueKey()),
           LabelScreen.routeName: (ctx) => LabelScreen(UniqueKey()),
           TaskScreen.routeName: (ctx) => TaskScreen(),

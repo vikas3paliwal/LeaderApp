@@ -9,8 +9,9 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  String customerId;
-  AddTaskScreen([this.customerId]);
+  // final String customerId;
+  final String taskid;
+  AddTaskScreen({this.taskid});
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
@@ -22,20 +23,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController _taskController = TextEditingController();
   TextEditingController _leadController = TextEditingController();
   String customerId;
-  int _selectedValue;
+  // int _selectedValue;
   Importance _importance;
   bool _error = false;
   @override
   void initState() {
-    if (widget.customerId != null) {
-      final task = Provider.of<Tasks>(context, listen: false)
-          .findById(widget.customerId);
-      final customer = Provider.of<Customers>(context, listen: false)
-          .findById(widget.customerId);
+    if (widget.taskid != null) {
+      final task =
+          Provider.of<Tasks>(context, listen: false).findById(widget.taskid);
+      final customer = task.customerId == null
+          ? null
+          : Provider.of<Customers>(context, listen: false)
+              .findById(task.customerId);
       _taskController.text = task.task;
-      _leadController.text = customer.name;
+      _leadController.text = customer?.name ?? '';
       date = task.day;
       time = task.time;
+      _importance = task.importance;
     }
 
     super.initState();
@@ -106,7 +110,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         icon: Icon(
                           Icons.person_pin,
                         ),
-                        onPressed: widget.customerId != null
+                        onPressed: _leadController.text.isNotEmpty
                             ? null
                             : () {
                                 pushNewScreen(context, screen: AllLeadsScreen(
@@ -182,7 +186,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           borderRadius: BorderRadius.circular(20)),
                       child: Center(
                           child: Text(
-                        time.hour.toString() + ' : ' + time.minute.toString(),
+                        (time.hour.toString().length == 1
+                                ? '0' + time.hour.toString()
+                                : time.hour.toString()) +
+                            ' : ' +
+                            (time.minute.toString().length == 1
+                                ? '0' + time.minute.toString()
+                                : time.minute.toString()),
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -204,7 +214,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         children: [
                           PopupMenuButton(
                             offset: Offset(30, -150),
-                            initialValue: _selectedValue ?? 2,
+                            //initialValue: _selectedValue ?? 2,
                             itemBuilder: (ctx) => [
                               PopupMenuItem(
                                 child: Text('Urgent'),
@@ -227,7 +237,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             ),
                             onSelected: (value) {
                               if (value != null) {
-                                _selectedValue = value;
+                                // _selectedValue = value;
                                 switch (value) {
                                   case 0:
                                     _importance = Importance.Urgent;
@@ -258,6 +268,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         onTap: () async {
                           var pickedDate = await showRoundedDatePicker(
                               context: context,
+                              firstDate: DateTime.now(),
+                              initialDate: DateTime.now(),
                               theme: ThemeData.dark(),
                               imageHeader:
                                   AssetImage('assets/images/night.jpg'),
@@ -326,14 +338,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
           onPressed: () {
             final task = Provider.of<Tasks>(context, listen: false);
+            final taskid = widget.taskid ?? UniqueKey().toString();
+
+            final taskmodel = Task(
+                taskID: taskid,
+                customerId: customerId,
+                day: date,
+                time: time,
+                task: _taskController.text,
+                importance: _importance ?? Importance.RoutineTask,
+                completed: false);
+
             if (_taskController.text.trim().isNotEmpty) {
-              print(_taskController.text);
-              task.addTask(Task(
-                  customerId: customerId,
-                  day: date,
-                  time: time,
-                  task: _taskController.text,
-                  importance: {_selectedValue: _importance}));
+              task.addTask(widget.taskid, taskmodel);
+              if (taskmodel.customerId != null) {
+                final customer = Provider.of<Customers>(context, listen: false)
+                    .findById(taskmodel.customerId);
+
+                customer.tasks == null
+                    ? customer.tasks = [taskmodel]
+                    : customer.tasks.add(taskmodel);
+              }
               Navigator.of(context).pop();
             } else {
               setState(() {

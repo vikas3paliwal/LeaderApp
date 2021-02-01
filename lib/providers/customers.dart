@@ -1,5 +1,6 @@
 import 'package:Leader/models/customer.dart';
 import 'package:Leader/models/label.dart';
+import 'package:Leader/models/task.dart';
 import 'package:flutter/widgets.dart';
 
 class Customers with ChangeNotifier {
@@ -12,6 +13,15 @@ class Customers with ChangeNotifier {
     _customers.insert(0, customer);
     print(customer.customerId);
     notifyListeners();
+  }
+
+  List<Task> completedTasks(String id, bool status) {
+    return _customers
+            .firstWhere((element) => element.customerId == id)
+            .tasks
+            .where((element) => element.completed == true)
+            .toList() ??
+        [];
   }
 
   void addLabels(List<Label> labels, String id) {
@@ -34,6 +44,19 @@ class Customers with ChangeNotifier {
                 .labelId ==
             id)
         .toList();
+  }
+
+  void deleteLabel(String id) {
+    _customers
+        .map((e) => e.labels.removeWhere((element) => element.labelId == id))
+        .toList();
+  }
+
+  void deleteTask(String id) {
+    _customers
+        .map((e) => e.tasks.removeWhere((element) => element.taskID == id))
+        .toList();
+    notifyListeners();
   }
 
   Customer findById(String id) {

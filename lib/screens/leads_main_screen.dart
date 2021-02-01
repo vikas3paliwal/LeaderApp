@@ -1,6 +1,7 @@
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/screens/add_label_screen.dart';
 import 'package:Leader/screens/add_task_screen.dart';
+import 'package:Leader/screens/selectedCustomers_tasks_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -207,7 +208,8 @@ class LeadProfileScreen extends StatelessWidget {
                           ListTile(
                             //dense: true,
                             onTap: () => pushNewScreen(context,
-                                screen: AddTaskScreen(customerId),
+                                screen: SelectedCustomerTasksScreen(
+                                    customerId, customer.name),
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                                 withNavBar: false),

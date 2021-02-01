@@ -22,6 +22,11 @@ class Labels with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteLabel(String id) {
+    _labels.removeWhere((element) => element.labelId == id);
+    notifyListeners();
+  }
+
   Label findById(String id) {
     return _labels.firstWhere((element) => element.labelId == id);
   }

@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 enum Importance { Urgent, ImportantButNotUrgent, RoutineTask }
 
 class Task {
+  String taskID;
   DateTime day;
   TimeOfDay time;
   String customerId;
   String task;
   bool completed;
-  Map<int, Importance> importance;
+  Importance importance;
+
   Task(
-      {this.customerId,
+      {this.taskID,
+      this.customerId,
       this.day,
       this.time,
       this.task,
