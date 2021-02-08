@@ -3,15 +3,22 @@ import 'package:Leader/screens/leads_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-class LeadTile extends StatelessWidget {
+class LeadTile extends StatefulWidget {
   final String id;
   final String name;
   final List<Label> labels;
   LeadTile({this.labels, this.id, this.name});
+
+  @override
+  _LeadTileState createState() => _LeadTileState();
+}
+
+class _LeadTileState extends State<LeadTile> {
+  bool _pinned = false;
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: ValueKey(id),
+      key: ValueKey(widget.id),
       decoration: BoxDecoration(shape: BoxShape.rectangle, boxShadow: [
         BoxShadow(
             offset: const Offset(4.0, 8.0),
@@ -30,11 +37,11 @@ class LeadTile extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: EdgeInsets.all(0),
-            onTap: id == null
+            onTap: widget.id == null
                 ? null
                 : () => pushNewScreen(
                       context,
-                      screen: LeadProfileScreen(id),
+                      screen: LeadProfileScreen(widget.id),
                       pageTransitionAnimation: PageTransitionAnimation.slideUp,
                       withNavBar: false,
                     ),
@@ -58,21 +65,21 @@ class LeadTile extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 0.0, vertical: 3),
                   child: Text(
-                    name,
+                    widget.name,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
                   ),
                 ),
-                if (labels != null)
+                if (widget.labels != null)
                   Container(
                     width: 200,
                     height: 25,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: labels.length,
-                        itemBuilder: (ctx, i) => labels
+                        itemCount: widget.labels.length,
+                        itemBuilder: (ctx, i) => widget.labels
                             .map(
                               (e) => Card(
                                   child: Padding(
@@ -91,12 +98,36 @@ class LeadTile extends StatelessWidget {
               ],
             ),
             tileColor: Colors.white,
-            trailing: IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: Theme.of(context).accentColor,
+            // subtitle: Text('23/3/2021'),
+            trailing: Container(
+              width: 100,
+              child: Row(
+                children: [
+                  IconButton(
+                      icon: _pinned
+                          ? Image.asset(
+                              'assets/images/filled_pin_2.png',
+                              height: 25,
+                            )
+                          : Image.asset(
+                              'assets/images/empty_pin.png',
+                              color: Theme.of(context).primaryColor,
+                              height: 25,
+                            ),
+                      onPressed: () {
+                        setState(() {
+                          _pinned = !_pinned;
+                        });
+                      }),
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onPressed: null,
+                  ),
+                ],
               ),
-              onPressed: null,
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/screens/add_label_screen.dart';
+import 'package:Leader/screens/add_notes_leadscreen.dart';
 import 'package:Leader/screens/add_task_screen.dart';
 import 'package:Leader/screens/selectedCustomers_tasks_screen.dart';
 
@@ -26,6 +27,7 @@ class LeadProfileScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: Container(
+        height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
             Stack(
@@ -247,6 +249,14 @@ class LeadProfileScreen extends StatelessWidget {
                           ),
                           ListTile(
                             // dense: true,
+                            onTap: () => pushNewScreen(context,
+                                screen: AddNotesLeadScreen(
+                                  customerId: customerId,
+                                  name: customer.name,
+                                ),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.slideRight,
+                                withNavBar: false),
                             leading: Container(
                               height: 60,
                               width: 60,

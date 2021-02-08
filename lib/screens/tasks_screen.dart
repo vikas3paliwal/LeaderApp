@@ -2,7 +2,6 @@ import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/add_task_screen.dart';
 import 'package:Leader/widgets/Importance_task.dart';
-import 'package:Leader/widgets/checked_task_item.dart';
 import 'package:Leader/widgets/customAppbar.dart';
 import 'package:Leader/widgets/drawer.dart';
 import 'package:Leader/widgets/task_item.dart';
@@ -30,10 +29,12 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     final tasks = Provider.of<Tasks>(context);
     final customers = Provider.of<Customers>(context);
-    final regularTasks =
-        tasks.tasks.where((element) => element.customerId == null);
+    // final regularTasks =
+    //     tasks.tasks.where((element) => element.customerId == null);
     return Scaffold(
       appBar: AppBar(
+        title: Text('Tasks'),
+        centerTitle: true,
         actions: [
           PopupMenuButton(
               itemBuilder: (context) => [
@@ -81,40 +82,39 @@ class _TaskScreenState extends State<TaskScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: tasks.tasks == null
+        child: tasks.tasks.isEmpty
             ? Center(
-                child: Text('Nothing to show'),
+                child: Container(
+                  height: 230,
+                  width: 240,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/no_tasks.png',
+                        height: 200,
+                        width: 200,
+                      ),
+                      Text(
+                        'No Tasks Yet',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      )
+                    ],
+                  ),
+                ),
               )
-            : _orderby
-                ? ListView.separated(
-                    separatorBuilder: (context, index) => Column(
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 2,
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 2,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
+            : (_orderby
+                ? ListView.builder(
+                    physics: AlwaysScrollableScrollPhysics(),
                     itemCount: customers.customers.length + 1,
                     itemBuilder: (ctx, i) {
-                      if (i < customers.customers.length)
+                      if (i < customers.customers.length) {
                         return customers.customers.map((e) {
                           if (e.tasks != null) {
                             print(_completed);
-                            // if(_completed)
                             final List tasks = customers.completedTasks(
                                 e.customerId, _completed);
 
@@ -194,12 +194,34 @@ class _TaskScreenState extends State<TaskScreen> {
                                               : e.tasks.length,
                                         ),
                                       ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Divider(
+                                  height: 1,
+                                  thickness: 2,
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Divider(
+                                  height: 1,
+                                  thickness: 2,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                               ],
+                            );
+                          } else {
+                            return SizedBox(
+                              height: 10,
                             );
                           }
                         }).toList()[i];
-                      else {
-                        final List comptasks = regularTasks
+                      } else {
+                        final List comptasks = tasks
+                                .otherTasks()
                                 .where((element) => element.completed == true)
                                 .toList() ??
                             [];
@@ -213,7 +235,7 @@ class _TaskScreenState extends State<TaskScreen> {
                               ),
                               (_completed
                                       ? comptasks.isEmpty
-                                      : regularTasks.isEmpty)
+                                      : tasks.otherTasks().isEmpty)
                                   ? SizedBox(
                                       height: 20,
                                     )
@@ -253,7 +275,8 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         },
                                                       )))
                                                   .toList()[ind]
-                                              : regularTasks
+                                              : tasks
+                                                  .otherTasks()
                                                   .map((e) => GestureDetector(
                                                       onTap: () =>
                                                           pushNewScreen(
@@ -277,13 +300,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                         },
                                         itemCount: _completed
                                             ? comptasks.length
-                                            : regularTasks.length,
+                                            : tasks.otherTasks().length,
                                       ),
                                     ),
                             ]);
                       }
                     })
-                : ImportantTaskList(),
+                : ImportantTaskList()),
       ),
       drawer: SideDrawer(),
       floatingActionButton: InkWell(

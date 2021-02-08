@@ -7,11 +7,12 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class ImportantTaskList extends StatelessWidget {
-  List<String> importance = ["Urgent", "Important", "Routine Task"];
+  final List<String> importance = ["Urgent", "Important", "Routine Task"];
   @override
   Widget build(BuildContext context) {
     final tasks = Provider.of<Tasks>(context).tasks;
     return ListView.separated(
+        physics: AlwaysScrollableScrollPhysics(),
         separatorBuilder: (context, index) => Column(
               children: [
                 SizedBox(
@@ -181,6 +182,7 @@ class ImportantTaskList extends StatelessWidget {
               );
               break;
             default:
+              return SizedBox();
           }
         });
   }

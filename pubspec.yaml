@@ -57,6 +57,7 @@ flutter:
     - assets/images/filled_pin.png
     - assets/images/filled_pin_2.png
     - assets/images/night.jpg
+    - assets/images/no_tasks.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

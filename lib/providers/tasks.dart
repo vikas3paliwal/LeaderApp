@@ -7,11 +7,6 @@ class Tasks with ChangeNotifier {
     return [..._tasks];
   }
 
-  // void addTask(Task task) {
-  //   _tasks.add(task);
-  //   notifyListeners();
-  // }
-
   void addTask(String taskId, Task task) {
     final index = _tasks.indexWhere((element) => element.taskID == taskId);
     index == -1 ? _tasks.add(task) : _tasks[index] = task;
@@ -21,6 +16,10 @@ class Tasks with ChangeNotifier {
   void deleteTask(String taskid) {
     _tasks.removeWhere((element) => element.taskID == taskid);
     notifyListeners();
+  }
+
+  List<Task> otherTasks() {
+    return _tasks.where((element) => element.customerId == null).toList();
   }
 
   Task findById(String id) {

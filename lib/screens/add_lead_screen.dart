@@ -54,6 +54,26 @@ class _AddLeadScreenState extends State<AddLeadScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    mobileController.dispose();
+    leadNameController.dispose();
+    locationController.dispose();
+    budgetController.dispose();
+    addressController.dispose();
+    eventController.dispose();
+    emailnode.dispose();
+    mobilenode.dispose();
+    leadNamenode.dispose();
+    locationnode.dispose();
+    budgetnode.dispose();
+    addressnode.dispose();
+    eventnode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

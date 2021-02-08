@@ -14,6 +14,7 @@ class Customer {
   List<Event> events = [];
   List<Label> labels = [];
   List<Task> tasks = [];
+  List<String> notes = [];
   int budget;
   PropertyType type;
   Customer(
@@ -28,7 +29,8 @@ class Customer {
       this.labels,
       this.phoneNos,
       this.tasks,
-      this.type});
+      this.type,
+      this.notes});
 }
 
 class Event {

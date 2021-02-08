@@ -1,4 +1,4 @@
-import 'package:Leader/models/customer.dart';
+import 'package:Leader/models/business.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
           create: (context) => Customers(),
         ),
         ChangeNotifierProvider(create: (context) => Tasks()),
+        ChangeNotifierProvider(create: (context) => Business())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

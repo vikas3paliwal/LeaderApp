@@ -1,9 +1,14 @@
+import 'package:Leader/models/business.dart';
+import 'package:Leader/screens/edit_businessDetails_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hexagon/hexagon_widget.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class BusinessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final business = Provider.of<Business>(context).business;
     return Container(
       child: Column(
         children: [
@@ -51,12 +56,24 @@ class BusinessCard extends StatelessWidget {
                           height: 12,
                         ),
                         Text(
-                          'Facebook',
+                          business?.name ?? '',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Color.fromRGBO(30, 95, 116, 1),
                               fontSize: 24),
                         ),
+                        // SizedBox(
+                        //   height: 6,
+                        // ),
+                        // Expanded(
+                        //   child: Text(
+                        //     business.description,
+                        //     style: TextStyle(
+                        //         fontWeight: FontWeight.w400,
+                        //         color: Color.fromRGBO(30, 95, 116, 1),
+                        //         fontSize: 16),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -77,6 +94,7 @@ class BusinessCard extends StatelessWidget {
                   //         Color.fromRGBO(23, 23, 23, 1),
                   //       ]),
                   // ),
+                  alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 7),
                     child: SingleChildScrollView(
@@ -97,7 +115,7 @@ class BusinessCard extends StatelessWidget {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    'Ist FLOOR, QURASHI TOWER, NEW KOHINOOR CINEMA CIRCLE, Akhaliya Vikas Yojana, Jodhpur, Rajasthan 342001',
+                                    business?.address ?? '',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -105,6 +123,9 @@ class BusinessCard extends StatelessWidget {
                                 )
                               ],
                             ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6),
@@ -120,7 +141,7 @@ class BusinessCard extends StatelessWidget {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    '9899257321',
+                                    business?.mobileNo ?? '',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -128,6 +149,9 @@ class BusinessCard extends StatelessWidget {
                                 )
                               ],
                             ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6),
@@ -143,7 +167,7 @@ class BusinessCard extends StatelessWidget {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    'www.facebook.com',
+                                    business?.webaddress ?? '',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -151,6 +175,9 @@ class BusinessCard extends StatelessWidget {
                                 )
                               ],
                             ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6),
@@ -166,7 +193,7 @@ class BusinessCard extends StatelessWidget {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    'max3samueal@gmail.com',
+                                    business?.emailaddress ?? '',
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -198,8 +225,13 @@ class BusinessCard extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: GestureDetector(
-                    onTap: () {},
+                  child: InkWell(
+                    onTap: () => pushNewScreen(context,
+                        screen: EditBusinessDetailsScreen(),
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                        withNavBar: false),
+                    splashColor: Colors.deepOrange[300],
                     child: Container(
                       child: Center(
                           child: Text(

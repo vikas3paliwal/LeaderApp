@@ -27,6 +27,7 @@ class Labels with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteCustomers(String id) {}
   Label findById(String id) {
     return _labels.firstWhere((element) => element.labelId == id);
   }

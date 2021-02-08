@@ -35,6 +35,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                   elevation: 10,
                   child: Container(
                     //width: MediaQuery.of(context).size.width * 0.7,
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       children: [
                         ListTile(
