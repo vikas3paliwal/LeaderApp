@@ -99,7 +99,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                         filled: true,
                         fillColor: Colors.white,
                         icon: Icon(
-                          Icons.person,
+                          Icons.business,
                           color: Colors.deepOrange[300],
                         ),
                         contentPadding: EdgeInsets.fromLTRB(
@@ -140,13 +140,12 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
                       controller: webController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.url,
                       decoration: InputDecoration(
                         labelText: 'Website',
                         filled: true,
                         fillColor: Colors.white,
-                        icon: Icon(Icons.attach_money,
-                            color: Colors.deepOrange[300]),
+                        icon: Icon(Icons.mouse, color: Colors.deepOrange[300]),
                         contentPadding: EdgeInsets.fromLTRB(
                             20.0,
                             MediaQuery.of(context).size.height * 0.02,

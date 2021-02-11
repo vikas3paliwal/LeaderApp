@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:Leader/models/customer.dart';
@@ -14,4 +15,16 @@ class Label {
     this.label,
     this.labelId,
   });
+  Map toJson() {
+    List<Map> customers = this.customers == null
+        ? null
+        : this.customers.map((e) => json.decode(e)).toList();
+    return {
+      'labelId': labelId,
+      'labelName': labelName,
+      'color': color,
+      'customers': customers,
+      'label': label
+    };
+  }
 }

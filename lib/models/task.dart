@@ -19,4 +19,15 @@ class Task {
       this.task,
       this.importance,
       this.completed});
+  Map toJson() {
+    return {
+      'taskId': taskID,
+      'day': day.toIso8601String(),
+      'time': time.hour.toString() + ' : ' + time.minute.toString(),
+      'customerId': customerId,
+      'task': task,
+      'completed': completed,
+      'importance': importance.toString()
+    };
+  }
 }

@@ -36,13 +36,9 @@ class Customers with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Customer> findByLabel(String id) {
+  List<Customer> findByLabel(List<String> ids) {
     return _customers
-        .where((element) =>
-            element.labels
-                .firstWhere((element) => element.labelId == id)
-                .labelId ==
-            id)
+        .where((element) => ids.contains(element.customerId))
         .toList();
   }
 

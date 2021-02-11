@@ -1,4 +1,5 @@
 import 'package:Leader/models/business.dart';
+import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
@@ -22,7 +23,10 @@ class MyApp extends StatelessWidget {
           create: (context) => Customers(),
         ),
         ChangeNotifierProvider(create: (context) => Tasks()),
-        ChangeNotifierProvider(create: (context) => Business())
+        ChangeNotifierProvider(create: (context) => Business()),
+        ChangeNotifierProvider(
+          create: (context) => BudgetProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

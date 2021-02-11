@@ -5,17 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
-class SelectedCustomerTasksScreen extends StatelessWidget {
+class SelectedCustomerTasksScreen extends StatefulWidget {
   final String id;
   final String name;
   SelectedCustomerTasksScreen(this.id, this.name);
+
+  @override
+  _SelectedCustomerTasksScreenState createState() =>
+      _SelectedCustomerTasksScreenState();
+}
+
+class _SelectedCustomerTasksScreenState
+    extends State<SelectedCustomerTasksScreen> {
   @override
   Widget build(BuildContext context) {
-    final customer =
-        Provider.of<Customers>(context, listen: false).findById(id);
+    final customer = Provider.of<Customers>(context).findById(widget.id);
     return Scaffold(
       appBar: AppBar(
-        title: Text(name + "'s Tasks"),
+        title: Text(widget.name + "'s Tasks"),
       ),
       body: customer.tasks == null
           ? Text('Nothing here')

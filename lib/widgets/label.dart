@@ -1,7 +1,10 @@
 import 'package:Leader/customs/label_painter.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
+import 'package:Leader/screens/all_leads_screen.dart';
+import 'package:Leader/screens/labeled_customers_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class Label extends StatelessWidget {
@@ -9,7 +12,13 @@ class Label extends StatelessWidget {
   final Color labelColor;
   final int customers;
   final String id;
-  Label({this.customers, this.labelColor, this.labelName, this.id});
+  final List<String> customids;
+  Label(
+      {this.customers,
+      this.labelColor,
+      this.labelName,
+      this.id,
+      this.customids});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -60,6 +69,12 @@ class Label extends StatelessWidget {
           },
           child: ListTile(
             dense: true,
+            onTap: customers == 0 || customers == null
+                ? null
+                : () => pushNewScreen(context,
+                    screen: LabeledCustomerScreen(id, customids),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino),
             tileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             // contentPadding: EdgeInsets.symmetric(horizontal: 0),
             leading: Icon(

@@ -104,6 +104,7 @@ class _LabelScreenState extends State<LabelScreen> {
                       labelColor: e.color,
                       labelName: e.labelName,
                       id: e.labelId,
+                      customids: e.label == null ? null : e.label.keys.toList(),
                     ),
                   ]))
               .toList()[i],

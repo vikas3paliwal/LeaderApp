@@ -87,14 +87,13 @@ class _TaskItemState extends State<TaskItem> {
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                         Text(
-                          widget.task.time.hour.toString().length == 1
-                              ? '0' + widget.task.time.hour.toString()
-                              : widget.task.time.hour.toString() +
-                                  ' : ' +
-                                  (widget.task.time.minute.toString().length ==
-                                          1
-                                      ? '0' + widget.task.time.minute.toString()
-                                      : widget.task.time.minute.toString()),
+                          (widget.task.time.hour.toString().length == 1
+                                  ? '0' + widget.task.time.hour.toString()
+                                  : widget.task.time.hour.toString()) +
+                              ' : ' +
+                              (widget.task.time.minute.toString().length == 1
+                                  ? '0' + widget.task.time.minute.toString()
+                                  : widget.task.time.minute.toString()),
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ],
