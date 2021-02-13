@@ -20,7 +20,6 @@ class AllLeadsScreen extends StatelessWidget {
                       onTap: () {
                         print('object');
                         callback(e.name, e.customerId);
-
                         Navigator.of(context).pop();
                       },
                       child: LeadTile(

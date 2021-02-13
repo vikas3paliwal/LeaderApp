@@ -1,12 +1,15 @@
 import 'package:Leader/models/label.dart';
+import 'package:Leader/providers/customers.dart';
 import 'package:Leader/screens/leads_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class LeadTile extends StatefulWidget {
   final String id;
   final String name;
   final List<Label> labels;
+
   LeadTile({this.labels, this.id, this.name});
 
   @override
@@ -14,9 +17,10 @@ class LeadTile extends StatefulWidget {
 }
 
 class _LeadTileState extends State<LeadTile> {
-  bool _pinned = false;
   @override
   Widget build(BuildContext context) {
+    final customers = Provider.of<Customers>(context);
+    final customer = widget.id == null ? null : customers.findById(widget.id);
     return Container(
       key: ValueKey(widget.id),
       decoration: BoxDecoration(shape: BoxShape.rectangle, boxShadow: [
@@ -99,36 +103,63 @@ class _LeadTileState extends State<LeadTile> {
             ),
             tileColor: Colors.white,
             // subtitle: Text('23/3/2021'),
-            trailing: Container(
-              width: 100,
-              child: Row(
-                children: [
-                  IconButton(
-                      icon: _pinned
-                          ? Image.asset(
-                              'assets/images/filled_pin_2.png',
-                              height: 25,
-                            )
-                          : Image.asset(
-                              'assets/images/empty_pin.png',
-                              color: Theme.of(context).primaryColor,
-                              height: 25,
-                            ),
-                      onPressed: () {
-                        setState(() {
-                          _pinned = !_pinned;
-                        });
-                      }),
-                  IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).accentColor,
+            trailing: customer == null
+                ? null
+                : Container(
+                    width: 100,
+                    child: Row(
+                      children: [
+                        IconButton(
+                            icon: customer.pinned
+                                ? Image.asset(
+                                    'assets/images/filled_pin_2.png',
+                                    height: 25,
+                                  )
+                                : Image.asset(
+                                    'assets/images/empty_pin.png',
+                                    color: Theme.of(context).primaryColor,
+                                    height: 25,
+                                  ),
+                            onPressed: () {
+                              setState(() {
+                                customer.pinned = !customer.pinned;
+                                // _pinned = !_pinned;
+                                customers.onchangedpin(customer);
+                              });
+                            }),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          onPressed: () async {
+                            var delete = await showDialog<bool>(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                      title: Text('Are You Sure?'),
+                                      content: Text(
+                                          'Do you want to delete ${customer.name}?'),
+                                      actions: [
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.of(ctx).pop(false);
+                                            },
+                                            child: Text('Cancel')),
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.of(ctx).pop(true);
+                                            },
+                                            child: Text('Yes')),
+                                      ],
+                                    ));
+                            if (delete) {
+                              customers.removeCustomer(customer.customerId);
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                    onPressed: null,
                   ),
-                ],
-              ),
-            ),
           ),
         ),
       ),

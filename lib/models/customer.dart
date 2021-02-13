@@ -17,6 +17,7 @@ class Customer {
   List<String> notes = [];
   String budget;
   String proptype;
+  bool pinned;
   // Property proptype;
   Customer(
       {this.name,
@@ -31,6 +32,7 @@ class Customer {
       this.tasks,
       this.budget,
       this.proptype,
+      this.pinned,
       // this.proptype,
       this.notes});
   Map<String, dynamic> toJson() {
@@ -58,6 +60,7 @@ class Customer {
       'tasks': tasks,
       'budget': budget,
       'proptype': proptype,
+      'pinned':pinned
     };
     return data;
   }

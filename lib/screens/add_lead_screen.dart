@@ -44,7 +44,6 @@ class _AddLeadScreenState extends State<AddLeadScreen>
   double _bottomleft;
   double _bottomright;
   String _custmprop;
-  int _flex;
   void addLead() {
     try {
       if (_formKey.currentState.validate()) {
@@ -57,6 +56,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
             emails: emailController.text,
             addresses: addressController.text,
             proptype: _custmprop ?? '',
+            pinned: false,
             events: Event(day: eventDate, eventName: eventController.text)));
         widget.callback();
         Navigator.of(context).pop();
@@ -74,7 +74,6 @@ class _AddLeadScreenState extends State<AddLeadScreen>
       _leftcontainwidth = _propwidth * 0.4;
       _rightcontainwidth = _propwidth * 0.4;
       _lowercontainheight = 0;
-      _flex = 0;
       _topleft = 20;
       _bottomleft = 20;
       _topright = 20;
@@ -464,6 +463,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                       borderRadius: BorderRadius.circular(50)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -507,6 +507,12 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                 ),
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            width:
+                                _prop == 'Commercial' || _prop == 'Residential'
+                                    ? 0
+                                    : 12,
                           ),
                           AnimatedSize(
                             vsync: this,

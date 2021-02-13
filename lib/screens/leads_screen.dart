@@ -20,6 +20,7 @@ class Leads extends StatefulWidget {
 class _LeadsState extends State<Leads> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  bool _search = false;
   @override
   Widget build(BuildContext context) {
     final customers = Provider.of<Customers>(context);
@@ -64,6 +65,7 @@ class _LeadsState extends State<Leads> {
                                 color: Colors.grey[800]),
                           ]),
                       child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
                             icon: Icon(
@@ -75,20 +77,41 @@ class _LeadsState extends State<Leads> {
                               _scaffoldKey.currentState.openDrawer();
                             },
                           ),
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: "Search",
-                              ),
-                            ),
-                          ),
+                          _search
+                              ? Expanded(
+                                  child: TextField(
+                                    onChanged: (val) => customers.onSearch(val),
+                                    // onSubmitted: (value) =>
+                                    //     customers.onSearchCancel(),
+                                    decoration: InputDecoration(
+                                      hintText: "Search",
+                                    ),
+                                  ),
+                                )
+                              : Expanded(
+                                  child: Center(
+                                    child: Text('Search'),
+                                  ),
+                                ),
                           IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: Colors.deepOrange[300],
-                            ),
+                            icon: _search
+                                ? Icon(
+                                    Icons.close_rounded,
+                                    color: Colors.deepOrange[300],
+                                  )
+                                : Icon(
+                                    Icons.search,
+                                    color: Colors.deepOrange[300],
+                                  ),
                             onPressed: () {
-                              print("your menu action here");
+                              setState(() {
+                                _search = !_search;
+                                if (_search) {
+                                  customers.onsearchClick();
+                                } else {
+                                  customers.onSearchCancel();
+                                }
+                              });
                             },
                           ),
                           PopupMenuButton(
@@ -111,27 +134,18 @@ class _LeadsState extends State<Leads> {
             ),
           ),
           Expanded(
-            child: customers.customers.isEmpty
-                ? Text('Nothing here')
-                : AnimatedList(
-                    key: listKey,
-                    initialItemCount: customers.customers.length,
-                    itemBuilder: (context, index, animation) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                                begin: Offset(-1, 0), end: Offset(0, 0))
-                            .animate(animation),
-                        child: customers.customers
-                            .map((e) => LeadTile(
-                                  id: e.customerId,
-                                  name: e.name,
-                                  labels: e.labels,
-                                ))
-                            .toList()[index],
-                      );
-                    },
-                  ),
-          ),
+              child: customers.customers.isEmpty
+                  ? Text('Nothing here')
+                  : ListView.builder(
+                      itemBuilder: (ctx, index) => customers.customers
+                          .map((e) => LeadTile(
+                                id: e.customerId,
+                                name: e.name,
+                                labels: e.labels,
+                              ))
+                          .toList()[index],
+                      itemCount: customers.customers.length,
+                    )),
         ],
       ),
       drawer: SideDrawer(),
@@ -141,18 +155,13 @@ class _LeadsState extends State<Leads> {
           pushNewScreen(
             context,
             screen: AddLeadScreen(() {
-              if (listKey.currentState != null)
-                listKey.currentState
-                    .insertItem(0, duration: Duration(milliseconds: 500));
+              // if (listKey.currentState != null)
+              // listKey.currentState.insertItem(customers.customers.length,
+              //     duration: Duration(milliseconds: 500));
             }),
             pageTransitionAnimation: PageTransitionAnimation.slideRight,
             withNavBar: false,
-          ).whenComplete(() {
-            // if (listKey.currentState != null)
-            //   listKey.currentState
-            //       .insertItem(0, duration: Duration(milliseconds: 500));
-            // setState(() {});
-          });
+          );
         },
         child: Container(
           width: 110,
