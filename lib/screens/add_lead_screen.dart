@@ -196,11 +196,10 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(mobilenode),
                     validator: (value) {
-                      if (value.trim().isEmpty)
-                        return 'This field can\'t be empty';
+                      // if (value.trim().isEmpty)
+                      //   return 'This field can\'t be empty';
                       return null;
                     },
-                    onSaved: (value) {},
                   ),
                 ),
                 Padding(
@@ -334,8 +333,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(eventnode),
                     validator: (value) {
-                      if (value.trim().isEmpty)
-                        return 'This field can\'t be empty';
+                      // if (value.trim().isEmpty)
+                      //   return 'This field can\'t be empty';
                       return null;
                     },
                     onSaved: (value) {},
@@ -415,7 +414,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                             }
                             return null;
                           },
-                          onSaved: (value) {},
+                          // onSaved: (value) {},
                         ),
                       ),
                     ],
@@ -564,10 +563,13 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                           width: _propwidth * 0.9,
                           height: _lowercontainheight,
                           decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 2,
+                                color: Theme.of(context).primaryColor),
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
                                 bottomRight: Radius.circular(20)),
-                            color: Colors.deepOrange[300],
+                            color: Colors.white,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -581,8 +583,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 60,
-                                        height: 30,
+                                        width: 65,
+                                        height: 35,
                                         margin: EdgeInsets.all(7),
                                         child: Center(
                                             child: Text(
@@ -591,7 +593,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                               color: Colors.white,
                                               fontSize: 16),
                                         )),
-                                        color: Theme.of(context).primaryColor,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff27b86a),
+                                            gradient: LinearGradient(
+                                                colors: [
+                                                  // Color(0xff27b86a),
+                                                  Color(0xfff2380f),
+                                                  Colors.deepOrange[300],
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                tileMode: TileMode.mirror),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
                                     ),
                                     InkWell(
@@ -602,8 +616,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 60,
-                                        height: 30,
+                                        width: 65,
+                                        height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
@@ -613,7 +627,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                               color: Colors.white,
                                               fontSize: 16),
                                         )),
-                                        color: Theme.of(context).primaryColor,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff27b86a),
+                                            gradient: LinearGradient(
+                                                colors: [
+                                                  // Color(0xff27b86a),
+                                                  Color(0xfff2380f),
+                                                  Colors.deepOrange[300],
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                tileMode: TileMode.mirror),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
                                     ),
                                     InkWell(
@@ -624,8 +650,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 60,
-                                        height: 30,
+                                        width: 65,
+                                        height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
@@ -635,7 +661,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                               color: Colors.white,
                                               fontSize: 16),
                                         )),
-                                        color: Theme.of(context).primaryColor,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff27b86a),
+                                            gradient: LinearGradient(
+                                                colors: [
+                                                  // Color(0xff27b86a),
+                                                  Color(0xfff2380f),
+                                                  Colors.deepOrange[300],
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                tileMode: TileMode.mirror),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
                                     ),
                                     InkWell(
@@ -646,8 +684,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 60,
-                                        height: 30,
+                                        width: 65,
+                                        height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
@@ -657,15 +695,27 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                               color: Colors.white,
                                               fontSize: 16),
                                         )),
-                                        color: Theme.of(context).primaryColor,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff27b86a),
+                                            gradient: LinearGradient(
+                                                colors: [
+                                                  // Color(0xff27b86a),
+                                                  Color(0xfff2380f),
+                                                  Colors.deepOrange[300],
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                tileMode: TileMode.mirror),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
                                     ),
                                   ]
                                 : [
                                     PopupMenuButton(
                                         child: Container(
-                                          width: 60,
-                                          height: 30,
+                                          width: 65,
+                                          height: 35,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 12),
                                           child: Center(
@@ -675,7 +725,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                                 color: Colors.white,
                                                 fontSize: 16),
                                           )),
-                                          color: Theme.of(context).primaryColor,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xff27b86a),
+                                              gradient: LinearGradient(
+                                                  colors: [
+                                                    // Color(0xff27b86a),
+                                                    Color(0xfff2380f),
+                                                    Colors.deepOrange[300],
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  tileMode: TileMode.mirror),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
                                         ),
                                         itemBuilder: (ctx) => [
                                               PopupMenuItem(
@@ -742,8 +804,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         }),
                                     PopupMenuButton(
                                         child: Container(
-                                          width: 60,
-                                          height: 30,
+                                          width: 65,
+                                          height: 35,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 12),
                                           child: Center(
@@ -753,7 +815,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                                 color: Colors.white,
                                                 fontSize: 16),
                                           )),
-                                          color: Theme.of(context).primaryColor,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xff27b86a),
+                                              gradient: LinearGradient(
+                                                  colors: [
+                                                    // Color(0xff27b86a),
+                                                    Color(0xfff2380f),
+                                                    Colors.deepOrange[300],
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  tileMode: TileMode.mirror),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
                                         ),
                                         itemBuilder: (ctx) => [
                                               PopupMenuItem(
@@ -844,8 +918,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 60,
-                                        height: 30,
+                                        width: 65,
+                                        height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
@@ -855,7 +929,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                               color: Colors.white,
                                               fontSize: 16),
                                         )),
-                                        color: Theme.of(context).primaryColor,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff27b86a),
+                                            gradient: LinearGradient(
+                                                colors: [
+                                                  // Color(0xff27b86a),
+                                                  Color(0xfff2380f),
+                                                  Colors.deepOrange[300],
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                tileMode: TileMode.mirror),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
                                     ),
                                     InkWell(
@@ -866,8 +952,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 60,
-                                        height: 30,
+                                        width: 65,
+                                        height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
@@ -877,7 +963,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                               color: Colors.white,
                                               fontSize: 16),
                                         )),
-                                        color: Theme.of(context).primaryColor,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff27b86a),
+                                            gradient: LinearGradient(
+                                                colors: [
+                                                  // Color(0xff27b86a),
+                                                  Color(0xfff2380f),
+                                                  Colors.deepOrange[300],
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                tileMode: TileMode.mirror),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       ),
                                     ),
                                   ],

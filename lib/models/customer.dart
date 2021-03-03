@@ -6,7 +6,6 @@ import 'package:Leader/models/task.dart';
 class Customer {
   String customerId;
   String name;
-  String company;
   String location;
   int phoneNos;
   String emails;
@@ -21,7 +20,6 @@ class Customer {
   // Property proptype;
   Customer(
       {this.name,
-      this.company,
       this.location,
       this.addresses,
       this.customerId,
@@ -49,7 +47,6 @@ class Customer {
           };
     var data = {
       'name': name,
-      'company': company,
       'location': location,
       'address': addresses,
       'customerId': customerId,

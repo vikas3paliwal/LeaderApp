@@ -29,65 +29,65 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
               SizedBox(
                 height: 30,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Card(
-                  elevation: 10,
-                  child: Container(
-                    //width: MediaQuery.of(context).size.width * 0.7,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          dense: true,
-                          leading: Icon(
-                            Icons.note,
-                            color: Colors.deepOrange[300],
-                            size: 25,
-                          ),
-                          title: Text(
-                            'Notes',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        Divider(
-                          thickness: 1,
-                        ),
-                        ListTile(
-                          dense: true,
-                          leading: Icon(
-                            Icons.event_note,
-                            color: Colors.deepOrange[300],
-                            size: 25,
-                          ),
-                          title: Text(
-                            'Proposals',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        Divider(
-                          thickness: 1,
-                        ),
-                        ListTile(
-                          dense: true,
-                          leading: Icon(
-                            Icons.bar_chart_rounded,
-                            color: Colors.deepOrange[300],
-                            size: 25,
-                          ),
-                          title: Text(
-                            'Statistics',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Container(
+              //   width: MediaQuery.of(context).size.width * 0.9,
+              //   child: Card(
+              //     elevation: 10,
+              //     child: Container(
+              //       //width: MediaQuery.of(context).size.width * 0.7,
+              //       padding: EdgeInsets.symmetric(vertical: 10),
+              //       child: Column(
+              //         children: [
+              //           ListTile(
+              //             dense: true,
+              //             leading: Icon(
+              //               Icons.note,
+              //               color: Colors.deepOrange[300],
+              //               size: 25,
+              //             ),
+              //             title: Text(
+              //               'Notes',
+              //               style: TextStyle(
+              //                   fontSize: 16, fontWeight: FontWeight.w500),
+              //             ),
+              //           ),
+              //           Divider(
+              //             thickness: 1,
+              //           ),
+              //           ListTile(
+              //             dense: true,
+              //             leading: Icon(
+              //               Icons.event_note,
+              //               color: Colors.deepOrange[300],
+              //               size: 25,
+              //             ),
+              //             title: Text(
+              //               'Proposals',
+              //               style: TextStyle(
+              //                   fontSize: 16, fontWeight: FontWeight.w500),
+              //             ),
+              //           ),
+              //           Divider(
+              //             thickness: 1,
+              //           ),
+              //           ListTile(
+              //             dense: true,
+              //             leading: Icon(
+              //               Icons.bar_chart_rounded,
+              //               color: Colors.deepOrange[300],
+              //               size: 25,
+              //             ),
+              //             title: Text(
+              //               'Statistics',
+              //               style: TextStyle(
+              //                   fontSize: 16, fontWeight: FontWeight.w500),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
