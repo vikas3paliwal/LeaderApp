@@ -4,11 +4,20 @@ import 'package:Leader/screens/add_label_screen.dart';
 import 'package:Leader/screens/add_notes_leadscreen.dart';
 import 'package:Leader/screens/add_task_screen.dart';
 import 'package:Leader/screens/selectedCustomers_tasks_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+
+Future<void> _openUrl(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 class LeadProfileScreen extends StatelessWidget {
   final String customerId;
@@ -61,46 +70,7 @@ class LeadProfileScreen extends StatelessWidget {
                           border: Border.all(color: Colors.white, width: 6.0)),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.call,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.message,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 156,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.email,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.navigation,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+                  ContactButtons(id: customerId),
                   Positioned(
                     top: 40,
                     child: Center(
@@ -422,6 +392,97 @@ class LeadProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ContactButtons extends StatefulWidget {
+  final String id;
+  ContactButtons({this.id});
+  @override
+  _ContactButtonsState createState() => _ContactButtonsState();
+}
+
+class _ContactButtonsState extends State<ContactButtons> {
+  @override
+  Widget build(BuildContext context) {
+    final customer = Provider.of<Customers>(context).findById(widget.id);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: IconButton(
+            constraints: BoxConstraints(),
+            icon: Icon(
+              Icons.call,
+              size: 35,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              print('x');
+              setState(() {
+                _openUrl('tel:+91${customer.phoneNos}');
+              });
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            constraints: BoxConstraints(),
+            icon: Icon(
+              Icons.message,
+              size: 35,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              print('x');
+              setState(() {
+                _openUrl('sms:${customer.phoneNos}');
+              });
+            },
+          ),
+        ),
+        SizedBox(
+          width: 156,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            constraints: BoxConstraints(),
+            icon: Icon(
+              Icons.email,
+              size: 35,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              print('x');
+              setState(() {
+                _openUrl('mailto:${customer.emails}');
+              });
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            constraints: BoxConstraints(),
+            icon: Icon(
+              Icons.navigation,
+              size: 35,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              print('x');
+              setState(() {
+                _openUrl(
+                    'https://www.google.com/maps/place/${customer.addresses}');
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 }
