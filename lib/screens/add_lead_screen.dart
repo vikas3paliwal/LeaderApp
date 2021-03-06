@@ -420,39 +420,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Property Type',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                    ),
-                    Container(
-                      width: 180,
-                      height: 40,
-                      margin: EdgeInsets.all(7),
-                      child: Center(
-                          child: Text(
-                        _custmprop ?? '',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      )),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Divider(
-                  height: 1,
-                  thickness: 2,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
+                SizedBox(height: 20.0),
                 Container(
                   width: _propwidth,
                   height: 60 + _lowercontainheight,
@@ -984,6 +952,39 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                       ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Divider(
+                  height: 1,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Property Type',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                    Container(
+                      width: 180,
+                      height: 40,
+                      margin: EdgeInsets.all(7),
+                      child: Center(
+                          child: Text(
+                        _custmprop ?? '',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      )),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 60,
