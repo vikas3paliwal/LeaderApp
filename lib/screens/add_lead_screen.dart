@@ -52,7 +52,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
             customerId: UniqueKey().toString(),
             name: leadNameController.text,
             location: locationController.text,
-            phoneNos: int.parse(mobileController.text),
+            phoneNos: mobileController.text,
             emails: emailController.text,
             addresses: addressController.text,
             proptype: _custmprop ?? '',

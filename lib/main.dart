@@ -3,6 +3,8 @@ import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
+import 'package:Leader/screens/Login/login_screen.dart';
+import 'package:Leader/screens/Signup/signup_screen.dart';
 import 'package:Leader/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Leader/screens/home_screen.dart';
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
           canvasColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage(),
+        home: SignUpScreen(),
       ),
     );
   }

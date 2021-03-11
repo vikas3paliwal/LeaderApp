@@ -7,7 +7,7 @@ class Customer {
   String customerId;
   String name;
   String location;
-  int phoneNos;
+  String phoneNos;
   String emails;
   String addresses;
   Event events;
@@ -57,9 +57,43 @@ class Customer {
       'tasks': tasks,
       'budget': budget,
       'proptype': proptype,
-      'pinned':pinned
+      'pinned': pinned
     };
     return data;
+  }
+
+  void fromJSON(dynamic res) {
+    print(res);
+    // print(res['mobile'].runtimeType);
+    name = res['name'];
+    customerId = res['id'].toString();
+    location = res['location'];
+    emails = res['email'];
+    // print(res['event']['day']);
+    // print(DateTime('2021-03-07T06:24:03Z'));
+
+    // events = res['event'];
+    // labels = res['labels'];
+    // tasks = res['taks'];
+    // print(res['notes']);
+    // notes = res['notes'];
+    budget = res['budget'].toString();
+    proptype = res['property_type'];
+    pinned = res['pinned'];
+    phoneNos = res['mobile'];
+    addresses = res['address'];
+
+    labels = [];
+
+    for (var x in res['labels']) {
+      // print(lbl);
+      Label lbl = new Label();
+      lbl.fromJson(x);
+      // print(lbl.color);
+      labels.add(lbl);
+    }
+
+    // we
   }
 }
 
