@@ -1,3 +1,5 @@
+import 'package:Leader/screens/conversion.dart';
+import 'package:Leader/screens/emi_calculator.dart';
 import 'package:flutter/material.dart';
 
 class SideDrawer extends StatelessWidget {
@@ -6,7 +8,7 @@ class SideDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: const <Widget>[
+        children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
@@ -24,10 +26,26 @@ class SideDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.calculate),
             title: Text('Loan Calculator'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EMIScreen(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.tab),
             title: Text('Conversion Table'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ConversionScreen(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.photo_library),
