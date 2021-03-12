@@ -551,7 +551,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.all(7),
                                         child: Center(
@@ -584,7 +584,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -618,7 +618,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -652,7 +652,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -682,7 +682,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                 : [
                                     PopupMenuButton(
                                         child: Container(
-                                          width: 65,
+                                          width: 55,
                                           height: 35,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 12),
@@ -772,7 +772,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         }),
                                     PopupMenuButton(
                                         child: Container(
-                                          width: 65,
+                                          width: 55,
                                           height: 35,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 12),
@@ -886,7 +886,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -920,7 +920,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),

@@ -265,7 +265,7 @@ class LeadProfileScreen extends StatelessWidget {
                                 print('rebuild');
                                 // bool clicked;
                                 return Container(
-                                  height: clicked ?? false ? 176 : 56,
+                                  height: clicked ?? false ? 176 : 66,
                                   child: ListView(
                                     children: [
                                       ListTile(
@@ -279,6 +279,9 @@ class LeadProfileScreen extends StatelessWidget {
                                           value.setState();
                                           // print(context.size.height);
                                         },
+                                        subtitle: customer.budget == null
+                                            ? null
+                                            : Text('${customer.budget}'),
                                         leading: Container(
                                           height: 60,
                                           width: 60,

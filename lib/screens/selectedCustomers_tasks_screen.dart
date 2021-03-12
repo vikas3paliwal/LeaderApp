@@ -25,7 +25,29 @@ class _SelectedCustomerTasksScreenState
         title: Text(widget.name + "'s Tasks"),
       ),
       body: customer.tasks == null
-          ? Text('Nothing here')
+          ? Center(
+              child: Container(
+                height: 230,
+                width: 240,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/no_tasks.png',
+                      height: 200,
+                      width: 200,
+                    ),
+                    Text(
+                      'No Tasks Yet',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey),
+                    )
+                  ],
+                ),
+              ),
+            )
           : Padding(
               padding: const EdgeInsets.all(14.0),
               child: GridView.builder(
