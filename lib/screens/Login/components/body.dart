@@ -40,11 +40,10 @@ class _BodyState extends State<Body> {
         message: "Logged In Successfully!",
         duration: Duration(seconds: 3),
       )..show(context);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => MyHomePage(),
-        ),
-      );
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage()),
+          (route) => false);
     } on HttpException catch (error) {
       Flushbar(
         message: '${error.toString()}',

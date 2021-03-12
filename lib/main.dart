@@ -6,6 +6,7 @@ import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/Login/login_screen.dart';
 import 'package:Leader/screens/Signup/signup_screen.dart';
 import 'package:Leader/screens/login_screen.dart';
+import 'package:Leader/utilities/api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:Leader/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
           canvasColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SignUpScreen(),
+        home: ApiHelper().getUID() == null ? SignUpScreen() : MyHomePage(),
       ),
     );
   }
