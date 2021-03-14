@@ -20,6 +20,25 @@ class LabelScreen extends StatefulWidget {
 }
 
 class _LabelScreenState extends State<LabelScreen> {
+  bool _initial = true;
+  bool _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_initial) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final val = Provider.of<Labels>(context);
+      Future.value(val.fetchData()).whenComplete(() => setState(() {
+            _isLoading = false;
+          }));
+    }
+    _initial = false;
+    super.didChangeDependencies();
+  }
+
   var currentColor = Colors.black;
   void _addLabel(BuildContext ctx) {
     final _controller = TextEditingController();

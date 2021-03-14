@@ -1,5 +1,7 @@
 import 'package:Leader/models/label.dart';
 import 'package:flutter/foundation.dart';
+import '../utilities/api_helper.dart';
+import '../utilities/api-response.dart';
 
 class Labels with ChangeNotifier {
   List<Label> _labels = [];
@@ -30,5 +32,26 @@ class Labels with ChangeNotifier {
   void deleteCustomers(String id) {}
   Label findById(String id) {
     return _labels.firstWhere((element) => element.labelId == id);
+  }
+
+  Future<ApiResponse> fetchData() async {
+    ApiResponse response;
+    try {
+      response = await ApiHelper().getRequest(endpoint: '/leadgrow/labels');
+    } catch (e) {
+      print(e);
+    }
+
+    _labels = [];
+
+    // print(response.data);
+    for (var res in response.data) {
+      Label lbl = new Label();
+      lbl.fromJson(res);
+      // print('y');
+      // print(cust.name);
+      _labels.add(lbl);
+    }
+    return response;
   }
 }

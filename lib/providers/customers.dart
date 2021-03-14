@@ -137,7 +137,7 @@ class Customers with ChangeNotifier {
     for (var res in response.data) {
       Customer cust = new Customer();
       cust.fromJSON(res);
-      print('y');
+      // print('y');
       // print(cust.name);
       _customers.add(cust);
     }

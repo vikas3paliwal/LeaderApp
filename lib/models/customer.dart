@@ -93,7 +93,13 @@ class Customer {
       labels.add(lbl);
     }
 
-    // we
+    tasks = [];
+
+    for (var x in res['tasks']) {
+      Task tsk = new Task();
+      tsk.fromJson(x);
+      tasks.add(tsk);
+    }
   }
 }
 
