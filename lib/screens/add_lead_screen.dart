@@ -5,6 +5,7 @@ import 'package:Leader/providers/customers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AddLeadScreen extends StatefulWidget {
   final Function callback;
@@ -58,7 +59,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
             proptype: _custmprop ?? '',
             pinned: false,
             events: Event(day: eventDate, eventName: eventController.text)));
-        widget.callback();
+        // widget.callback();
         Navigator.of(context).pop();
       }
     } catch (e) {
@@ -105,7 +106,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add New Lead"),
+        title: Text("Add New Lead".tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -121,7 +122,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     controller: leadNameController,
                     keyboardType: TextInputType.name,
                     decoration: InputDecoration(
-                      labelText: 'Lead Name',
+                      labelText: 'Lead Name'.tr(),
                       filled: true,
                       fillColor: Colors.white,
                       icon: Icon(
@@ -154,7 +155,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                         FocusScope.of(context).requestFocus(locationnode),
                     validator: (value) {
                       if (value.trim().isEmpty)
-                        return 'This field can\'t be empty';
+                        return 'This field can not be empty'.tr();
                       return null;
                     },
                     onSaved: (value) {},
@@ -166,7 +167,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     controller: locationController,
                     keyboardType: TextInputType.streetAddress,
                     decoration: InputDecoration(
-                      labelText: 'Location',
+                      labelText: 'Location'.tr(),
                       filled: true,
                       fillColor: Colors.white,
                       icon: Icon(Icons.location_city,
@@ -211,7 +212,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                       FilteringTextInputFormatter(RegExp('[0-9]'), allow: true),
                     ],
                     decoration: InputDecoration(
-                      labelText: 'Mobile No.',
+                      labelText: 'Mobile No.'.tr(),
                       filled: true,
                       fillColor: Colors.white,
                       icon: Icon(Icons.call, color: Colors.deepOrange[300]),
@@ -241,12 +242,12 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                         FocusScope.of(context).requestFocus(emailnode),
                     validator: (value) {
                       if (value.trim().isEmpty)
-                        return 'This field can\'t be empty';
+                        return 'This field can not be empty'.tr();
                       if (value.length != 10 &&
                           !RegExp(r"^((\+){1}91){1}[1-9]{1}[0-9]{9}$",
                                   multiLine: true)
                               .hasMatch(value))
-                        return 'Please enter valid Number';
+                        return 'Please enter valid Number'.tr();
 
                       return null;
                     },
@@ -258,7 +259,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'Email Id',
+                      labelText: 'Email Address'.tr(),
                       filled: true,
                       fillColor: Colors.white,
                       icon: Icon(Icons.email, color: Colors.deepOrange[300]),
@@ -288,12 +289,12 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                         FocusScope.of(context).requestFocus(addressnode),
                     validator: (value) {
                       if (value.trim().isEmpty)
-                        return 'This field can\'t be empty';
+                        return 'This field can not be empty'.tr();
                       if (!RegExp(
                               r'^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$',
                               multiLine: true)
                           .hasMatch(value))
-                        return 'Please enter valid email address';
+                        return 'Please enter valid email address'.tr();
                       return null;
                     },
                   ),
@@ -304,7 +305,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                     controller: addressController,
                     keyboardType: TextInputType.streetAddress,
                     decoration: InputDecoration(
-                      labelText: 'Address',
+                      labelText: 'Address'.tr(),
                       filled: true,
                       fillColor: Colors.white,
                       icon: Icon(Icons.pin_drop, color: Colors.deepOrange[300]),
@@ -364,7 +365,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                           controller: eventController,
                           keyboardType: TextInputType.streetAddress,
                           decoration: InputDecoration(
-                            labelText: 'Event',
+                            labelText: 'Event'.tr(),
                             filled: true,
                             fillColor: Colors.white,
                             prefixIcon: IconButton(
@@ -410,7 +411,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                             // if (value.trim().isEmpty)
                             //   return 'This field can\'t be empty';
                             if (value.isNotEmpty && eventDate == null) {
-                              return 'please select event date';
+                              return 'please select event date'.tr();
                             }
                             return null;
                           },
@@ -464,7 +465,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Commercial',
+                                    'Commercial'.tr(),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -510,7 +511,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Residential',
+                                    'Residential'.tr(),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -551,15 +552,17 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.all(7),
                                         child: Center(
-                                            child: Text(
-                                          _property.commercial['sho'],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
+                                            child: FittedBox(
+                                          child: Text(
+                                            _property.commercial['sho'],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          ),
                                         )),
                                         decoration: BoxDecoration(
                                             color: Color(0xff27b86a),
@@ -584,16 +587,18 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
-                                            child: Text(
-                                          _property.commercial['sco'],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
+                                            child: FittedBox(
+                                          child: Text(
+                                            _property.commercial['sco'],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          ),
                                         )),
                                         decoration: BoxDecoration(
                                             color: Color(0xff27b86a),
@@ -618,16 +623,18 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
-                                            child: Text(
-                                          _property.commercial['scf'],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
+                                            child: FittedBox(
+                                          child: Text(
+                                            _property.commercial['scf'],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          ),
                                         )),
                                         decoration: BoxDecoration(
                                             color: Color(0xff27b86a),
@@ -652,16 +659,18 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
                                         child: Center(
-                                            child: Text(
-                                          _property.commercial['other'],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
+                                            child: FittedBox(
+                                          child: Text(
+                                            _property.commercial['other'],
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          ),
                                         )),
                                         decoration: BoxDecoration(
                                             color: Color(0xff27b86a),
@@ -682,13 +691,13 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                 : [
                                     PopupMenuButton(
                                         child: Container(
-                                          width: 65,
+                                          width: 55,
                                           height: 35,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 12),
                                           child: Center(
                                               child: Text(
-                                            'Plot',
+                                            'Plot'.tr(),
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16),
@@ -772,13 +781,13 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         }),
                                     PopupMenuButton(
                                         child: Container(
-                                          width: 65,
+                                          width: 55,
                                           height: 35,
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 12),
                                           child: Center(
                                               child: Text(
-                                            'Flat',
+                                            'Flat'.tr(),
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16),
@@ -886,7 +895,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -920,7 +929,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                         });
                                       },
                                       child: Container(
-                                        width: 65,
+                                        width: 55,
                                         height: 35,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 12),
@@ -967,7 +976,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Property Type',
+                      'Property Type'.tr(),
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
@@ -977,7 +986,11 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                       margin: EdgeInsets.all(7),
                       child: Center(
                           child: Text(
-                        _custmprop ?? '',
+                        _custmprop == null
+                            ? ''
+                            : _custmprop.split(' ')[0].tr() +
+                                    _custmprop.substring(4) ??
+                                '',
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       )),
                       decoration: BoxDecoration(
@@ -995,7 +1008,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => addLead(),
         label: Text(
-          'Add',
+          'Add'.tr(),
           style: TextStyle(
               color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
         ),

@@ -1,18 +1,33 @@
+import 'package:Leader/localization/app_localization.dart';
 import 'package:Leader/models/business.dart';
 import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
-import 'package:Leader/screens/Login/login_screen.dart';
 import 'package:Leader/screens/Signup/signup_screen.dart';
-import 'package:Leader/screens/login_screen.dart';
+// import 'package:Leader/screens/login_screen.dart';
 import 'package:Leader/utilities/api_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:Leader/screens/home_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      path: 'assets/translation',
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('hi', 'IND'),
+      ],
+      saveLocale: true,
+      startLocale: Locale('en', 'US'),
+      fallbackLocale: Locale('en', 'US'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +57,20 @@ class MyApp extends StatelessWidget {
           canvasColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: ApiHelper().getUID() == null ? SignUpScreen() : MyHomePage(),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          for (var locale in supportedLocales) {
+            if (locale.languageCode == deviceLocale.languageCode &&
+                locale.countryCode == deviceLocale.countryCode) {
+              return deviceLocale;
+            }
+          }
+          return supportedLocales.first;
+        },
+        debugShowCheckedModeBanner: false,
+        locale: context.locale,
+        home: SignUpScreen(),
       ),
     );
   }

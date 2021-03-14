@@ -7,11 +7,13 @@ import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AddTaskScreen extends StatefulWidget {
   // final String customerId;
   final String taskid;
-  AddTaskScreen({this.taskid});
+  final String customerid;
+  AddTaskScreen({this.taskid, this.customerid});
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
@@ -35,11 +37,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ? null
           : Provider.of<Customers>(context, listen: false)
               .findById(task.customerId);
+      print(customer?.name ?? 'ok');
       _taskController.text = task.task;
       _leadController.text = customer?.name ?? '';
       date = task.day;
       time = task.time;
       _importance = task.importance;
+    }
+    if (widget.customerid != null) {
+      final customer = widget.customerid == null
+          ? null
+          : Provider.of<Customers>(context, listen: false)
+              .findById(widget.customerid);
+      _leadController.text = customer?.name ?? '';
     }
 
     super.initState();
@@ -51,7 +61,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       maintainBottomViewPadding: true,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add Task'),
+          title: Text('Add Task'.tr()),
         ),
         body: Padding(
           padding:
@@ -61,7 +71,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             child: Column(
               children: [
                 Text(
-                  'Task Description',
+                  'Task Description'.tr(),
                   style: TextStyle(fontSize: 22),
                 ),
                 SizedBox(
@@ -71,7 +81,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   controller: _taskController,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                      errorText: _error ? 'This field can not be empty' : null,
+                      errorText:
+                          _error ? 'This field can not be empty'.tr() : null,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)),
                       enabled: true,
@@ -104,7 +115,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           borderRadius: BorderRadius.circular(20)),
                       enabled: true,
                       filled: true,
-                      labelText: 'Tap icon to attatch to lead(Optional)',
+                      labelText: 'Tap icon to attatch to lead(Optional)'.tr(),
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       icon: IconButton(
                         icon: Icon(
@@ -144,7 +155,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       width: 11,
                     ),
                     Text(
-                      'Set Reminder Date',
+                      'Set Reminder Date'.tr(),
                       style: TextStyle(fontSize: 22),
                     ),
                   ],
@@ -167,7 +178,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
-                        format.format(date),
+                        format.format(date).split(' ').first.tr() +
+                            format.format(date).substring(3),
                         style: TextStyle(
                             color: Color(0xff383838),
                             fontSize: 20,
@@ -217,15 +229,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             //initialValue: _selectedValue ?? 2,
                             itemBuilder: (ctx) => [
                               PopupMenuItem(
-                                child: Text('Urgent'),
+                                child: Text('Urgent'.tr()),
                                 value: 0,
                               ),
                               PopupMenuItem(
-                                child: Text('Important'),
+                                child: Text('Important'.tr()),
                                 value: 1,
                               ),
                               PopupMenuItem(
-                                child: Text('Normal'),
+                                child: Text('Normal'.tr()),
                                 value: 2,
                               ),
                             ],
@@ -256,7 +268,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             },
                           ),
                           Text(
-                            'Set Importance',
+                            'Set Importance'.tr(),
                             style: TextStyle(fontSize: 20),
                           )
                         ],
@@ -274,13 +286,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               imageHeader:
                                   AssetImage('assets/images/night.jpg'),
                               height: MediaQuery.of(context).size.height * 0.4,
-                              textActionButton: 'Time',
+                              textActionButton: 'Time'.tr(),
                               onTapActionButton: () async {
                                 var pickedTime = await showTimePicker(
                                   context: context,
                                   initialTime: TimeOfDay.now(),
                                   initialEntryMode: TimePickerEntryMode.dial,
-                                  cancelText: 'CANCEL',
+                                  cancelText: 'CANCEL'.tr(),
                                 );
                                 time = pickedTime == null ? time : pickedTime;
                               }).whenComplete(() {
@@ -291,27 +303,29 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         child: Container(
                           width: 120,
                           padding: EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Icon(
-                                Icons.date_range,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Text(
-                                'Set Date',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                            ],
+                          child: FittedBox(
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Icon(
+                                  Icons.date_range,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  'Set Date'.tr(),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                              ],
+                            ),
                           ),
                           decoration: BoxDecoration(
                               // color: Theme.of(context).primaryColor,
@@ -333,7 +347,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             size: 30,
           ),
           label: Text(
-            'Add',
+            'Add'.tr(),
             style: TextStyle(fontSize: 20),
           ),
           onPressed: () {

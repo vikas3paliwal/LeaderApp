@@ -5,6 +5,7 @@ import 'package:Leader/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ImportantTaskList extends StatelessWidget {
   final List<String> importance = ["Urgent", "Important", "Routine Task"];
@@ -46,7 +47,7 @@ class ImportantTaskList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    importance[i],
+                    importance[i].tr(),
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                   ),
                   urgentTasks.isEmpty
@@ -94,7 +95,7 @@ class ImportantTaskList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    importance[i],
+                    importance[i].tr(),
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                   ),
                   importantTasks.isEmpty
@@ -145,7 +146,7 @@ class ImportantTaskList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    importance[i],
+                    importance[i].tr(),
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                   ),
                   Padding(

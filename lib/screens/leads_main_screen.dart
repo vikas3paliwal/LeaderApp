@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Future<void> _openUrl(String url) async {
   if (await canLaunch(url)) {
@@ -133,7 +134,7 @@ class LeadProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               title: Text(
-                                'ADD LABELS',
+                                'ADD LABELS'.tr(),
                                 style: TextStyle(fontSize: 16),
                               ),
                               subtitle: customer.labels == null ||
@@ -202,7 +203,7 @@ class LeadProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               title: Text(
-                                'ADD FOLLOW-UP/TASK',
+                                'ADD FOLLOW-UP/TASK'.tr(),
                                 style: TextStyle(fontSize: 16),
                               ),
                               trailing: Icon(
@@ -244,7 +245,7 @@ class LeadProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               title: Text(
-                                'ADD NOTES',
+                                'ADD NOTES'.tr(),
                                 style: TextStyle(fontSize: 16),
                               ),
                               trailing: Icon(
@@ -265,7 +266,7 @@ class LeadProfileScreen extends StatelessWidget {
                                 print('rebuild');
                                 // bool clicked;
                                 return Container(
-                                  height: clicked ?? false ? 176 : 56,
+                                  height: clicked ?? false ? 176 : 66,
                                   child: ListView(
                                     children: [
                                       ListTile(
@@ -279,6 +280,9 @@ class LeadProfileScreen extends StatelessWidget {
                                           value.setState();
                                           // print(context.size.height);
                                         },
+                                        subtitle: customer.budget == null
+                                            ? null
+                                            : Text('${customer.budget}'),
                                         leading: Container(
                                           height: 60,
                                           width: 60,
@@ -295,7 +299,7 @@ class LeadProfileScreen extends StatelessWidget {
                                           ),
                                         ),
                                         title: Text(
-                                          'ADD BUDGET',
+                                          'ADD BUDGET'.tr(),
                                           style: TextStyle(fontSize: 16),
                                         ),
                                         trailing: clicked
@@ -358,7 +362,7 @@ class LeadProfileScreen extends StatelessWidget {
                                                             value.setState();
                                                           }
                                                         },
-                                                        child: Text('Ok'),
+                                                        child: Text('Ok'.tr()),
                                                         color: Theme.of(context)
                                                             .primaryColor,
                                                       ),

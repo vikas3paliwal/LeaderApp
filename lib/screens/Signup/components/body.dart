@@ -1,3 +1,4 @@
+import 'package:Leader/screens/home_screen.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -45,8 +46,10 @@ class _BodyState extends State<Body> {
         message: "Signed-Up Successfully!",
         duration: Duration(seconds: 3),
       )..show(context);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/profile', (Route<dynamic> route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage()),
+          (route) => false);
     } on HttpException catch (error) {
       Flushbar(
         message: '${error.toString()}',
@@ -123,12 +126,14 @@ class _BodyState extends State<Body> {
                   },
                 ),
               ),
-              RoundedButton(
-                text: "SIGNUP",
-                press: () {
-                  _signUp();
-                },
-              ),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : RoundedButton(
+                      text: "SIGNUP",
+                      press: () {
+                        _signUp();
+                      },
+                    ),
               // (_isLoading)
               //     ? SpinKitThreeBounce(
               //         color: Theme.of(context).primaryColor,
@@ -138,7 +143,7 @@ class _BodyState extends State<Body> {
               AlreadyHaveAnAccountCheck(
                 login: false,
                 press: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) {

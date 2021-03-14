@@ -4,6 +4,7 @@ import 'package:Leader/models/business.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EditBusinessDetailsScreen extends StatefulWidget {
   @override
@@ -80,7 +81,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Business Profile"),
+        title: Text("Business Profile".tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -95,7 +96,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                       controller: businessNameController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
-                        labelText: 'Business Name',
+                        labelText: 'Business Name'.tr(),
                         filled: true,
                         fillColor: Colors.white,
                         icon: Icon(
@@ -142,7 +143,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                       controller: webController,
                       keyboardType: TextInputType.url,
                       decoration: InputDecoration(
-                        labelText: 'Website',
+                        labelText: 'Website'.tr(),
                         filled: true,
                         fillColor: Colors.white,
                         icon: Icon(Icons.mouse, color: Colors.deepOrange[300]),
@@ -190,7 +191,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                         FilteringTextInputFormatter.allow(RegExp('[0-9]'))
                       ],
                       decoration: InputDecoration(
-                        labelText: 'Contact No.',
+                        labelText: 'Contact'.tr(),
                         filled: true,
                         fillColor: Colors.white,
                         icon: Icon(Icons.call, color: Colors.deepOrange[300]),
@@ -228,7 +229,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                                 !RegExp(r"^((\+){1}91){1}[1-9]{1}[0-9]{9}$",
                                         multiLine: true)
                                     .hasMatch(value)))
-                          return 'Please enter valid Number';
+                          return 'Please enter valid Number'.tr();
                         else
                           return null;
                       },
@@ -240,7 +241,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        labelText: 'Email Address',
+                        labelText: 'Email Address'.tr(),
                         filled: true,
                         fillColor: Colors.white,
                         icon: Icon(Icons.email, color: Colors.deepOrange[300]),
@@ -279,7 +280,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                                     r'^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+([^<>()\.,;:\s@\"]{2,}|[\d\.]+))$',
                                     multiLine: true)
                                 .hasMatch(value)))
-                          return 'Please enter valid email address';
+                          return 'Please enter valid email address'.tr();
                         else
                           return null;
                       },
@@ -291,7 +292,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                       controller: addressController,
                       keyboardType: TextInputType.streetAddress,
                       decoration: InputDecoration(
-                        labelText: 'Address',
+                        labelText: 'Address'.tr(),
                         filled: true,
                         fillColor: Colors.white,
                         icon:
@@ -339,7 +340,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
         label: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Text(
-            'Edit',
+            'Edit'.tr(),
             style: TextStyle(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
           ),

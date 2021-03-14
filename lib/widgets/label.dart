@@ -6,6 +6,7 @@ import 'package:Leader/screens/labeled_customers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Label extends StatelessWidget {
   final String labelName;
@@ -30,19 +31,19 @@ class Label extends StatelessWidget {
             return showDialog<bool>(
                 context: context,
                 builder: (ctx) => AlertDialog(
-                      title: Text('Are You Sure?'),
-                      content: Text('Do you want to delete this label?'),
+                      title: Text('Are You Sure ?'.tr()),
+                      content: Text('Do you want to delete this label?'.tr()),
                       actions: [
                         FlatButton(
                             onPressed: () {
                               Navigator.of(ctx).pop(false);
                             },
-                            child: Text('Cancel')),
+                            child: Text('Cancel'.tr())),
                         FlatButton(
                             onPressed: () {
                               Navigator.of(ctx).pop(true);
                             },
-                            child: Text('Yes')),
+                            child: Text('Yes'.tr())),
                       ],
                     ));
           },
@@ -90,7 +91,7 @@ class Label extends StatelessWidget {
             ),
             trailing: customers == null
                 ? null
-                : Text(customers.toString() + " " + 'CUSTOMERS'),
+                : Text(customers.toString() + " " + 'CUSTOMERS'.tr()),
           ),
         ));
   }

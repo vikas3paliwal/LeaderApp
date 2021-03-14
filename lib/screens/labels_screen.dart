@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LabelScreen extends StatefulWidget {
   static const routeName = '/label';
@@ -33,13 +34,13 @@ class _LabelScreenState extends State<LabelScreen> {
               TextField(
                 controller: _controller,
                 decoration: InputDecoration(
-                  labelText: 'Label Name',
+                  labelText: 'Label Name'.tr(),
                 ),
               ),
               SizedBox(
                 height: 25,
               ),
-              Text('Select Color'),
+              Text('Select Color'.tr()),
               Expanded(
                 child: BlockPicker(
                   pickerColor: currentColor,
@@ -54,7 +55,7 @@ class _LabelScreenState extends State<LabelScreen> {
         actions: [
           FlatButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel')),
+              child: Text('Cancel'.tr())),
           FlatButton(
               onPressed: () {
                 if (_controller.text.trim().isNotEmpty) {
@@ -66,7 +67,7 @@ class _LabelScreenState extends State<LabelScreen> {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Ok')),
+              child: Text('Ok'.tr())),
         ],
       ),
     ).whenComplete(() {
@@ -79,11 +80,12 @@ class _LabelScreenState extends State<LabelScreen> {
     final label = Provider.of<Labels>(context);
     return Scaffold(
       appBar: AppBar(
+        title: Text('Labels'.tr()),
         actions: [
           PopupMenuButton(
               itemBuilder: (context) => [
-                    PopupMenuItem(child: Text('Settings')),
-                    PopupMenuItem(child: Text('Logout'))
+                    PopupMenuItem(child: Text('Settings'.tr())),
+                    PopupMenuItem(child: Text('Log out'.tr()))
                   ],
               icon: Icon(Icons.more_vert),
               onSelected: null,
@@ -121,7 +123,7 @@ class _LabelScreenState extends State<LabelScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Label',
+                'Label'.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               SizedBox(

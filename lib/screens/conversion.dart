@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "dart:math";
 
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Map<String, double> unitConv = {
   'Are': 1076.0,
@@ -70,13 +71,13 @@ class ConversionScreenState extends State<ConversionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Conversion Table"), elevation: 0.0),
+      appBar: AppBar(title: Text("Conversion Table".tr()), elevation: 0.0),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: 10),
             Text(
-              "Land Unit Conversion",
+              "Land Unit Conversion".tr(),
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 30),
@@ -158,7 +159,7 @@ class _UnitState extends State<Unit> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(widget.unit),
+              Text(widget.unit.tr()),
               Text(unitValue[widget.unit].toStringAsFixed(3)),
             ],
           ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:Leader/models/label.dart';
 import 'package:Leader/models/task.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Customer {
   String customerId;
@@ -31,7 +32,6 @@ class Customer {
       this.budget,
       this.proptype,
       this.pinned,
-      // this.proptype,
       this.notes});
   Map<String, dynamic> toJson() {
     List<Map> labels = this.labels == null
@@ -106,30 +106,30 @@ class Event {
 class Property {
   Map<String, dynamic> residential = {
     'plot': [
-      '60 sq Yards',
-      '100 sq Yards',
-      '160 sq Yards',
-      '250 sq Yards',
-      '500 sq Yards',
-      '1000 sq Yards'
+      '60 sq Yards'.substring(0, 5) + ' ' + '60 sq Yards'.split(' ')[2].tr(),
+      '100 sq Yards'.substring(0, 6) + ' ' + '60 sq Yards'.split(' ')[2].tr(),
+      '160 sq Yards'.substring(0, 6) + ' ' + '60 sq Yards'.split(' ')[2].tr(),
+      '250 sq Yards'.substring(0, 6) + ' ' + '60 sq Yards'.split(' ')[2].tr(),
+      '500 sq Yards'.substring(0, 6) + ' ' + '60 sq Yards'.split(' ')[2].tr(),
+      '1000 sq Yards'.substring(0, 7) + ' ' + '60 sq Yards'.split(' ')[2].tr()
     ],
     'Flat': [
-      'Studio Apartment',
-      '1 BHK',
-      '2 BHK',
-      '2+1 BHK',
-      '3 BHK',
-      '3+1 BHK',
-      '4 BHK',
-      'Penthouse'
+      'Studio Apartment'.tr(),
+      '1 BHK'.tr(),
+      '2 BHK'.tr(),
+      '2+1 BHK'.tr(),
+      '3 BHK'.tr(),
+      '3+1 BHK'.tr(),
+      '4 BHK'.tr(),
+      'Penthouse'.tr()
     ],
-    'villa': 'Villa',
-    'other': 'Other'
+    'villa': 'Villa'.tr(),
+    'other': 'Other'.tr()
   };
   Map<String, dynamic> commercial = {
-    'sho': 'SHO',
-    'sco': 'SCO',
-    'scf': 'SCF',
-    'other': 'Other'
+    'sho': 'SHO'.tr(),
+    'sco': 'SCO'.tr(),
+    'scf': 'SCF'.tr(),
+    'other': 'Other'.tr()
   };
 }

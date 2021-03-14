@@ -1,3 +1,4 @@
+import 'package:Leader/screens/Signup/signup_screen.dart';
 import 'package:Leader/screens/home_screen.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -121,12 +122,14 @@ class _BodyState extends State<Body> {
                   },
                 ),
               ),
-              RoundedButton(
-                text: "LOGIN",
-                press: () {
-                  _signIn();
-                },
-              ),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : RoundedButton(
+                      text: "LOGIN",
+                      press: () {
+                        _signIn();
+                      },
+                    ),
               // (_isLoading)
               //     ? SpinKitThreeBounce(
               //         color: Theme.of(context).primaryColor,
@@ -135,12 +138,11 @@ class _BodyState extends State<Body> {
               SizedBox(height: size.height * 0.03),
               AlreadyHaveAnAccountCheck(
                 press: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return;
-                        // return SignUpScreen();
+                        return SignUpScreen();
                       },
                     ),
                   );

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "dart:math";
+import 'package:easy_localization/easy_localization.dart';
 
 class EMIScreen extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class EMIScreenState extends State<EMIScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("EMI Calculator"), elevation: 0.0),
+        appBar: AppBar(title: Text("EMI Calculator".tr()), elevation: 0.0),
         body: Center(
             child: Container(
                 child: Column(
@@ -31,14 +32,14 @@ class EMIScreenState extends State<EMIScreen> {
                 child: TextField(
                   controller: _principalAmount,
                   decoration:
-                      InputDecoration(labelText: "Enter Principal Amount"),
+                      InputDecoration(labelText: "Enter Principal Amount".tr()),
                   keyboardType: TextInputType.number,
                 )),
             Container(
                 padding: EdgeInsets.all(20.0),
                 child: TextField(
                   controller: _interestRate,
-                  decoration: InputDecoration(labelText: "Interest Rate"),
+                  decoration: InputDecoration(labelText: "Interest Rate".tr()),
                   keyboardType: TextInputType.number,
                 )),
             Container(
@@ -50,8 +51,8 @@ class EMIScreenState extends State<EMIScreen> {
                         fit: FlexFit.tight,
                         child: TextField(
                           controller: _tenure,
-                          decoration:
-                              InputDecoration(labelText: "Tenure (in months)"),
+                          decoration: InputDecoration(
+                              labelText: "Tenure (in months)".tr()),
                           keyboardType: TextInputType.number,
                         )),
                     // Flexible(
@@ -85,7 +86,7 @@ class EMIScreenState extends State<EMIScreen> {
                 child: FlatButton(
                     onPressed: _handleCalculation,
                     child: Text(
-                      "Calculate",
+                      "Calculate".tr(),
                       style: TextStyle(fontSize: 20.0),
                     ),
                     color: Color.fromRGBO(89, 87, 117, 1.0),
@@ -130,7 +131,7 @@ class EMIScreenState extends State<EMIScreen> {
         child: canShow
             ? Column(
                 children: [
-                  Text("Your Monthly EMI is",
+                  Text("Your Monthly EMI is".tr(),
                       style: TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold)),
                   Container(
@@ -139,7 +140,7 @@ class EMIScreenState extends State<EMIScreen> {
                             fontSize: 50.0, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 15.0),
-                  Text("Total Payment is",
+                  Text("Total Payment is".tr(),
                       style: TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold)),
                   Container(

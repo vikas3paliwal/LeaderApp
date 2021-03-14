@@ -8,6 +8,7 @@ import 'package:Leader/screens/customer_screen.dart';
 import 'package:Leader/screens/my_business_screen.dart';
 import 'package:Leader/screens/tasks_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Icons.stacked_line_chart,
           ),
           activeColorAlternate: Colors.white,
-          title: 'Leads',
+          title: 'Leads'.tr(),
           inactiveColor: Colors.deepOrange[300],
           activeColor: Theme.of(context).primaryColor,
           textStyle: TextStyle(
@@ -54,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Icons.local_offer,
         ),
         activeColorAlternate: Colors.white,
-        title: 'Labels',
+        title: 'Labels'.tr(),
         inactiveColor: Colors.deepOrange[300],
         activeColor: Theme.of(context).primaryColor,
         textStyle: TextStyle(fontSize: 20, color: Colors.deepPurpleAccent),
@@ -64,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Icons.notifications,
         ),
         activeColorAlternate: Colors.white,
-        title: 'Tasks',
+        title: 'Tasks'.tr(),
         inactiveColor: Colors.deepOrange[300],
         activeColor: Theme.of(context).primaryColor,
         textStyle: TextStyle(fontSize: 20, color: Colors.deepPurpleAccent),
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Icons.business_sharp,
           //color: Colors.deepPurpleAccent,
         ),
-        title: 'My Business',
+        title: 'My Business'.tr(),
         inactiveColor: Colors.deepOrange[300],
         // Color.fromRGBO(190, 144, 99, 1),
         activeColor: Theme.of(context).primaryColor,
