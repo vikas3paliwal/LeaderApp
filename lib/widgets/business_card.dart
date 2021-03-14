@@ -1,9 +1,10 @@
 import 'package:Leader/models/business.dart';
 import 'package:Leader/screens/edit_businessDetails_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:hexagon/hexagon_widget.dart';
+import 'package:hexagon/hexagon.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BusinessCard extends StatelessWidget {
   @override
@@ -235,7 +236,7 @@ class BusinessCard extends StatelessWidget {
                     child: Container(
                       child: Center(
                           child: Text(
-                        "EDIT DETAILS",
+                        "EDIT DETAILS".tr(),
                         style: TextStyle(color: Colors.white),
                       )),
                     ),
@@ -253,7 +254,7 @@ class BusinessCard extends StatelessWidget {
                     child: Container(
                       child: Center(
                           child: Text(
-                        "SEND BUSINESS CARD",
+                        "SEND BUSINESS CARD".tr(),
                         style: TextStyle(color: Colors.white),
                       )),
                     ),

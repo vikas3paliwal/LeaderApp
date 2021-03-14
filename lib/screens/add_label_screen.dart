@@ -4,6 +4,7 @@ import 'package:Leader/providers/labels.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AddLabelScreen extends StatefulWidget {
   final String customerId;
@@ -24,7 +25,7 @@ class _AddLabelScreenState extends State<AddLabelScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Labels"),
+        title: Text("Labels".tr()),
       ),
       body: ListView.builder(
         itemBuilder: (ctx, i) => label.labels
@@ -92,7 +93,7 @@ class _AddLabelScreenState extends State<AddLabelScreen> {
           label.addCustomer(widget.customerId, selectedLabels);
           Navigator.of(context).pop();
         },
-        child: Text('Add'),
+        child: Text('Add'.tr()),
       ),
     );
   }

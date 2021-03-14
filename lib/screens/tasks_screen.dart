@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TaskScreen extends StatefulWidget {
   static const routeName = '/task';
@@ -33,31 +34,30 @@ class _TaskScreenState extends State<TaskScreen> {
     //     tasks.tasks.where((element) => element.customerId == null);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tasks'),
-        centerTitle: true,
+        title: Text('Tasks'.tr()),
         actions: [
           PopupMenuButton(
               itemBuilder: (context) => [
                     _orderby
                         ? PopupMenuItem(
                             child: _completed
-                                ? Text('Show All Tasks')
-                                : Text('Show Completed Tasks'),
+                                ? Text('Show All Tasks'.tr())
+                                : Text('Show Completed Tasks'.tr()),
                             value: 0,
                           )
                         : null,
                     PopupMenuItem(
                       child: _orderby
-                          ? Text('OrderBy Importance')
-                          : Text('OrderBy Leads'),
+                          ? Text('GroupBy Importance'.tr())
+                          : Text('GroupBy Leads'.tr()),
                       value: 1,
                     ),
                     PopupMenuItem(
-                      child: Text('Settings'),
+                      child: Text('Settings'.tr()),
                       value: 2,
                     ),
                     PopupMenuItem(
-                      child: Text('Logout'),
+                      child: Text('Log out'.tr()),
                       value: 3,
                     )
                   ],
@@ -96,7 +96,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         width: 200,
                       ),
                       Text(
-                        'No Tasks Yet',
+                        'No Tasks Yet'.tr(),
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -229,7 +229,7 @@ class _TaskScreenState extends State<TaskScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Other Tasks",
+                                "Other Tasks".tr(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 18),
                               ),
@@ -323,7 +323,7 @@ class _TaskScreenState extends State<TaskScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Task',
+                'Task'.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               SizedBox(

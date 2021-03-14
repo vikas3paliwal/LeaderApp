@@ -1,0 +1,84 @@
+﻿{
+  "Name": "Name",
+  "Address": "Address",
+  "Phone No": "Phone No",
+  "Contact": "Contact",
+  "Email": "Email",
+  "Update":"Update",
+  "Remove": "Remove",
+  "Language": "Language",
+  "Accept": "Accept",
+  "Reject": "Reject",
+  "Are You Sure ?" : "Are You Sure ?" ,
+  "No" : "No",
+  "Yes" : "Yes" ,
+  "Are you sure, You want to delete ?" : "Are you sure, You want to delete ?",
+  "Login Failed": "Login Failed",
+  "Log Out": "Log Out",
+  "Close": "Close",
+  "Please Choose your langauge" : "Please Choose your langauge",
+  "Successfully Done": "Successfully Done",
+  "Please Wait": "Please Wait",
+  "Logging In": "Logging In",
+  "Save": "Save",
+  "OK": "OK",
+  "CANCEL": "CANCEL",
+  "Title": "Title",
+  "Submit": "Submit",
+  "ADD LABELS":"ADD LABELS",
+  "ADD FOLLOW-UP/TASK": "ADD FOLLOW-UP/TASK",
+  "ADD NOTES":"ADD NOTES",
+  "ADD BUDGET":"ADD BUDGET",
+  "LEADS":"LEADS",
+  "Labels":"Labels",
+  "Tasks":"Tasks",
+  "No Tasks Yet":"No Tasks Yet",
+  "Task Description":"Task Description",
+  "This field can not be empty":"This field can not be empty",
+  "Tap icon to attatch to lead(Optional)":"Tap icon to attatch to lead(Optional)",
+  "Set Reminder Date":"Set Reminder Date",
+  "Jan":"Jan",
+  "Feb":"Feb",
+  "Mar":"Mar",
+  "Apr":"Apr",
+  "May":"May",
+  "Jun":"Jun",
+  "Jul":"Jul",
+  "Aug":"Aug",
+  "Sep":"Sep",
+  "Oct":"Oct",
+  "Nov":"Nov",
+  "Dec":"Dec",
+  "Set Importance":"Set Importance",
+  "Set Date":"Set Date",
+  "Time":"Time",
+  "SELECT TIME":"SELECT TIME",
+  "Add":"Add",
+  "Search": "Search",
+  "Loan Calculator":"Loan Calculator",
+  "Conversion Table":"Conversion Table",
+  "Show Labels":"Show Labels",
+  "List Order":"List Order",
+  "Date Added":"Date Added",
+  "Order By Name":"Order By Name",
+  "EDIT DETAILS":"EDIT DETAILS",
+  "SEND BUSINESS CARD":"SEND BUSINESS CARD",
+  "Settings":"Settings"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

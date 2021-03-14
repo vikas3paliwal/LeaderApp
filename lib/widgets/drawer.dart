@@ -1,4 +1,9 @@
+import 'package:Leader/screens/conversion.dart';
+import 'package:Leader/screens/emi_calculator.dart';
+import 'package:Leader/widgets/languageDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class SideDrawer extends StatelessWidget {
   @override
@@ -6,37 +11,53 @@ class SideDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: const <Widget>[
+        children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.black,
             ),
-            child: Center(
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
+            child: Center(child: Image.asset('assets/images/leadgrow.jpeg')),
           ),
           ListTile(
             leading: Icon(Icons.calculate),
-            title: Text('Loan Calculator'),
+            title: Text('Loan Calculator'.tr()),
+            onTap: () {
+              pushNewScreen(
+                context,
+                screen: EMIScreen(),
+                pageTransitionAnimation: PageTransitionAnimation.slideRight,
+                withNavBar: false,
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.tab),
-            title: Text('Conversion Table'),
+            title: Text('Conversion Table'.tr()),
+            onTap: () {
+              pushNewScreen(
+                context,
+                screen: ConversionScreen(),
+                pageTransitionAnimation: PageTransitionAnimation.slideRight,
+                withNavBar: false,
+              );
+            },
           ),
           ListTile(
-            leading: Icon(Icons.photo_library),
-            title: Text('Upcoming Projects'),
+            title: Text('Language'.tr()),
+            leading: Icon(Icons.language),
+            onTap: () {
+              showDialog(
+                  context: context, builder: (context) => LanguageDialog());
+            },
           ),
-          ListTile(
-            leading: Icon(Icons.video_library),
-            title: Text('News'),
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.photo_library),
+          //   title: Text('Upcoming Projects'),
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.video_library),
+          //   title: Text('News'),
+          // ),
         ],
       ),
     );

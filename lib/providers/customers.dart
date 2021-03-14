@@ -2,6 +2,8 @@ import 'package:Leader/models/customer.dart';
 import 'package:Leader/models/label.dart';
 import 'package:Leader/models/task.dart';
 import 'package:flutter/widgets.dart';
+import '../utilities/api_helper.dart';
+import '../utilities/api-response.dart';
 
 class Customers with ChangeNotifier {
   // List<int> copyindex = [];
@@ -10,6 +12,8 @@ class Customers with ChangeNotifier {
   List<Customer> get customers {
     return [..._customers];
   }
+
+  // final String url = "https://www.homeplanify.com/leadgrow/customer";
 
   void addLead(Customer customer) {
     _customers.add(customer);
@@ -117,5 +121,26 @@ class Customers with ChangeNotifier {
   Customer findById(String id) {
     customers.map((e) => print(e.customerId));
     return _customers.firstWhere((element) => element.customerId == id);
+  }
+
+  Future<ApiResponse> fetchData() async {
+    ApiResponse response;
+    try {
+      response = await ApiHelper().getRequest(endpoint: '/leadgrow/customer');
+    } catch (e) {
+      print(e);
+    }
+
+    _customers = [];
+
+    // print(response.data);
+    for (var res in response.data) {
+      Customer cust = new Customer();
+      cust.fromJSON(res);
+      print('y');
+      // print(cust.name);
+      _customers.add(cust);
+    }
+    return response;
   }
 }

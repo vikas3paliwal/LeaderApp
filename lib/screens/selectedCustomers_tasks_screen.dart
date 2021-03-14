@@ -4,6 +4,7 @@ import 'package:Leader/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SelectedCustomerTasksScreen extends StatefulWidget {
   final String id;
@@ -23,6 +24,16 @@ class _SelectedCustomerTasksScreenState
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name + "'s Tasks"),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => pushNewScreen(context,
+                  screen: AddTaskScreen(
+                    customerid: customer.customerId,
+                  ),
+                  pageTransitionAnimation: PageTransitionAnimation.slideRight,
+                  withNavBar: false))
+        ],
       ),
       body: customer.tasks == null
           ? Center(
@@ -38,7 +49,7 @@ class _SelectedCustomerTasksScreenState
                       width: 200,
                     ),
                     Text(
-                      'No Tasks Yet',
+                      'No Tasks Yet'.tr(),
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,

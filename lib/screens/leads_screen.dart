@@ -8,6 +8,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+// import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Leads extends StatefulWidget {
   static const routeName = '/second';
@@ -20,10 +23,32 @@ class Leads extends StatefulWidget {
 class _LeadsState extends State<Leads> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  bool _isLoading = false;
   bool _search = false;
+  bool _showLabels = true;
+  bool _orderByDate = true;
+  bool _initial = true;
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    if (_initial) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final val = Provider.of<Customers>(context);
+      Future.value(val.fetchData()).whenComplete(() => setState(() {
+            _isLoading = false;
+          }));
+    }
+    _initial = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final customers = Provider.of<Customers>(context);
+    final customers = Provider.of<Customers>(context, listen: false);
+    // print('11');
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
@@ -38,7 +63,7 @@ class _LeadsState extends State<Leads> {
                   height: 100.0,
                   child: Center(
                     child: Text(
-                      "LEADS",
+                      "LEADS".tr(),
                       style: TextStyle(color: Colors.white, fontSize: 18.0),
                     ),
                   ),
@@ -84,13 +109,12 @@ class _LeadsState extends State<Leads> {
                                     // onSubmitted: (value) =>
                                     //     customers.onSearchCancel(),
                                     decoration: InputDecoration(
-                                      hintText: "Search",
-                                    ),
+                                        hintText: "Search".tr()),
                                   ),
                                 )
                               : Expanded(
                                   child: Center(
-                                    child: Text('Search'),
+                                    child: Text('Search'.tr()),
                                   ),
                                 ),
                           IconButton(
@@ -115,15 +139,80 @@ class _LeadsState extends State<Leads> {
                             },
                           ),
                           PopupMenuButton(
-                            itemBuilder: (context) => [
-                              PopupMenuItem(child: Text('Settings')),
-                              PopupMenuItem(child: Text('Logout'))
+                            itemBuilder: (ctx) => [
+                              PopupMenuItem(
+                                  child: Row(
+                                children: [
+                                  Text('Show Labels'.tr()),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Checkbox(
+                                      value: _showLabels,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _showLabels = val;
+                                        });
+
+                                        Navigator.of(ctx).pop();
+                                      }),
+                                ],
+                              )),
+                              PopupMenuItem(
+                                  child: PopupMenuButton(
+                                offset: Offset(15, -105),
+                                child: Row(
+                                  children: [
+                                    Text('List Order'.tr()),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Icon(Icons.arrow_right)
+                                  ],
+                                ),
+                                itemBuilder: (ctxt) => [
+                                  PopupMenuItem(
+                                    child: Row(
+                                      children: [
+                                        Text('Date Added'.tr()),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Checkbox(
+                                            value: _orderByDate,
+                                            onChanged: (val) {
+                                              _orderByDate = val;
+                                              Navigator.of(ctxt).pop();
+                                              Navigator.of(ctx).pop();
+                                            })
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    child: Row(
+                                      children: [
+                                        Text('Order By Name'.tr()),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Checkbox(
+                                            value: !_orderByDate,
+                                            onChanged: (val) {
+                                              _orderByDate = !_orderByDate;
+                                              Navigator.of(ctxt).pop();
+                                              Navigator.of(ctx).pop();
+                                            })
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ))
                             ],
                             icon: Icon(
                               Icons.more_vert,
                               color: Colors.deepOrange[300],
                             ),
-                            onSelected: null,
+                            onSelected: (val) {},
                           ),
                         ],
                       ),
@@ -133,19 +222,33 @@ class _LeadsState extends State<Leads> {
               ],
             ),
           ),
-          Expanded(
-              child: customers.customers.isEmpty
-                  ? Text('Nothing here')
-                  : ListView.builder(
-                      itemBuilder: (ctx, index) => customers.customers
-                          .map((e) => LeadTile(
-                                id: e.customerId,
-                                name: e.name,
-                                labels: e.labels,
-                              ))
-                          .toList()[index],
-                      itemCount: customers.customers.length,
-                    )),
+          _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Consumer<Customers>(builder: (ctx, val, child) {
+                  return Expanded(
+                      child: customers.customers.isEmpty
+                          ? Center(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
+                                child:
+                                    Column(children: [Icon(Icons.person_pin)]),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (ctx, index) => customers.customers
+                                  .map((e) => LeadTile(
+                                      id: e.customerId,
+                                      name: e.name,
+                                      labels: e.labels,
+                                      showLabels: _showLabels))
+                                  .toList()[index],
+                              itemCount: customers.customers.length,
+                            ));
+                }),
         ],
       ),
       drawer: SideDrawer(),
@@ -170,7 +273,7 @@ class _LeadsState extends State<Leads> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'Lead',
+                'Lead'.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               SizedBox(

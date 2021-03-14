@@ -2,6 +2,7 @@ import 'package:Leader/providers/customers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AddNotesLeadScreen extends StatefulWidget {
   final String customerId;
@@ -51,7 +52,7 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
         maintainBottomViewPadding: true,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Notes - " + widget.name),
+            title: Text("Notes".tr() + " - " + widget.name),
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
@@ -79,7 +80,8 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
                     child: ListView(
                   children: [
                     Text(
-                      format.format(DateTime.now()),
+                      format.format(DateTime.now()).split(' ').first.tr() +
+                          format.format(DateTime.now()).substring(3),
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                     ),
@@ -126,7 +128,7 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                "Add",
+                "Add".tr(),
                 style: TextStyle(fontSize: 17),
               ),
             ),
