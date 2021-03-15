@@ -2,6 +2,10 @@ import 'dart:ui';
 
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/screens/labeled_customers_screen.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
+import 'package:Leader/utilities/http_exception.dart';
 import 'package:Leader/widgets/drawer.dart';
 import 'package:Leader/models/label.dart' as lb;
 import 'package:Leader/widgets/label.dart';
@@ -76,7 +80,7 @@ class _LabelScreenState extends State<LabelScreen> {
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Cancel'.tr())),
           FlatButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_controller.text.trim().isNotEmpty) {
                   final label = lb.Label();
                   label.color = currentColor;
@@ -84,7 +88,41 @@ class _LabelScreenState extends State<LabelScreen> {
                   label.labelId = UniqueKey().toString();
                   Provider.of<Labels>(ctx, listen: false).addLabel(label);
                   Navigator.of(context).pop();
+
+                  Map<String, dynamic> data = {
+                    'name': label.labelName,
+                    'color': label.color.value.toString(),
+                  };
+                  print(data);
+
+                  try {
+                    final ApiResponse response = await ApiHelper().postRequest(
+                      'leadgrow/labels/',
+                      data,
+                    );
+                    if (!response.error) {
+                      Flushbar(
+                        message: 'Message Sent successfully!',
+                        duration: Duration(seconds: 3),
+                      )..show(context);
+                    } else {
+                      Flushbar(
+                        message: response.errorMessage ?? 'Unable to send',
+                        duration: Duration(seconds: 3),
+                      )..show(context);
+                    }
+                  } on HttpException catch (error) {
+                    throw HttpException(message: error.toString());
+                  } catch (error) {
+                    Flushbar(
+                      message: 'Unable to send',
+                      duration: Duration(seconds: 3),
+                    )..show(context);
+                  }
                 }
+                setState(() {
+                  _isLoading = false;
+                });
               },
               child: Text('Ok'.tr())),
         ],

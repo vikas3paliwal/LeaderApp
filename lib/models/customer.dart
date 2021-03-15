@@ -29,7 +29,7 @@ class Customer {
       this.labels,
       this.phoneNos,
       this.tasks,
-      this.budget,
+      this.budget = '0',
       this.proptype,
       this.pinned,
       this.notes});
@@ -39,31 +39,28 @@ class Customer {
         : this.labels.map((e) => e.toJson()).toList();
     List<Map> tasks =
         this.tasks == null ? null : this.tasks.map((e) => e.toJson()).toList();
-    Map events = this.events == null
-        ? null
-        : {
-            'day': this.events.day?.toIso8601String() ?? '',
-            'eventName': this.events.eventName
-          };
-    var data = {
+    Map<String, dynamic> data = {
       'name': name,
       'location': location,
-      'address': addresses,
-      'customerId': customerId,
+      'mobile': "+91" + phoneNos.toString(),
       'email': emails,
-      'notes': notes,
-      'event': events,
-      'labels': labels,
-      'tasks': tasks,
+      'address': addresses,
       'budget': budget,
-      'proptype': proptype,
-      'pinned': pinned
+      'property_type': proptype,
+      'pinned': pinned.toString(),
+      'event_name': events.eventName,
+      'event_date': events.day.toString(),
+      // 'event_date': events,
+      // 'id': customerId,
+      // 'notes': notes,
+      // 'labels': labels,
+      // 'tasks': tasks,
     };
     return data;
   }
 
   void fromJSON(dynamic res) {
-    print(res);
+    // print(res);
     // print(res['mobile'].runtimeType);
     name = res['name'];
     customerId = res['id'].toString();
