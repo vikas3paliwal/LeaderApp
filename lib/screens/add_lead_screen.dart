@@ -1,7 +1,12 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:Leader/models/customer.dart';
 import 'package:Leader/providers/customers.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
+import 'package:Leader/utilities/http_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -45,25 +50,60 @@ class _AddLeadScreenState extends State<AddLeadScreen>
   double _bottomleft;
   double _bottomright;
   String _custmprop;
-  void addLead() {
+  void addLead() async {
+    Map<String, dynamic> data;
     try {
       if (_formKey.currentState.validate()) {
         final customer = Provider.of<Customers>(context, listen: false);
-        customer.addLead(Customer(
-            customerId: UniqueKey().toString(),
-            name: leadNameController.text,
-            location: locationController.text,
-            phoneNos: mobileController.text,
-            emails: emailController.text,
-            addresses: addressController.text,
-            proptype: _custmprop ?? '',
-            pinned: false,
-            events: Event(day: eventDate, eventName: eventController.text)));
+        Customer cust = new Customer(
+          customerId: UniqueKey().toString(),
+          name: leadNameController.text,
+          location: locationController.text,
+          phoneNos: mobileController.text,
+          emails: emailController.text,
+          addresses: addressController.text,
+          proptype: _custmprop ?? '',
+          pinned: false,
+          events: Event(
+            day: eventDate,
+            eventName: eventController.text,
+          ),
+        );
+        customer.addLead(cust);
+        data = cust.toJson();
+        print('================');
+        print(data);
+        print('================');
         // widget.callback();
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       }
     } catch (e) {
       print(e.toString());
+    }
+
+    try {
+      final ApiResponse response = await ApiHelper().postRequest(
+        'leadgrow/customer/',
+        data,
+      );
+      if (!response.error) {
+        Flushbar(
+          message: 'Message Sent successfully!',
+          duration: Duration(seconds: 3),
+        )..show(context);
+      } else {
+        Flushbar(
+          message: response.errorMessage ?? 'Unable to send',
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    } on HttpException catch (error) {
+      throw HttpException(message: error.toString());
+    } catch (error) {
+      Flushbar(
+        message: 'Unable to send',
+        duration: Duration(seconds: 3),
+      )..show(context);
     }
   }
 

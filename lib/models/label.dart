@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class Label {
   String labelId;
   String labelName;
-  var color;
+  Color color;
   List<String> customers;
   Map<String, bool> label;
   Label({
@@ -16,23 +16,27 @@ class Label {
     this.label,
     this.labelId,
   });
-  Map toJson() {
+
+  Map<String, dynamic> toJson() {
     List<Map> customers = this.customers == null
         ? null
         : this.customers.map((e) => json.decode(e)).toList();
-    return {
-      'labelId': labelId,
+    Map<String, dynamic> data = {
+      // 'labelId': labelId,
       'labelName': labelName,
       'color': color,
       'customers': customers,
       'label': label
     };
+    return data;
   }
 
   void fromJson(res) {
-    print(res['id'].runtimeType);
+    // print(res['color'].runtimeType);
     labelId = res['id'].toString();
     labelName = res['name'];
-    color = Colors.red;
+    color = Color(int.parse(res['color']));
+    // print();
+    // color = Colors.blue;
   }
 }

@@ -1,10 +1,13 @@
 import 'dart:math';
+import 'dart:io';
 
 import 'package:Leader/models/business.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:image_picker/image_picker.dart';
+import '../widgets/image_bottom_sheet.dart';
 
 class EditBusinessDetailsScreen extends StatefulWidget {
   @override
@@ -15,18 +18,33 @@ class EditBusinessDetailsScreen extends StatefulWidget {
 class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _initial = true;
+  File _imageFile;
+  bool _noImageError = false;
 
   TextEditingController businessNameController = TextEditingController();
   TextEditingController webController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
   //focus node contorller
 
   FocusNode webnode = FocusNode();
   FocusNode mobilenode = FocusNode();
   FocusNode emailnode = FocusNode();
   FocusNode addressnode = FocusNode();
+
+  Future<File> getImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: source);
+    setState(() {
+      _imageFile = File(pickedFile.path);
+      _noImageError = false;
+    });
+    return File(pickedFile.path);
+
+    //cropImage();
+  }
 
   void editBusiness() {
     try {
@@ -56,6 +74,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
       mobileController.text = business?.mobileNo ?? '';
       webController.text = business?.webaddress ?? '';
       emailController.text = business?.emailaddress ?? '';
+      imageController.text = '';
     }
     _initial = false;
     super.didChangeDependencies();
@@ -331,6 +350,67 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                       },
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 40.0,
+                      child: RaisedButton(
+                        color: Theme.of(context).accentColor,
+                        child: Text(
+                          'Add Profile',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          print('y');
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) => Wrap(children: [
+                                    ImageBottomSheet(
+                                      onTapCamera: () async {
+                                        File file =
+                                            await getImage(ImageSource.camera);
+                                        print(file);
+                                        setState(() {
+                                          _imageFile = file;
+                                          imageController.text =
+                                              file.toString();
+                                          _noImageError = false;
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      onTapGallery: () async {
+                                        File file =
+                                            await getImage(ImageSource.gallery);
+                                        setState(() {
+                                          _imageFile = file;
+                                          imageController.text =
+                                              file.toString();
+                                          _noImageError = false;
+                                        });
+                                        print(file);
+                                        Navigator.pop(context);
+                                      },
+                                    )
+                                  ]));
+                        },
+                      ),
+                    ),
+                  ),
+                  if (_imageFile != null)
+                    Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 5.0, color: Theme.of(context).accentColor),
+                          image: DecorationImage(
+                              image: FileImage(_imageFile),
+                              fit: BoxFit.fitWidth),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             )),

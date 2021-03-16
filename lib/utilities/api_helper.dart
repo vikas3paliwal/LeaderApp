@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'api-response.dart';
@@ -227,19 +228,20 @@ class ApiHelper {
   //POST
   Future<ApiResponse> postRequest(
       String endpoint, Map<String, dynamic> data) async {
+    print('post');
     if (_authToken.isEmpty || _authToken == null) {
       return ApiResponse(error: true, errorMessage: 'User not logged in');
     }
     try {
 //      final url = '$_baseUrl$endpoint';
       final uri = Uri.https(_baseUrl, endpoint);
-
+      print(jsonEncode(data));
       final response = await http.post(uri,
           headers: {
             HttpHeaders.authorizationHeader: 'Token $_authToken',
           },
           body: data);
-//      print('code is ${response.statusCode}');
+      print('code is ${response.statusCode}');
       if (response.statusCode == 200 || response.statusCode == 201) {
         return ApiResponse(data: jsonDecode(response.body));
       } else {
@@ -258,8 +260,11 @@ class ApiHelper {
         return ApiResponse(error: true, errorMessage: error);
       }
     } on SocketException catch (error) {
+      print('socket');
       throw HttpException(message: 'No Internet Connection');
     } catch (e) {
+      print('***********');
+      print(e);
       throw e;
     }
   }
