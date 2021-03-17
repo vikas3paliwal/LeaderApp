@@ -74,7 +74,8 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
       mobileController.text = business?.mobileNo ?? '';
       webController.text = business?.webaddress ?? '';
       emailController.text = business?.emailaddress ?? '';
-      imageController.text = '';
+      imageController.text = business?.imgurl ?? '';
+      print(imageController.text);
     }
     _initial = false;
     super.didChangeDependencies();
@@ -408,6 +409,22 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                           image: DecorationImage(
                               image: FileImage(_imageFile),
                               fit: BoxFit.fitWidth),
+                        ),
+                      ),
+                    ),
+                  if (_imageFile == null)
+                    Center(
+                      child: Container(
+                        // child: Text('dddd'),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 5.0, color: Theme.of(context).accentColor),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(imageController.text),
+                          ),
                         ),
                       ),
                     ),

@@ -1,3 +1,5 @@
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
 import 'package:flutter/cupertino.dart';
 
 class Business extends ChangeNotifier {
@@ -43,5 +45,31 @@ class Business extends ChangeNotifier {
     );
 
     notifyListeners();
+  }
+
+  Future<ApiResponse> fetchData() async {
+    ApiResponse response;
+    try {
+      response = await ApiHelper().getRequest(endpoint: '/leadgrow/business');
+    } catch (e) {
+      print(e);
+    }
+
+    // _labels = [];
+
+    final data = response.data[0];
+    print(data);
+    Business b = new Business();
+    b.mobileNo = data['mobile'];
+    b.address = data['address'];
+    b.webaddress = data['website'];
+    b.emailaddress = data['email'];
+    b.imgurl = data['image'];
+    b.name = data['name'];
+    _business = b;
+    // _business.mobileNo = data['mobile'].toString();
+
+    // notifyListeners();
+    return response;
   }
 }
