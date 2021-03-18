@@ -1,4 +1,5 @@
 import 'package:Leader/models/business.dart';
+import 'package:Leader/screens/edit_businessDetails_screen.dart';
 import 'package:Leader/widgets/customAppbar.dart';
 import 'package:Leader/widgets/drawer.dart';
 
@@ -26,13 +27,21 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
       });
 
       final val = Provider.of<Business>(context);
-      Future.value(val.fetchData()).whenComplete(
-        () => setState(
+      Future.value(val.fetchData()).whenComplete(() {
+        print('yyyyyyyyyyyyyyyyyyy');
+        setState(
           () {
             _isLoading = false;
           },
-        ),
-      );
+        );
+        if (val.business == null) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditBusinessDetailsScreen()),
+              (route) => false);
+        }
+      });
     }
     _initial = false;
     super.didChangeDependencies();

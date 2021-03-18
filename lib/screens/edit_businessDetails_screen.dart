@@ -1,7 +1,11 @@
 import 'dart:math';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:Leader/models/business.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +50,34 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
     //cropImage();
   }
 
+  void updateData(data) async {
+    try {
+      final ApiResponse response = await ApiHelper().postWithFileRequest(
+          endpoint: '/leadgrow/business/',
+          data: data,
+          file: _imageFile,
+          fileFieldName: 'image');
+      if (!response.error) {
+        Flushbar(
+          message: 'Message Sent successfully!',
+          duration: Duration(seconds: 3),
+        )..show(context);
+      } else {
+        Flushbar(
+          message: response.errorMessage ?? 'Unable to send',
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    } on HttpException catch (error) {
+      throw HttpException(error.toString());
+    } catch (error) {
+      Flushbar(
+        message: 'Unable to send',
+        duration: Duration(seconds: 3),
+      )..show(context);
+    }
+  }
+
   void editBusiness() {
     try {
       if (_formKey.currentState.validate()) {
@@ -55,7 +87,21 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
             mobileNo: mobileController.text,
             emailaddress: emailController.text,
             id: UniqueKey().toString(),
-            webaddress: webController.text);
+            webaddress: webController.text,
+            imgurl: imageController.text);
+
+        Map<String, dynamic> data = {
+          'name': businessNameController.text,
+          'email': emailController.text,
+          'mobile': "+91" + mobileController.text,
+          'address': addressController.text,
+          // 'image': base64Image,
+          'website': webController.text
+        };
+        print(data);
+
+        updateData(data);
+
         Navigator.of(context).pop();
       }
     } on FormatException catch (e) {
@@ -386,7 +432,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                                         setState(() {
                                           _imageFile = file;
                                           imageController.text =
-                                              file.toString();
+                                              file.path.toString();
                                           _noImageError = false;
                                         });
                                         print(file);

@@ -56,9 +56,15 @@ class Business extends ChangeNotifier {
     }
 
     // _labels = [];
-
+    print('#############');
+    print(response.data);
+    print('#############');
+    if (response.data == []) {
+      return null;
+    }
+    // print('ouy');
     final data = response.data[0];
-    print(data);
+    // print('**************');
     Business b = new Business();
     b.mobileNo = data['mobile'];
     b.address = data['address'];
@@ -70,6 +76,7 @@ class Business extends ChangeNotifier {
     // _business.mobileNo = data['mobile'].toString();
 
     // notifyListeners();
+    // print('y');
     return response;
   }
 }
