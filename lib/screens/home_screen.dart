@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     _bottomTabController = PersistentTabController(
-      initialIndex: 0,
+      initialIndex: 3,
     );
     // _bottomTabController.addListener(() {
     //   setState(() {});

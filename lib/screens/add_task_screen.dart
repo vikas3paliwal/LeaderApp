@@ -2,6 +2,10 @@ import 'package:Leader/models/task.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/all_leads_screen.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
+import 'package:Leader/utilities/http_exception.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:intl/intl.dart';
@@ -53,6 +57,37 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     }
 
     super.initState();
+  }
+
+  void addCard(BuildContext context, task) async {
+    print('adding');
+    Map<String, dynamic> data = task.toJson();
+    print(data);
+
+    try {
+      final ApiResponse response = await ApiHelper().postRequest(
+        'leadgrow/tasks/',
+        data,
+      );
+      if (!response.error) {
+        Flushbar(
+          message: 'Message Sent successfully!',
+          duration: Duration(seconds: 3),
+        )..show(context);
+      } else {
+        Flushbar(
+          message: response.errorMessage ?? 'Unable to send',
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    } on HttpException catch (error) {
+      throw HttpException(message: error.toString());
+    } catch (error) {
+      Flushbar(
+        message: 'Unable to send',
+        duration: Duration(seconds: 3),
+      )..show(context);
+    }
   }
 
   @override
@@ -362,6 +397,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 task: _taskController.text,
                 importance: _importance ?? Importance.RoutineTask,
                 completed: false);
+            // print(taskmodel);
 
             if (_taskController.text.trim().isNotEmpty) {
               task.addTask(widget.taskid, taskmodel);
@@ -373,6 +409,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     ? customer.tasks = [taskmodel]
                     : customer.tasks.add(taskmodel);
               }
+              addCard(context, taskmodel);
               Navigator.of(context).pop();
             } else {
               setState(() {

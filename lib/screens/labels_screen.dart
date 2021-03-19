@@ -150,26 +150,32 @@ class _LabelScreenState extends State<LabelScreen> {
         ],
       ),
       drawer: SideDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView.separated(
-          separatorBuilder: (ctx, i) => Divider(
-            thickness: 2,
-          ),
-          itemBuilder: (ctx, i) => label.labels
-              .map((e) => Column(children: [
-                    Label(
-                      customers: e.label == null ? null : e.label.keys.length,
-                      labelColor: e.color,
-                      labelName: e.labelName,
-                      id: e.labelId,
-                      customids: e.label == null ? null : e.label.keys.toList(),
-                    ),
-                  ]))
-              .toList()[i],
-          itemCount: label.labels.length,
-        ),
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ListView.separated(
+                separatorBuilder: (ctx, i) => Divider(
+                  thickness: 2,
+                ),
+                itemBuilder: (ctx, i) => label.labels
+                    .map((e) => Column(children: [
+                          Label(
+                            customers:
+                                e.label == null ? null : e.label.keys.length,
+                            labelColor: e.color,
+                            labelName: e.labelName,
+                            id: e.labelId,
+                            customids:
+                                e.label == null ? null : e.label.keys.toList(),
+                          ),
+                        ]))
+                    .toList()[i],
+                itemCount: label.labels.length,
+              ),
+            ),
       floatingActionButton: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => _addLabel(context),

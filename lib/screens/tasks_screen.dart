@@ -21,9 +21,27 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
   bool _orderby = false;
   bool _completed = false;
+  bool _initial = true;
+  bool _isLoading = false;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    if (_initial) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final val = Provider.of<Tasks>(context);
+      Future.value(val.fetchData()).whenComplete(
+        () => setState(
+          () {
+            _isLoading = false;
+          },
+        ),
+      );
+    }
+    _initial = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -80,234 +98,256 @@ class _TaskScreenState extends State<TaskScreen> {
               offset: Offset(3, 4)),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: tasks.tasks.isEmpty
-            ? Center(
-                child: Container(
-                  height: 230,
-                  width: 240,
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        'assets/images/no_tasks.png',
-                        height: 200,
-                        width: 200,
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: tasks.tasks.isEmpty
+                  ? Center(
+                      child: Container(
+                        height: 230,
+                        width: 240,
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'assets/images/no_tasks.png',
+                              height: 200,
+                              width: 200,
+                            ),
+                            Text(
+                              'No Tasks Yet'.tr(),
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        ),
                       ),
-                      Text(
-                        'No Tasks Yet'.tr(),
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            : (_orderby
-                ? ListView.builder(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: customers.customers.length + 1,
-                    itemBuilder: (ctx, i) {
-                      if (i < customers.customers.length) {
-                        return customers.customers.map((e) {
-                          if (e.tasks != null) {
-                            print(_completed);
-                            final List tasks = customers.completedTasks(
-                                e.customerId, _completed);
+                    )
+                  : (_orderby
+                      ? ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: customers.customers.length + 1,
+                          itemBuilder: (ctx, i) {
+                            if (i < customers.customers.length) {
+                              return customers.customers.map((e) {
+                                if (e.tasks != null) {
+                                  print(_completed);
+                                  final List tasks = customers.completedTasks(
+                                      e.customerId, _completed);
 
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  e.name.toUpperCase(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                ),
-                                (_completed ? tasks.isEmpty : e.tasks.isEmpty)
-                                    ? SizedBox(
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        e.name.toUpperCase(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18),
+                                      ),
+                                      (_completed
+                                              ? tasks.isEmpty
+                                              : e.tasks.isEmpty)
+                                          ? SizedBox(
+                                              height: 10,
+                                            )
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 20),
+                                              child: GridView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                addAutomaticKeepAlives: true,
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                  mainAxisSpacing: 8,
+                                                  crossAxisSpacing: 8,
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio: 1,
+                                                ),
+                                                itemBuilder: (ctx, i) =>
+                                                    _completed
+                                                        ? tasks.map((e) {
+                                                            return GestureDetector(
+                                                                onTap: () =>
+                                                                    pushNewScreen(
+                                                                      context,
+                                                                      screen:
+                                                                          AddTaskScreen(
+                                                                        taskid:
+                                                                            e.taskID,
+                                                                      ),
+                                                                      pageTransitionAnimation:
+                                                                          PageTransitionAnimation
+                                                                              .fade,
+                                                                      withNavBar:
+                                                                          false,
+                                                                    ),
+                                                                child: TaskItem(
+                                                                  task: e,
+                                                                  callback: () {
+                                                                    // setState(() {});
+                                                                  },
+                                                                ));
+                                                          }).toList()[i]
+                                                        : e.tasks.map((e) {
+                                                            return GestureDetector(
+                                                                onTap: () =>
+                                                                    pushNewScreen(
+                                                                      context,
+                                                                      screen:
+                                                                          AddTaskScreen(
+                                                                        taskid:
+                                                                            e.taskID,
+                                                                      ),
+                                                                      pageTransitionAnimation:
+                                                                          PageTransitionAnimation
+                                                                              .fade,
+                                                                      withNavBar:
+                                                                          false,
+                                                                    ),
+                                                                child: TaskItem(
+                                                                  task: e,
+                                                                  callback: () {
+                                                                    // setState(() {});
+                                                                  },
+                                                                ));
+                                                          }).toList()[i],
+                                                itemCount: _completed
+                                                    ? tasks.length
+                                                    : e.tasks.length,
+                                              ),
+                                            ),
+                                      SizedBox(
                                         height: 10,
-                                      )
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 20),
-                                        child: GridView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          addAutomaticKeepAlives: true,
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                            mainAxisSpacing: 8,
-                                            crossAxisSpacing: 8,
-                                            crossAxisCount: 2,
-                                            childAspectRatio: 1,
-                                          ),
-                                          itemBuilder: (ctx, i) => _completed
-                                              ? tasks.map((e) {
-                                                  return GestureDetector(
-                                                      onTap: () =>
-                                                          pushNewScreen(
-                                                            context,
-                                                            screen:
-                                                                AddTaskScreen(
-                                                              taskid: e.taskID,
-                                                            ),
-                                                            pageTransitionAnimation:
-                                                                PageTransitionAnimation
-                                                                    .fade,
-                                                            withNavBar: false,
-                                                          ),
-                                                      child: TaskItem(
-                                                        task: e,
-                                                        callback: () {
-                                                          // setState(() {});
-                                                        },
-                                                      ));
-                                                }).toList()[i]
-                                              : e.tasks.map((e) {
-                                                  return GestureDetector(
-                                                      onTap: () =>
-                                                          pushNewScreen(
-                                                            context,
-                                                            screen:
-                                                                AddTaskScreen(
-                                                              taskid: e.taskID,
-                                                            ),
-                                                            pageTransitionAnimation:
-                                                                PageTransitionAnimation
-                                                                    .fade,
-                                                            withNavBar: false,
-                                                          ),
-                                                      child: TaskItem(
-                                                        task: e,
-                                                        callback: () {
-                                                          // setState(() {});
-                                                        },
-                                                      ));
-                                                }).toList()[i],
-                                          itemCount: _completed
-                                              ? tasks.length
-                                              : e.tasks.length,
-                                        ),
                                       ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Divider(
-                                  height: 1,
-                                  thickness: 2,
-                                ),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                                Divider(
-                                  height: 1,
-                                  thickness: 2,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            );
-                          } else {
-                            return SizedBox(
-                              height: 10,
-                            );
-                          }
-                        }).toList()[i];
-                      } else {
-                        final List comptasks = tasks
-                                .otherTasks()
-                                .where((element) => element.completed == true)
-                                .toList() ??
-                            [];
-                        return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Other Tasks".tr(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 18),
-                              ),
-                              (_completed
-                                      ? comptasks.isEmpty
-                                      : tasks.otherTasks().isEmpty)
-                                  ? SizedBox(
-                                      height: 20,
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 20),
-                                      child: GridView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisSpacing: 8,
-                                          crossAxisSpacing: 8,
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 1,
-                                        ),
-                                        itemBuilder: (ctx, ind) {
-                                          return _completed
-                                              ? comptasks
-                                                  .map((e) => GestureDetector(
-                                                      onTap: () =>
-                                                          pushNewScreen(
-                                                            context,
-                                                            screen:
-                                                                AddTaskScreen(
-                                                              taskid: e.taskID,
-                                                            ),
-                                                            pageTransitionAnimation:
-                                                                PageTransitionAnimation
-                                                                    .fade,
-                                                            withNavBar: false,
-                                                          ),
-                                                      child: TaskItem(
-                                                        task: e,
-                                                        callback: () {
-                                                          // setState(() {});
-                                                        },
-                                                      )))
-                                                  .toList()[ind]
-                                              : tasks
-                                                  .otherTasks()
-                                                  .map((e) => GestureDetector(
-                                                      onTap: () =>
-                                                          pushNewScreen(
-                                                            context,
-                                                            screen:
-                                                                AddTaskScreen(
-                                                              taskid: e.taskID,
-                                                            ),
-                                                            pageTransitionAnimation:
-                                                                PageTransitionAnimation
-                                                                    .fade,
-                                                            withNavBar: false,
-                                                          ),
-                                                      child: TaskItem(
-                                                        task: e,
-                                                        callback: () {
-                                                          // setState(() {});
-                                                        },
-                                                      )))
-                                                  .toList()[ind];
-                                        },
-                                        itemCount: _completed
-                                            ? comptasks.length
-                                            : tasks.otherTasks().length,
+                                      Divider(
+                                        height: 1,
+                                        thickness: 2,
                                       ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Divider(
+                                        height: 1,
+                                        thickness: 2,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return SizedBox(
+                                    height: 10,
+                                  );
+                                }
+                              }).toList()[i];
+                            } else {
+                              final List comptasks = tasks
+                                      .otherTasks()
+                                      .where((element) =>
+                                          element.completed == true)
+                                      .toList() ??
+                                  [];
+                              return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Other Tasks".tr(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18),
                                     ),
-                            ]);
-                      }
-                    })
-                : ImportantTaskList()),
-      ),
+                                    (_completed
+                                            ? comptasks.isEmpty
+                                            : tasks.otherTasks().isEmpty)
+                                        ? SizedBox(
+                                            height: 20,
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            child: GridView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                mainAxisSpacing: 8,
+                                                crossAxisSpacing: 8,
+                                                crossAxisCount: 2,
+                                                childAspectRatio: 1,
+                                              ),
+                                              itemBuilder: (ctx, ind) {
+                                                return _completed
+                                                    ? comptasks
+                                                        .map((e) =>
+                                                            GestureDetector(
+                                                                onTap: () =>
+                                                                    pushNewScreen(
+                                                                      context,
+                                                                      screen:
+                                                                          AddTaskScreen(
+                                                                        taskid:
+                                                                            e.taskID,
+                                                                      ),
+                                                                      pageTransitionAnimation:
+                                                                          PageTransitionAnimation
+                                                                              .fade,
+                                                                      withNavBar:
+                                                                          false,
+                                                                    ),
+                                                                child: TaskItem(
+                                                                  task: e,
+                                                                  callback: () {
+                                                                    // setState(() {});
+                                                                  },
+                                                                )))
+                                                        .toList()[ind]
+                                                    : tasks
+                                                        .otherTasks()
+                                                        .map((e) =>
+                                                            GestureDetector(
+                                                                onTap: () =>
+                                                                    pushNewScreen(
+                                                                      context,
+                                                                      screen:
+                                                                          AddTaskScreen(
+                                                                        taskid:
+                                                                            e.taskID,
+                                                                      ),
+                                                                      pageTransitionAnimation:
+                                                                          PageTransitionAnimation
+                                                                              .fade,
+                                                                      withNavBar:
+                                                                          false,
+                                                                    ),
+                                                                child: TaskItem(
+                                                                  task: e,
+                                                                  callback: () {
+                                                                    // setState(() {});
+                                                                  },
+                                                                )))
+                                                        .toList()[ind];
+                                              },
+                                              itemCount: _completed
+                                                  ? comptasks.length
+                                                  : tasks.otherTasks().length,
+                                            ),
+                                          ),
+                                  ]);
+                            }
+                          })
+                      : ImportantTaskList()),
+            ),
       drawer: SideDrawer(),
       floatingActionButton: InkWell(
         onTap: () {
