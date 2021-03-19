@@ -69,41 +69,43 @@ class _AddLeadScreenState extends State<AddLeadScreen>
             eventName: eventController.text,
           ),
         );
-        customer.addLead(cust);
         data = cust.toJson();
+        try {
+          final ApiResponse response = await ApiHelper().postRequest(
+            'leadgrow/customer/',
+            data,
+          );
+          if (!response.error) {
+            Flushbar(
+              message: 'Message Sent successfully!',
+              duration: Duration(seconds: 3),
+            )..show(context);
+            customer.addLead(cust);
+            Navigator.of(context).pop();
+          } else {
+            Flushbar(
+              message: response.errorMessage ??
+                  'Unable to add, Please try again later',
+              duration: Duration(seconds: 3),
+            )..show(context);
+          }
+        } on HttpException catch (error) {
+          throw HttpException(message: error.toString());
+        } catch (error) {
+          Flushbar(
+            message: 'Unable to add, Please try again later',
+            duration: Duration(seconds: 3),
+          )..show(context);
+        }
+
         print('================');
         print(data);
         print('================');
         // widget.callback();
-        // Navigator.of(context).pop();
+
       }
     } catch (e) {
       print(e.toString());
-    }
-
-    try {
-      final ApiResponse response = await ApiHelper().postRequest(
-        'leadgrow/customer/',
-        data,
-      );
-      if (!response.error) {
-        Flushbar(
-          message: 'Message Sent successfully!',
-          duration: Duration(seconds: 3),
-        )..show(context);
-      } else {
-        Flushbar(
-          message: response.errorMessage ?? 'Unable to send',
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    } on HttpException catch (error) {
-      throw HttpException(message: error.toString());
-    } catch (error) {
-      Flushbar(
-        message: 'Unable to send',
-        duration: Duration(seconds: 3),
-      )..show(context);
     }
   }
 

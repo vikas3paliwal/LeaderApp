@@ -231,11 +231,24 @@ class _LeadsState extends State<Leads> {
                       child: customers.customers.isEmpty
                           ? Center(
                               child: Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.6,
-                                child:
-                                    Column(children: [Icon(Icons.person_pin)]),
+                                padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        MediaQuery.of(context).size.height *
+                                            0.25),
+                                // width: MediaQuery.of(context).size.width,
+                                // height: MediaQuery.of(context).size.height,
+                                child: Column(children: [
+                                  Icon(
+                                    Icons.person_pin,
+                                    size: 60,
+                                    color: Colors.deepOrange[300],
+                                  ),
+                                  Text('No leads at the moment'.tr()),
+                                  TextButton(
+                                      onPressed: () {},
+                                      child:
+                                          Text('IMPORT LEADS/CUSTOMERS'.tr()))
+                                ]),
                               ),
                             )
                           : ListView.builder(

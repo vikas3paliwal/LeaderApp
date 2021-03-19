@@ -229,6 +229,7 @@ class ApiHelper {
   Future<ApiResponse> postRequest(
       String endpoint, Map<String, dynamic> data) async {
     print('post');
+    print(_authToken + 'line');
     if (_authToken.isEmpty || _authToken == null) {
       return ApiResponse(error: true, errorMessage: 'User not logged in');
     }

@@ -113,7 +113,7 @@
   "Villa":"विला",
   "please select event date":"कृपया ईवेंट तिथि चुनें",
   "Do you want to delete":"क्या आप इसे हटाना चाहते हैं",
-  "Load Conversion Unit":"लोड रूपांतरण इकाई",
+  "Land Unit Conversion":"भूमि रूपांतरण इकाई",
   "Add New Lead":"नई लीड जोड़ें",
   "Studio Apartment":"स्टूडियो अपार्टमेंट",
   "1 BHK":"1 बीएचके",
@@ -124,7 +124,10 @@
   "4 BHK":"4 बीएचके",
   "Penthouse":"पेंटहाउस",
   "Yards":"गज",
-  "Routine Task":"सामान्य कार्य"
+  "Routine Task":"सामान्य कार्य",
+  "No leads at the moment":"इस समय कोई लीड नहीं है",
+  "IMPORT LEADS/CUSTOMERS":"इम्पोर्ट लीड/ग्राहक"
+
 
 
 

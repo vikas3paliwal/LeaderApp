@@ -1,4 +1,5 @@
 import 'package:Leader/providers/labels.dart';
+import 'package:Leader/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -106,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: SideDrawer(),
       body: PersistentTabView(
         context,
         padding: NavBarPadding.only(bottom: 2),
