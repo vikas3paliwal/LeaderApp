@@ -1,6 +1,8 @@
 import 'package:Leader/screens/Signup/signup_screen.dart';
+import 'package:Leader/screens/add_business_screen.dart';
 import 'package:Leader/screens/home_screen.dart';
 import 'package:Leader/screens/my_business_screen.dart';
+import 'package:Leader/utilities/api-response.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -42,10 +44,22 @@ class _BodyState extends State<Body> {
         message: "Logged In Successfully!",
         duration: Duration(seconds: 3),
       )..show(context);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MyHomePage()),
-          (route) => false);
+
+      ApiResponse response =
+          await ApiHelper().getRequest(endpoint: 'leadgrow/business');
+
+      print(response.data.length);
+      if (response.data.length != 0) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MyHomePage()),
+            (route) => false);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => AddBusinessDetailsScreen()),
+            (route) => false);
+      }
     } on HttpException catch (error) {
       Flushbar(
         message: '${error.toString()}',
