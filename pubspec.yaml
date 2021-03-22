@@ -42,6 +42,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   flushbar: ^1.10.4
+  animated_text_kit: ^2.2.0
 
 dev_dependencies:
   flutter_test:

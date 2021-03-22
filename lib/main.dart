@@ -4,6 +4,7 @@ import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
+import 'package:Leader/screens/OnBoarding/on_boarding.dart';
 import 'package:Leader/screens/Signup/signup_screen.dart';
 // import 'package:Leader/screens/login_screen.dart';
 import 'package:Leader/utilities/api_helper.dart';
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         locale: context.locale,
-        home: SignUpScreen(),
+        home: OnBoardingScreen(),
       ),
     );
   }

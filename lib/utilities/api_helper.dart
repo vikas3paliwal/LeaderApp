@@ -23,7 +23,7 @@ class ApiHelper {
   factory ApiHelper() => _instance ?? ApiHelper._internal();
   ApiHelper._internal();
 
-  Future<String> _getAuthToken() async {
+  Future<String> getAuthToken() async {
     if (_authToken != null) return _authToken;
 
     final SharedPreferences prefs = await _prefs;
