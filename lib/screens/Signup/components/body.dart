@@ -1,3 +1,4 @@
+import 'package:Leader/screens/add_business_screen.dart';
 import 'package:Leader/screens/home_screen.dart';
 import 'package:Leader/screens/my_business_screen.dart';
 import 'package:flushbar/flushbar.dart';
@@ -49,7 +50,7 @@ class _BodyState extends State<Body> {
       )..show(context);
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => MyHomePage()),
+          MaterialPageRoute(builder: (context) => AddBusinessDetailsScreen()),
           (route) => false);
     } on HttpException catch (error) {
       Flushbar(
