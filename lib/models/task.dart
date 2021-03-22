@@ -20,20 +20,35 @@ class Task {
       this.task,
       this.importance,
       this.completed});
-  Map toJson() {
-    return {
-      'taskId': taskID,
-      'day': day.toIso8601String(),
-      'time': time.hour.toString() + ' : ' + time.minute.toString(),
-      'customerId': customerId,
-      'task': task,
-      'completed': completed,
-      'importance': importance.toString()
+
+  Map<String, dynamic> toJson() {
+    Map convert = {
+      Importance.Urgent: 'U',
+      Importance.ImportantButNotUrgent: 'I',
+      Importance.RoutineTask: 'R'
     };
+
+    Map<String, dynamic> data = {
+      // 'taskId': taskID,
+      // 'day': day.toIso8601String(),
+      'time': time.hour.toString() + ':' + time.minute.toString(),
+      'customer': customerId,
+      'task': task,
+      'completed': completed.toString(),
+      'importance': convert[importance]
+    };
+    return data;
   }
 
   void fromJson(res) {
-    print(res);
+    // print(res);
+
+    Map convert = {
+      'U': Importance.Urgent,
+      'I': Importance.ImportantButNotUrgent,
+      'R': Importance.RoutineTask
+    };
+
     taskID = res['id'].toString();
     customerId = res['customer'].toString();
     task = res['task'];
@@ -46,7 +61,7 @@ class Task {
     day = dt;
     time = tm;
 
-    importance = Importance.Urgent;
-    print('yyyy');
+    importance = convert[res['importance']];
+    // print('yyyy');
   }
 }

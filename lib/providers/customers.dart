@@ -41,7 +41,7 @@ class Customers with ChangeNotifier {
     notifyListeners();
   }
 
-  void onchangedpin(Customer customer) {
+  Future<void> onchangedpin(Customer customer) async {
     final index = _customers.indexOf(customer);
     var total = _customers.where((element) => element.pinned == true).length;
     final custom = _customers[index];
@@ -56,12 +56,25 @@ class Customers with ChangeNotifier {
         _customers.insert(total, custom);
       }
     }
+    ApiResponse response = await ApiHelper().postRequest(
+        'leadgrow/customer/${customer.customerId}/pin',
+        {"pinned": '${customer.pinned}'});
+    print(response.data);
     notifyListeners();
   }
 
-  void removeCustomer(String id) {
+  Future<void> removeCustomer(String id) async {
+    print(id);
     _customers.removeWhere((element) => element.customerId == id);
     customerscpy.removeWhere((element) => element.customerId == id);
+    ApiResponse response;
+    try {
+      response = await ApiHelper()
+          .deleteRequest(endpoint: '/leadgrow/customer', id: id);
+      print(response.data);
+    } catch (e) {
+      print(e.toString() + 'line 71');
+    }
     notifyListeners();
   }
 

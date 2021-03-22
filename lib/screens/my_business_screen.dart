@@ -1,8 +1,11 @@
+import 'package:Leader/models/business.dart';
+import 'package:Leader/screens/edit_businessDetails_screen.dart';
 import 'package:Leader/widgets/customAppbar.dart';
 import 'package:Leader/widgets/drawer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:Leader/widgets/business_card.dart';
+import 'package:provider/provider.dart';
 
 class MyBusinessScreen extends StatefulWidget {
   static const routeName = '/business';
@@ -13,6 +16,37 @@ class MyBusinessScreen extends StatefulWidget {
 }
 
 class _MyBusinessScreenState extends State<MyBusinessScreen> {
+  bool _initial = true;
+  bool _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_initial) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final val = Provider.of<Business>(context);
+      Future.value(val.fetchData()).whenComplete(() {
+        print('yyyyyyyyyyyyyyyyyyy');
+        setState(
+          () {
+            _isLoading = false;
+          },
+        );
+        if (val.business == null) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditBusinessDetailsScreen()),
+              (route) => false);
+        }
+      });
+    }
+    _initial = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

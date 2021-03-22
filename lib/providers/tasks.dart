@@ -1,4 +1,7 @@
 import 'package:Leader/models/task.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
+import 'package:Leader/widgets/label.dart';
 import 'package:flutter/foundation.dart';
 
 class Tasks with ChangeNotifier {
@@ -24,5 +27,26 @@ class Tasks with ChangeNotifier {
 
   Task findById(String id) {
     return _tasks.firstWhere((element) => element.taskID == id);
+  }
+
+  Future<ApiResponse> fetchData() async {
+    ApiResponse response;
+    try {
+      response = await ApiHelper().getRequest(endpoint: '/leadgrow/tasks');
+    } catch (e) {
+      print(e);
+    }
+
+    _tasks = [];
+
+    // print(response.data);
+    for (var res in response.data) {
+      print(res);
+      Task tsk = new Task();
+      tsk.fromJson(res);
+      _tasks.add(tsk);
+    }
+    return response;
+    // print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
   }
 }

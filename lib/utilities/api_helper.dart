@@ -427,14 +427,16 @@ class ApiHelper {
   }
 
   // DELETE
-  Future<ApiResponse> deleteRequest({String endpoint}) async {
+  Future<ApiResponse> deleteRequest({String endpoint, String id}) async {
     if (_authToken.isEmpty || _authToken == null) {
       print('not logged in');
       return ApiResponse(error: true, errorMessage: 'User not logged in');
     }
     try {
       //final url = '$_baseUrl$endpoint';
-      final uri = Uri.https(_baseUrl, endpoint);
+      final String endPointUrl = id == null ? endpoint : '$endpoint/' + '$id/';
+      print(endPointUrl);
+      final uri = Uri.https(_baseUrl, endPointUrl);
       print(uri);
       final response = await http.delete(
         uri,

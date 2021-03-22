@@ -24,8 +24,15 @@ class Labels with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteLabel(String id) {
+  Future<void> deleteLabel(String id) async {
     _labels.removeWhere((element) => element.labelId == id);
+    ApiResponse response;
+    try {
+      response =
+          await ApiHelper().deleteRequest(endpoint: '/leadgrow/labels', id: id);
+    } catch (e) {
+      print(e.toString() + 'line 33');
+    }
     notifyListeners();
   }
 
@@ -43,15 +50,15 @@ class Labels with ChangeNotifier {
     }
 
     _labels = [];
-
-    // print(response.data);
-    for (var res in response.data) {
-      Label lbl = new Label();
-      lbl.fromJson(res);
-      // print('y');
-      // print(cust.name);
-      _labels.add(lbl);
-    }
+    if (response != null)
+      // print(response.data);
+      for (var res in response.data) {
+        Label lbl = new Label();
+        lbl.fromJson(res);
+        // print('y');
+        // print(cust.name);
+        _labels.add(lbl);
+      }
     return response;
   }
 }

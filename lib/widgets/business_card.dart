@@ -32,12 +32,12 @@ class BusinessCard extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Color.fromRGBO(53, 53, 53, 1),
-                                // image: DecorationImage(
-                                //   fit: BoxFit.cover,
-                                //   image: NetworkImage(
-                                //     'https://icon-library.com/images/facebook-icon-high-res/facebook-icon-high-res-4.jpg',
-                                //   ),
-                                // ),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    business?.imgurl ?? '',
+                                  ),
+                                ),
                               ),
                             ),
                           ),

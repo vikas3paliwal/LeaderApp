@@ -56,7 +56,6 @@ class _AddLeadScreenState extends State<AddLeadScreen>
       if (_formKey.currentState.validate()) {
         final customer = Provider.of<Customers>(context, listen: false);
         Customer cust = new Customer(
-          customerId: UniqueKey().toString(),
           name: leadNameController.text,
           location: locationController.text,
           phoneNos: mobileController.text,
@@ -64,10 +63,12 @@ class _AddLeadScreenState extends State<AddLeadScreen>
           addresses: addressController.text,
           proptype: _custmprop ?? '',
           pinned: false,
-          events: Event(
-            day: eventDate,
-            eventName: eventController.text,
-          ),
+          events: eventDate == null || eventController.text == null
+              ? null
+              : Event(
+                  day: eventDate,
+                  eventName: eventController.text,
+                ),
         );
         data = cust.toJson();
         try {
@@ -80,6 +81,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
               message: 'Message Sent successfully!',
               duration: Duration(seconds: 3),
             )..show(context);
+            cust.customerId = response.data["id"];
             customer.addLead(cust);
             Navigator.of(context).pop();
           } else {
