@@ -1,5 +1,6 @@
 import 'package:Leader/models/label.dart';
 import 'package:Leader/providers/customers.dart';
+import 'package:Leader/providers/labels.dart';
 import 'package:Leader/screens/leads_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -70,12 +71,37 @@ class _LeadTileState extends State<LeadTile> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 0.0, vertical: 3),
-                  child: Text(
-                    widget.name,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 70,
+                        height: 25,
+                        child: FittedBox(
+                          child: Text(
+                            widget.name,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Container(
+                        width: 60,
+                        height: 15,
+                        child: FittedBox(
+                            child: Text(customer.createDate.split(' ')[0] +
+                                ' ' +
+                                customer.createDate.split(' ')[1] +
+                                ' ' +
+                                customer.createDate.split(' ')[2])),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1,
+                                color: Theme.of(context).primaryColor),
+                            borderRadius: BorderRadius.circular(4)),
+                      )
+                    ],
                   ),
                 ),
                 if (widget.labels != null)
@@ -141,7 +167,9 @@ class _LeadTileState extends State<LeadTile> {
                             var delete = await showDialog<bool>(
                                 context: context,
                                 builder: (ctx) => AlertDialog(
-                                      title: Text('Are You Sure ?'.tr()),
+                                      title: Text(
+                                        'Are You Sure ?'.tr(),
+                                      ),
                                       content: Text(
                                           'Do you want to delete'.tr() + ' ?'),
                                       actions: [
@@ -159,6 +187,8 @@ class _LeadTileState extends State<LeadTile> {
                                     ));
                             if (delete) {
                               customers.removeCustomer(customer.customerId);
+                              Provider.of<Labels>(context, listen: false)
+                                  .fetchData();
                             }
                           },
                         ),

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:Leader/models/customer.dart';
 import 'package:Leader/providers/customers.dart';
+import 'package:Leader/screens/leads_screen.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:Leader/utilities/api-response.dart';
 import 'package:Leader/utilities/api_helper.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:intl/intl.dart';
 
 class AddLeadScreen extends StatefulWidget {
   final Function callback;
@@ -40,6 +42,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
 
   final Property _property = Property();
   bool _init = true;
+  bool _isLoading = false;
   String _prop = '';
   double _propwidth;
   double _leftcontainwidth;
@@ -50,54 +53,51 @@ class _AddLeadScreenState extends State<AddLeadScreen>
   double _bottomleft;
   double _bottomright;
   String _custmprop;
-  void addLead() async {
+
+  Future<ApiResponse> addLead(BuildContext ctx) async {
     Map<String, dynamic> data;
     try {
       if (_formKey.currentState.validate()) {
-        final customer = Provider.of<Customers>(context, listen: false);
+        final customer = Provider.of<Customers>(ctx, listen: false);
         Customer cust = new Customer(
-          name: leadNameController.text,
-          location: locationController.text,
-          phoneNos: mobileController.text,
-          emails: emailController.text,
-          addresses: addressController.text,
-          proptype: _custmprop ?? '',
-          pinned: false,
-          events: eventDate == null || eventController.text == null
-              ? null
-              : Event(
-                  day: eventDate,
-                  eventName: eventController.text,
-                ),
-        );
+            name: leadNameController.text,
+            location: locationController.text,
+            phoneNos: mobileController.text,
+            emails: emailController.text,
+            addresses: addressController.text,
+            proptype: _custmprop ?? '',
+            pinned: false,
+            events: Event(day: eventDate, eventName: eventController.text));
         data = cust.toJson();
         try {
-          final ApiResponse response = await ApiHelper().postRequest(
-            'leadgrow/customer/',
-            data,
-          );
+          final ApiResponse response = await ApiHelper()
+              .postRequest(
+                'leadgrow/customer/',
+                data,
+              )
+              .whenComplete(() => Navigator.of(ctx).pop());
           if (!response.error) {
             Flushbar(
-              message: 'Message Sent successfully!',
+              message: 'Added successfully!',
               duration: Duration(seconds: 3),
-            )..show(context);
-            cust.customerId = response.data["id"];
+            )..show(ctx);
+            cust.customerId = response.data["id"].toString();
             customer.addLead(cust);
-            Navigator.of(context).pop();
           } else {
             Flushbar(
               message: response.errorMessage ??
                   'Unable to add, Please try again later',
               duration: Duration(seconds: 3),
-            )..show(context);
+            )..show(ctx);
           }
+          return response;
         } on HttpException catch (error) {
           throw HttpException(message: error.toString());
         } catch (error) {
           Flushbar(
             message: 'Unable to add, Please try again later',
             duration: Duration(seconds: 3),
-          )..show(context);
+          )..show(ctx);
         }
 
         print('================');
@@ -116,8 +116,8 @@ class _AddLeadScreenState extends State<AddLeadScreen>
     // TODO: implement didChangeDependencies
     if (_init) {
       _propwidth = MediaQuery.of(context).size.width;
-      _leftcontainwidth = _propwidth * 0.4;
-      _rightcontainwidth = _propwidth * 0.4;
+      _leftcontainwidth = _propwidth * 0.42;
+      _rightcontainwidth = _propwidth * 0.42;
       _lowercontainheight = 0;
       _topleft = 20;
       _bottomleft = 20;
@@ -423,6 +423,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime(1965, 7),
                                       lastDate: DateTime(2101));
+
                                   print(eventDate);
                                 }),
                             contentPadding: EdgeInsets.fromLTRB(
@@ -1025,17 +1026,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                     Container(
-                      width: 180,
+                      width: 175,
                       height: 40,
                       margin: EdgeInsets.all(7),
                       child: Center(
-                          child: Text(
-                        _custmprop == null
-                            ? ''
-                            : _custmprop.split(' ')[0].tr() +
-                                    _custmprop.substring(4) ??
-                                '',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                          child: FittedBox(
+                        child: Text(
+                          _custmprop == null
+                              ? ''
+                              : _custmprop.split(' ')[0].tr() +
+                                      _custmprop.substring(4) ??
+                                  '',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       )),
                       decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
@@ -1049,18 +1052,31 @@ class _AddLeadScreenState extends State<AddLeadScreen>
               ],
             )),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => addLead(),
-        label: Text(
-          'Add'.tr(),
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-        ),
-        icon: Icon(
-          Icons.add,
-          size: 30,
-        ),
-      ),
+      floatingActionButton: _isLoading
+          ? CircularProgressIndicator()
+          : FloatingActionButton.extended(
+              onPressed: () {
+                setState(() {
+                  _isLoading = true;
+                });
+                addLead(context).then((_) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                });
+              },
+              label: Text(
+                'Add'.tr(),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
+              icon: Icon(
+                Icons.add,
+                size: 30,
+              ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

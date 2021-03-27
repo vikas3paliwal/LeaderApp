@@ -126,7 +126,10 @@
   "Yards":"गज",
   "Routine Task":"सामान्य कार्य",
   "No leads at the moment":"इस समय कोई लीड नहीं है",
-  "IMPORT LEADS/CUSTOMERS":"इम्पोर्ट लीड/ग्राहक"
+  "IMPORT LEADS/CUSTOMERS":"इम्पोर्ट लीड/ग्राहक",
+  "Import Data":"इम्पोर्ट डेटा",
+  "Export Data":"एक्सपोर्ट डेटा",
+  "Reminder Date":"अनुस्मारक दिनांक"
 
 
 

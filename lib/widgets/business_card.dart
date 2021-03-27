@@ -1,12 +1,44 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:Leader/models/business.dart';
 import 'package:Leader/screens/edit_businessDetails_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:hexagon/hexagon.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:share/share.dart';
 
 class BusinessCard extends StatelessWidget {
+  final scr = new GlobalKey();
+  Future<void> takescrshot(BuildContext context) async {
+    try {
+      RenderRepaintBoundary boundary = scr.currentContext.findRenderObject();
+      final directory = (await getExternalStorageDirectory()).path;
+      var image = await boundary.toImage();
+      var byteData = await image.toByteData(format: ImageByteFormat.png);
+      var pngBytes = byteData.buffer.asUint8List();
+      File imgFile = new File('$directory/screenshot.png');
+      imgFile.writeAsBytes(pngBytes);
+      final RenderBox box = context.findRenderObject();
+
+      Share.shareFiles(['$directory/screenshot.png'],
+          subject: 'Screenshot + Share',
+          text: 'Hey, check it out the sharefiles repo!',
+          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+      print(pngBytes);
+    } on PlatformException catch (e) {
+      print("Exception while taking screenshot:" + e.toString());
+    } catch (e) {
+      print('another error' + e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final business = Provider.of<Business>(context).business;
@@ -63,18 +95,6 @@ class BusinessCard extends StatelessWidget {
                               color: Color.fromRGBO(30, 95, 116, 1),
                               fontSize: 24),
                         ),
-                        // SizedBox(
-                        //   height: 6,
-                        // ),
-                        // Expanded(
-                        //   child: Text(
-                        //     business.description,
-                        //     style: TextStyle(
-                        //         fontWeight: FontWeight.w400,
-                        //         color: Color.fromRGBO(30, 95, 116, 1),
-                        //         fontSize: 16),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -85,16 +105,6 @@ class BusinessCard extends StatelessWidget {
                 child: Container(
                   height: 250,
                   color: Color.fromRGBO(30, 95, 116, 1),
-                  //width: 250,
-                  // decoration: BoxDecoration(
-                  //   gradient: LinearGradient(
-                  //       begin: Alignment.centerLeft,
-                  //       end: Alignment.centerRight,
-                  //       colors: [
-                  //         Color.fromRGBO(63, 63, 63, 1),
-                  //         Color.fromRGBO(23, 23, 23, 1),
-                  //       ]),
-                  // ),
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 7),
@@ -210,58 +220,6 @@ class BusinessCard extends StatelessWidget {
                 ),
               )
             ],
-          ),
-          Container(
-            height: 60,
-
-            //width: MediaQuery.of(context).size.width * 0.88,
-            decoration: BoxDecoration(
-                color: Color.fromRGBO(75, 93, 103, 1),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                )),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: InkWell(
-                    onTap: () => pushNewScreen(context,
-                        screen: EditBusinessDetailsScreen(),
-                        pageTransitionAnimation:
-                            PageTransitionAnimation.cupertino,
-                        withNavBar: false),
-                    splashColor: Colors.deepOrange[300],
-                    child: Container(
-                      child: Center(
-                          child: Text(
-                        "EDIT DETAILS".tr(),
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                  ),
-                ),
-                VerticalDivider(
-                  width: 6,
-                  thickness: 1.5,
-                  color: Colors.white,
-                ),
-                Expanded(
-                  flex: 3,
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      child: Center(
-                          child: Text(
-                        "SEND BUSINESS CARD".tr(),
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/screens/add_lead_screen.dart';
+import 'package:Leader/utilities/api_helper.dart';
 import 'package:Leader/widgets/drawer.dart';
 import 'package:Leader/widgets/leads_tile.dart';
 
@@ -14,8 +15,9 @@ import 'dart:convert';
 
 class Leads extends StatefulWidget {
   static const routeName = '/second';
-  final Key key;
-  Leads(this.key) : super(key: key);
+  final GlobalKey<ScaffoldState> ctx;
+
+  Leads({this.ctx});
   @override
   _LeadsState createState() => _LeadsState();
 }
@@ -26,7 +28,8 @@ class _LeadsState extends State<Leads> {
   bool _isLoading = false;
   bool _search = false;
   bool _showLabels = true;
-  bool _orderByDate = true;
+  bool _orderByDate = false;
+  bool _orderByName = false;
   bool _initial = true;
   @override
   void didChangeDependencies() {
@@ -51,183 +54,212 @@ class _LeadsState extends State<Leads> {
     // print('11');
     return Scaffold(
       key: _scaffoldKey,
-      body: Column(
-        children: [
-          Container(
-            height: 140.0,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  color: Theme.of(context).primaryColor,
-                  width: MediaQuery.of(context).size.width,
-                  height: 100.0,
-                  child: Center(
-                    child: Text(
-                      "LEADS".tr(),
-                      style: TextStyle(color: Colors.white, fontSize: 18.0),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 70.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
-                          border: Border.all(
-                              color: Colors.grey.withOpacity(0.5), width: 1.0),
-                          color: Colors.white,
-                          shape: BoxShape.rectangle,
-                          boxShadow: [
-                            BoxShadow(
-                                offset: const Offset(1.0, 4.0),
-                                blurRadius: 4.0,
-                                spreadRadius: -1.0,
-                                color: Colors.grey[800]),
-                          ]),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.menu,
-                              color: Colors.deepOrange[300],
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Consumer<Customers>(builder: (ctx, val, child) {
+              return Column(
+                children: [
+                  Container(
+                    height: 140.0,
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          color: Theme.of(context).primaryColor,
+                          width: MediaQuery.of(context).size.width,
+                          height: 100.0,
+                          child: Center(
+                            child: Text(
+                              "LEADS".tr(),
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.0),
                             ),
-                            onPressed: () {
-                              // print("your menu action here");
-                              _scaffoldKey.currentState.openDrawer();
-                            },
                           ),
-                          _search
-                              ? Expanded(
-                                  child: TextField(
-                                    onChanged: (val) => customers.onSearch(val),
-                                    // onSubmitted: (value) =>
-                                    //     customers.onSearchCancel(),
-                                    decoration: InputDecoration(
-                                        hintText: "Search".tr()),
-                                  ),
-                                )
-                              : Expanded(
-                                  child: Center(
-                                    child: Text('Search'.tr()),
-                                  ),
-                                ),
-                          IconButton(
-                            icon: _search
-                                ? Icon(
-                                    Icons.close_rounded,
-                                    color: Colors.deepOrange[300],
-                                  )
-                                : Icon(
-                                    Icons.search,
-                                    color: Colors.deepOrange[300],
-                                  ),
-                            onPressed: () {
-                              setState(() {
-                                _search = !_search;
-                                if (_search) {
-                                  customers.onsearchClick();
-                                } else {
-                                  customers.onSearchCancel();
-                                }
-                              });
-                            },
-                          ),
-                          PopupMenuButton(
-                            itemBuilder: (ctx) => [
-                              PopupMenuItem(
-                                  child: Row(
+                        ),
+                        Positioned(
+                          top: 70.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: Container(
+                            height: 50,
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  border: Border.all(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      width: 1.0),
+                                  color: Colors.white,
+                                  shape: BoxShape.rectangle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        offset: const Offset(1.0, 4.0),
+                                        blurRadius: 4.0,
+                                        spreadRadius: -1.0,
+                                        color: Colors.grey[800]),
+                                  ]),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Show Labels'.tr()),
-                                  SizedBox(
-                                    width: 2,
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.menu,
+                                      color: Colors.deepOrange[300],
+                                    ),
+                                    onPressed: () {
+                                      // print("your menu action here");
+                                      try {
+                                        _scaffoldKey.currentState.openDrawer();
+                                      } catch (e) {
+                                        print(e.toString() + 'line 116');
+                                      }
+                                    },
                                   ),
-                                  Checkbox(
-                                      value: _showLabels,
-                                      onChanged: (val) {
-                                        setState(() {
-                                          _showLabels = val;
-                                        });
+                                  _search
+                                      ? Expanded(
+                                          child: TextField(
+                                            onChanged: (val) =>
+                                                customers.onSearch(val),
+                                            // onSubmitted: (value) =>
+                                            //     customers.onSearchCancel(),
+                                            decoration: InputDecoration(
+                                                hintText: "Search".tr()),
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: Center(
+                                            child: Text('Search'.tr()),
+                                          ),
+                                        ),
+                                  IconButton(
+                                    icon: _search
+                                        ? Icon(
+                                            Icons.close_rounded,
+                                            color: Colors.deepOrange[300],
+                                          )
+                                        : Icon(
+                                            Icons.search,
+                                            color: Colors.deepOrange[300],
+                                          ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _search = !_search;
+                                        if (_search) {
+                                          customers.onsearchClick();
+                                        } else {
+                                          customers.onSearchCancel();
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  PopupMenuButton(
+                                    itemBuilder: (ctx) => [
+                                      PopupMenuItem(
+                                          child: Row(
+                                        children: [
+                                          Text('Show Labels'.tr()),
+                                          SizedBox(
+                                            width: 2,
+                                          ),
+                                          Checkbox(
+                                              value: _showLabels,
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  _showLabels = val;
+                                                });
 
-                                        Navigator.of(ctx).pop();
-                                      }),
-                                ],
-                              )),
-                              PopupMenuItem(
-                                  child: PopupMenuButton(
-                                offset: Offset(15, -105),
-                                child: Row(
-                                  children: [
-                                    Text('List Order'.tr()),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Icon(Icons.arrow_right)
-                                  ],
-                                ),
-                                itemBuilder: (ctxt) => [
-                                  PopupMenuItem(
-                                    child: Row(
-                                      children: [
-                                        Text('Date Added'.tr()),
-                                        SizedBox(
-                                          width: 2,
+                                                Navigator.of(ctx).pop();
+                                              }),
+                                        ],
+                                      )),
+                                      PopupMenuItem(
+                                          child: PopupMenuButton(
+                                        offset: Offset(15, -105),
+                                        child: Row(
+                                          children: [
+                                            Text('List Order'.tr()),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Icon(Icons.arrow_right)
+                                          ],
                                         ),
-                                        Checkbox(
-                                            value: _orderByDate,
-                                            onChanged: (val) {
-                                              _orderByDate = val;
-                                              Navigator.of(ctxt).pop();
-                                              Navigator.of(ctx).pop();
-                                            })
-                                      ],
+                                        itemBuilder: (ctxt) => [
+                                          PopupMenuItem(
+                                            child: Row(
+                                              children: [
+                                                Text('Date Added'.tr()),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Checkbox(
+                                                    value: _orderByDate,
+                                                    onChanged: (val) {
+                                                      _orderByDate = val;
+                                                      _orderByName = !val;
+                                                      setState(() {
+                                                        _isLoading = true;
+                                                      });
+                                                      customers.fetchData({
+                                                        "sort": "datedec"
+                                                      }).whenComplete(
+                                                          () => setState(() {
+                                                                _isLoading =
+                                                                    false;
+                                                              }));
+                                                      Navigator.of(ctxt).pop();
+                                                      Navigator.of(ctx).pop();
+                                                    })
+                                              ],
+                                            ),
+                                          ),
+                                          PopupMenuItem(
+                                            child: Row(
+                                              children: [
+                                                Text('Order By Name'.tr()),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Checkbox(
+                                                    value: _orderByName,
+                                                    onChanged: (val) {
+                                                      _orderByName = val;
+                                                      _orderByDate = !val;
+                                                      setState(() {
+                                                        _isLoading = true;
+                                                      });
+                                                      customers.fetchData({
+                                                        "sort": "nameasc"
+                                                      }).whenComplete(
+                                                          () => setState(() {
+                                                                _isLoading =
+                                                                    false;
+                                                              }));
+                                                      Navigator.of(ctxt).pop();
+                                                      Navigator.of(ctx).pop();
+                                                    })
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ))
+                                    ],
+                                    icon: Icon(
+                                      Icons.more_vert,
+                                      color: Colors.deepOrange[300],
                                     ),
+                                    onSelected: (val) {},
                                   ),
-                                  PopupMenuItem(
-                                    child: Row(
-                                      children: [
-                                        Text('Order By Name'.tr()),
-                                        SizedBox(
-                                          width: 2,
-                                        ),
-                                        Checkbox(
-                                            value: !_orderByDate,
-                                            onChanged: (val) {
-                                              _orderByDate = !_orderByDate;
-                                              Navigator.of(ctxt).pop();
-                                              Navigator.of(ctx).pop();
-                                            })
-                                      ],
-                                    ),
-                                  )
                                 ],
-                              ))
-                            ],
-                            icon: Icon(
-                              Icons.more_vert,
-                              color: Colors.deepOrange[300],
+                              ),
                             ),
-                            onSelected: (val) {},
                           ),
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-          ),
-          _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Consumer<Customers>(builder: (ctx, val, child) {
-                  return Expanded(
+                  Expanded(
                       child: customers.customers.isEmpty
                           ? Center(
                               child: Container(
@@ -260,11 +292,11 @@ class _LeadsState extends State<Leads> {
                                       showLabels: _showLabels))
                                   .toList()[index],
                               itemCount: customers.customers.length,
-                            ));
-                }),
-        ],
-      ),
-      drawer: SideDrawer(),
+                            )),
+                ],
+              );
+            }),
+      drawer: SideDrawer(widget.ctx),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: GestureDetector(
         onTap: () {

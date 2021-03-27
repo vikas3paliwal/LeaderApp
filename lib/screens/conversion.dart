@@ -116,8 +116,19 @@ class ConversionScreenState extends State<ConversionScreen> {
               ),
             ),
             SizedBox(height: 30),
-            for (var unit in unitConv.keys)
-              Unit(unit: unit, value: unitConv[unit]),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Expanded(
+                child: ListView.builder(
+                  itemBuilder: (ctx, i) => unitConv.keys
+                      .map((e) => Unit(unit: e, value: unitConv[e]))
+                      .toList()[i],
+                  itemCount: unitConv.keys.length,
+                ),
+              ),
+            )
+            // for (var unit in unitConv.keys)
+            //   Unit(unit: unit, value: unitConv[unit]),
             // Unit()
           ],
         ),

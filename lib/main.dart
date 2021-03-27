@@ -6,6 +6,9 @@ import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/OnBoarding/on_boarding.dart';
 import 'package:Leader/screens/Signup/signup_screen.dart';
+import 'package:Leader/screens/home_screen.dart';
+import 'package:Leader/screens/leads_screen.dart';
+import 'package:Leader/screens/splashScreen.dart';
 // import 'package:Leader/screens/login_screen.dart';
 import 'package:Leader/utilities/api_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -54,9 +57,50 @@ class MyApp extends StatelessWidget {
           buttonColor: Color.fromRGBO(242, 138, 48, 1),
           primaryColor: Color.fromRGBO(89, 87, 117, 1.0),
           accentColor: Color.fromRGBO(84, 103, 143, 1),
+          fontFamily: 'Poppins',
           // Color.fromRGBO(171, 166, 191, 1.0),
           canvasColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: TextTheme(
+            button: TextStyle(color: Color(0xFF252525)),
+            headline5: TextStyle(
+              fontSize: 20.0,
+            ),
+            headline4: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+            ),
+            headline3: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w600,
+            ),
+            headline2: TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.w700,
+                color: Colors.white),
+            headline1: TextStyle(
+              fontSize: 22.0,
+              fontWeight: FontWeight.w300,
+            ),
+            subtitle1: TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),
+            headline6: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+            ),
+            bodyText1: TextStyle(
+              fontSize: 12.0,
+            ),
+            bodyText2: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w600,
+            ),
+            caption: TextStyle(
+              fontSize: 12.0,
+            ),
+          ),
         ),
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
@@ -69,9 +113,19 @@ class MyApp extends StatelessWidget {
           }
           return supportedLocales.first;
         },
+        routes: {
+          MyHomePage.routeName: (ctx) => MyHomePage(),
+        },
         debugShowCheckedModeBanner: false,
         locale: context.locale,
-        home: OnBoardingScreen(),
+        home: FutureBuilder(
+            future: ApiHelper().isLoggedIn(),
+            builder: (ctx, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? SplashScreen()
+                    : snapshot.data == true
+                        ? MyHomePage()
+                        : OnBoardingScreen()),
       ),
     );
   }

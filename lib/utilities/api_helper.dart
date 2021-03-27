@@ -146,6 +146,12 @@ class ApiHelper {
   Future<void> logOut() async {
     final SharedPreferences prefs = await _prefs;
     prefs.clear();
+    try {
+      ApiResponse response = await postRequest('/rest-auth/logout/', {});
+    } catch (e) {
+      print(e.toString() + 'line 152');
+    }
+
     _userID = null;
     _authToken = null;
   }
@@ -169,7 +175,14 @@ class ApiHelper {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 206 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204 ||
+          response.statusCode == 200 ||
+          response.statusCode == 202 ||
+          response.statusCode == 203 ||
+          response.statusCode == 205 ||
+          response.statusCode == 207) {
         print('==');
         return ApiResponse(data: jsonDecode(response.body));
       } else {
@@ -244,6 +257,8 @@ class ApiHelper {
           body: data);
       print('code is ${response.statusCode}');
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print('++++');
+        print(response.body);
         return ApiResponse(data: jsonDecode(response.body));
       } else {
         print(response.body);
@@ -277,7 +292,7 @@ class ApiHelper {
       return ApiResponse(error: true, errorMessage: 'User not logged in');
     }
     try {
-//      final url = '$_baseUrl$endpoint';
+      final url = '$_baseUrl$endpoint';
       final uri = Uri.https(_baseUrl, endpoint);
 
       final response = await http.patch(uri,
@@ -285,12 +300,14 @@ class ApiHelper {
             HttpHeaders.authorizationHeader: 'Token $_authToken',
           },
           body: data);
-//      print('code is ${response.statusCode}');
+      print('code is ${response.statusCode}');
+      print('++++');
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return ApiResponse(data: jsonDecode(response.body));
       } else {
-        // print(response.body);
-        // print(response.statusCode);
+        print(response.body);
+        print(response.statusCode);
         Map<String, dynamic> data = jsonDecode(response.body);
         String error = 'Error occurred';
         data.keys.forEach((String key) {
@@ -304,6 +321,7 @@ class ApiHelper {
     } on SocketException catch (error) {
       throw HttpException(message: 'No Internet Connection');
     } catch (e) {
+      print(e.toString());
       throw e;
     }
   }

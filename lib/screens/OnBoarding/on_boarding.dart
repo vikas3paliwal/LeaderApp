@@ -15,6 +15,7 @@ import '../../components/Onboarding/rounded_input_field.dart';
 import 'package:flutter_svg/svg.dart';
 
 class OnBoardingScreen extends StatelessWidget {
+  static const routename = '/onboarding';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,11 +86,11 @@ class _BodyState extends State<Body> {
                 child: FlatButton(
                   padding: EdgeInsets.symmetric(horizontal: 35, vertical: 12),
                   onPressed: () async {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SignUpScreen(),
-                      ),
-                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => SignUpScreen(),
+                        ),
+                        (route) => false);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

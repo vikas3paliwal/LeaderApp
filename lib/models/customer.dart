@@ -5,6 +5,7 @@ import 'package:Leader/models/task.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class Customer {
+  String createDate;
   String customerId;
   String name;
   String location;
@@ -19,6 +20,7 @@ class Customer {
   String proptype;
   bool pinned;
   // Property proptype;
+  DateFormat format = DateFormat.yMMMd();
   Customer(
       {this.name,
       this.location,
@@ -32,7 +34,8 @@ class Customer {
       this.budget = '0',
       this.proptype,
       this.pinned,
-      this.notes});
+      this.notes,
+      this.createDate});
   Map<String, dynamic> toJson() {
     List<Map> labels = this.labels == null
         ? null
@@ -49,37 +52,27 @@ class Customer {
       'property_type': proptype,
       'pinned': pinned.toString(),
       'event_name': events?.eventName ?? '',
-      'event_date': events?.day.toString() ?? '',
-      // 'event_date': events,
-      // 'id': customerId,
-      // 'notes': notes,
-      // 'labels': labels,
-      // 'tasks': tasks,
+      'event_date': events?.day == null ? '' : format.format(events?.day) ?? '',
     };
     return data;
   }
 
   void fromJSON(dynamic res) {
-    // print(res);
-    // print(res['mobile'].runtimeType);
     name = res['name'];
     customerId = res['id'].toString();
     location = res['location'];
     emails = res['email'];
-    // print(res['event']['day']);
-    // print(DateTime('2021-03-07T06:24:03Z'));
 
-    // events = res['event'];
-    // labels = res['labels'];
-    // tasks = res['taks'];
-    // print(res['notes']);
-    // notes = res['notes'];
     budget = res['budget'].toString();
     proptype = res['property_type'];
     pinned = res['pinned'];
     phoneNos = res['mobile'];
     addresses = res['address'];
-
+    createDate = res['created_at'];
+    notes = [];
+    for (var x in res['notes']) {
+      notes.add(x);
+    }
     labels = [];
 
     for (var x in res['labels']) {

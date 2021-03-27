@@ -1,4 +1,8 @@
 import 'package:Leader/providers/customers.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
+import 'package:Leader/utilities/http_exception.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +32,7 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
     if (_initial) {
       final customer =
           Provider.of<Customers>(context).findById(widget.customerId);
+
       if (customer.notes == null) {
         _controller.text = ' ';
       } else {
@@ -103,7 +108,7 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
+            onPressed: () async {
               if (customer.notes == null) {
                 customer.notes = [
                   '\n' +
@@ -120,10 +125,37 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
                     '\n' +
                     _controller.text);
               }
-
-              FocusScope.of(context).unfocus();
-              Future.delayed(Duration(milliseconds: 150))
-                  .whenComplete(() => Navigator.of(context).pop());
+              try {
+                final ApiResponse response = await ApiHelper().postRequest(
+                    'leadgrow/notes/${customer.customerId}/', {
+                  "note": _controller.text,
+                  "customer": '${customer.customerId}'
+                }).whenComplete(() async {
+                  FocusScope.of(context).unfocus();
+                  await Future.delayed(Duration(milliseconds: 150))
+                      .whenComplete(() => Navigator.of(context).pop());
+                });
+                if (!response.error) {
+                  Flushbar(
+                    message: 'Added successfully!',
+                    duration: Duration(seconds: 3),
+                  )..show(context);
+                  return response.data["id"].toString();
+                } else {
+                  Flushbar(
+                    message: response.errorMessage ??
+                        'Unable to add, please try again later',
+                    duration: Duration(seconds: 3),
+                  )..show(context);
+                }
+              } on HttpException catch (error) {
+                throw HttpException(message: error.toString());
+              } catch (error) {
+                Flushbar(
+                  message: 'Unable to add, please try again later',
+                  duration: Duration(seconds: 3),
+                )..show(context);
+              }
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8),

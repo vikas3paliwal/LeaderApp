@@ -11,15 +11,18 @@ import 'package:easy_localization/easy_localization.dart';
 class Label extends StatelessWidget {
   final String labelName;
   final Color labelColor;
-  final int customers;
+  // final int customers;
   final String id;
+  final int custmcount;
   final List<String> customids;
   Label(
-      {this.customers,
+      {
+      // this.customers,
       this.labelColor,
       this.labelName,
       this.id,
-      this.customids});
+      this.customids,
+      this.custmcount});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -70,7 +73,7 @@ class Label extends StatelessWidget {
           },
           child: ListTile(
             dense: true,
-            onTap: customers == 0 || customers == null
+            onTap: customids == null
                 ? null
                 : () => pushNewScreen(context,
                     screen: LabeledCustomerScreen(id, customids),
@@ -89,9 +92,9 @@ class Label extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            trailing: customers == null
+            trailing: customids == null || customids.isEmpty
                 ? null
-                : Text(customers.toString() + " " + 'CUSTOMERS'.tr()),
+                : Text(customids.length.toString() + " " + 'CUSTOMERS'.tr()),
           ),
         ));
   }

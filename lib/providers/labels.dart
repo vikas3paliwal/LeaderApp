@@ -24,12 +24,11 @@ class Labels with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteLabel(String id) async {
+  void deleteLabel(String id) {
     _labels.removeWhere((element) => element.labelId == id);
-    ApiResponse response;
+
     try {
-      response =
-          await ApiHelper().deleteRequest(endpoint: '/leadgrow/labels', id: id);
+      ApiHelper().deleteRequest(endpoint: '/leadgrow/labels', id: id);
     } catch (e) {
       print(e.toString() + 'line 33');
     }

@@ -59,12 +59,13 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
           fileFieldName: 'image');
       if (!response.error) {
         Flushbar(
-          message: 'Message Sent successfully!',
+          message: 'Added successfully!',
           duration: Duration(seconds: 3),
         )..show(context);
       } else {
         Flushbar(
-          message: response.errorMessage ?? 'Unable to send',
+          message:
+              response.errorMessage ?? 'Unable to Add, please try again later',
           duration: Duration(seconds: 3),
         )..show(context);
       }
@@ -72,7 +73,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
       throw HttpException(error.toString());
     } catch (error) {
       Flushbar(
-        message: 'Unable to send',
+        message: 'Unable to Add, please try again later',
         duration: Duration(seconds: 3),
       )..show(context);
     }
@@ -96,7 +97,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
           'mobile': "+91" + mobileController.text,
           'address': addressController.text,
           // 'image': base64Image,
-          'website': webController.text
+          'website': 'https://' + webController.text
         };
         print(data);
 

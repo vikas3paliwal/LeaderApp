@@ -28,11 +28,15 @@ class _SelectedCustomerTasksScreenState
           IconButton(
               icon: Icon(Icons.add),
               onPressed: () => pushNewScreen(context,
-                  screen: AddTaskScreen(
-                    customerid: customer.customerId,
-                  ),
-                  pageTransitionAnimation: PageTransitionAnimation.slideRight,
-                  withNavBar: false))
+                          screen: AddTaskScreen(
+                            customerid: customer.customerId,
+                          ),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.slideRight,
+                          withNavBar: false)
+                      .whenComplete(() {
+                    setState(() {});
+                  }))
         ],
       ),
       body: customer.tasks == null

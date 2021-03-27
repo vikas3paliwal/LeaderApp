@@ -14,9 +14,20 @@ class AddLabelScreen extends StatefulWidget {
 }
 
 class _AddLabelScreenState extends State<AddLabelScreen> {
+  bool _initial = true;
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    if (_initial) {
+      final labels = Provider.of<Labels>(context, listen: false);
+      final customer = Provider.of<Customers>(context, listen: false)
+          .findById(widget.customerId);
+      customer.labels.forEach((element) {
+        labels.findById(element.labelId).label = {widget.customerId: true};
+      });
+    }
+    _initial = false;
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override

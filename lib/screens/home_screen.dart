@@ -1,4 +1,5 @@
 import 'package:Leader/providers/labels.dart';
+import 'package:Leader/widgets/customAppbar.dart';
 import 'package:Leader/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,19 +13,24 @@ import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class MyHomePage extends StatefulWidget {
+  static const routeName = '/home';
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static final mainscaffoldkey = GlobalKey<ScaffoldState>();
   PersistentTabController _bottomTabController;
   List<Widget> _buildScreens() {
     return [
-      Leads(UniqueKey()),
+      Leads(ctx: mainscaffoldkey),
       //CustomerScreen(),
-      LabelScreen(UniqueKey()),
-      TaskScreen(),
-      MyBusinessScreen(UniqueKey())
+      LabelScreen(
+        UniqueKey(),
+        ctx: mainscaffoldkey,
+      ),
+      TaskScreen(ctx: mainscaffoldkey),
+      MyBusinessScreen(UniqueKey(), ctx: mainscaffoldkey)
     ];
   }
 
@@ -91,9 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _bottomTabController = PersistentTabController(
       initialIndex: 0,
     );
-    // _bottomTabController.addListener(() {
-    //   setState(() {});
-    // });
+
     super.initState();
   }
 
@@ -107,21 +111,26 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideDrawer(),
+      key: mainscaffoldkey,
       body: PersistentTabView(
         context,
+        popActionScreens: PopActionScreensType.all,
         padding: NavBarPadding.only(bottom: 2),
         neumorphicProperties: NeumorphicProperties(
           shape: BoxShape.rectangle,
           showSubtitleText: true,
           bevel: 1,
         ),
+
         routeAndNavigatorSettings: RouteAndNavigatorSettings(routes: {
-          // CustomerScreen.routeName: (ctx) => CustomerScreen(),
-          Leads.routeName: (ctx) => Leads(UniqueKey()),
-          LabelScreen.routeName: (ctx) => LabelScreen(UniqueKey()),
-          TaskScreen.routeName: (ctx) => TaskScreen(),
-          MyBusinessScreen.routeName: (ctx) => MyBusinessScreen(UniqueKey())
+          Leads.routeName: (ctx) => Leads(
+                ctx: mainscaffoldkey,
+              ),
+          LabelScreen.routeName: (ctx) =>
+              LabelScreen(UniqueKey(), ctx: mainscaffoldkey),
+          TaskScreen.routeName: (ctx) => TaskScreen(ctx: mainscaffoldkey),
+          MyBusinessScreen.routeName: (ctx) =>
+              MyBusinessScreen(UniqueKey(), ctx: mainscaffoldkey)
         }),
         controller: _bottomTabController,
         screens: _buildScreens(),
@@ -140,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
           colorBehindNavBar: Colors.white,
         ),
 
-        popAllScreensOnTapOfSelectedTab: true,
+        popAllScreensOnTapOfSelectedTab: false,
         //popActionScreens: PopActionScreensType.once,
         itemAnimationProperties: ItemAnimationProperties(
           // Navigation Bar's items animation properties.

@@ -2,6 +2,7 @@ import 'package:Leader/customs/task_painter.dart';
 import 'package:Leader/models/task.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/tasks.dart';
+import 'package:Leader/utilities/api_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -49,11 +50,16 @@ class _TaskItemState extends State<TaskItem> {
                       onPressed: () {
                         setState(() {
                           widget.task.completed = !widget.task.completed;
-                          if (widget.callback != null) widget.callback();
+                          ApiHelper().getRequest(
+                              endpoint:
+                                  'leadgrow/tasks/${widget.task.taskID}/complete');
+                          print(widget.task.taskID +
+                              widget.task.completed.toString());
+                          // if (widget.callback != null) widget.callback();
                         });
                       }),
                   SizedBox(
-                    width: 80,
+                    width: 60,
                   ),
                   IconButton(
                       icon: Icon(
@@ -67,6 +73,7 @@ class _TaskItemState extends State<TaskItem> {
                             .deleteTask(widget.task.taskID);
                         Provider.of<Customers>(context, listen: false)
                             .deleteTask(widget.task.taskID);
+                        widget.callback();
                       }),
                 ],
               ),

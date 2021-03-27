@@ -29,6 +29,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController _taskController = TextEditingController();
   TextEditingController _leadController = TextEditingController();
   String customerId;
+  bool _isLoading = false;
   // int _selectedValue;
   Importance _importance;
   bool _error = false;
@@ -49,6 +50,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       _importance = task.importance;
     }
     if (widget.customerid != null) {
+      customerId = widget.customerid;
       final customer = widget.customerid == null
           ? null
           : Provider.of<Customers>(context, listen: false)
@@ -59,35 +61,24 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     super.initState();
   }
 
-  void addCard(BuildContext context, task) async {
+  Future<String> addCard(BuildContext context, task) async {
     print('adding');
     Map<String, dynamic> data = task.toJson();
     print(data);
 
     try {
-      final ApiResponse response = await ApiHelper().postRequest(
-        'leadgrow/tasks/',
-        data,
-      );
+      final ApiResponse response = await ApiHelper()
+          .postRequest(
+            'leadgrow/tasks/',
+            data,
+          )
+          .whenComplete(() => Navigator.of(context).pop());
       if (!response.error) {
-        Flushbar(
-          message: 'Message Sent successfully!',
-          duration: Duration(seconds: 3),
-        )..show(context);
-      } else {
-        Flushbar(
-          message: response.errorMessage ?? 'Unable to send',
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
+        return response.data["id"].toString();
+      } else {}
     } on HttpException catch (error) {
       throw HttpException(message: error.toString());
-    } catch (error) {
-      Flushbar(
-        message: 'Unable to send',
-        duration: Duration(seconds: 3),
-      )..show(context);
-    }
+    } catch (error) {}
   }
 
   @override
@@ -96,7 +87,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       maintainBottomViewPadding: true,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add Task'.tr()),
+          title: Text(widget.taskid == null ? 'Add Task'.tr() : 'Task'.tr()),
         ),
         body: Padding(
           padding:
@@ -115,6 +106,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 TextField(
                   controller: _taskController,
                   keyboardType: TextInputType.multiline,
+                  readOnly: widget.taskid == null ? false : true,
                   decoration: InputDecoration(
                       errorText:
                           _error ? 'This field can not be empty'.tr() : null,
@@ -190,7 +182,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       width: 11,
                     ),
                     Text(
-                      'Set Reminder Date'.tr(),
+                      widget.taskid == null
+                          ? 'Set Reminder Date'.tr()
+                          : 'Reminder Date'.tr(),
                       style: TextStyle(fontSize: 22),
                     ),
                   ],
@@ -222,14 +216,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.30,
                       height: 70,
                       decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          // gradient: LinearGradient(
-                          //     colors: [Color(0xff223c47), Color(0xff3c677a)],
-                          //     begin: Alignment.centerLeft,
-                          //     end: Alignment.centerRight),
                           borderRadius: BorderRadius.circular(20)),
                       child: Center(
                           child: Text(
@@ -251,173 +241,200 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 SizedBox(
                   height: 5,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      //height: 5,
-                      width: 200,
-                      child: Row(
+                widget.taskid == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          PopupMenuButton(
-                            offset: Offset(30, -150),
-                            //initialValue: _selectedValue ?? 2,
-                            itemBuilder: (ctx) => [
-                              PopupMenuItem(
-                                child: Text('Urgent'.tr()),
-                                value: 0,
-                              ),
-                              PopupMenuItem(
-                                child: Text('Important'.tr()),
-                                value: 1,
-                              ),
-                              PopupMenuItem(
-                                child: Text('Normal'.tr()),
-                                value: 2,
-                              ),
-                            ],
-                            //initialValue: 0,
-                            icon: Icon(
-                              (Icons.lightbulb_outline),
-                              color: Colors.deepOrange[300],
-                              size: 30,
-                            ),
-                            onSelected: (value) {
-                              if (value != null) {
-                                // _selectedValue = value;
-                                switch (value) {
-                                  case 0:
-                                    _importance = Importance.Urgent;
-                                    break;
-                                  case 1:
-                                    _importance =
-                                        Importance.ImportantButNotUrgent;
-                                    break;
-                                  case 2:
-                                    _importance = Importance.RoutineTask;
-                                    break;
-                                  default:
-                                    print('default');
-                                }
-                              }
-                            },
-                          ),
-                          Text(
-                            'Set Importance'.tr(),
-                            style: TextStyle(fontSize: 20),
-                          )
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () async {
-                          var pickedDate = await showRoundedDatePicker(
-                              context: context,
-                              firstDate: DateTime.now(),
-                              initialDate: DateTime.now(),
-                              theme: ThemeData.dark(),
-                              imageHeader:
-                                  AssetImage('assets/images/night.jpg'),
-                              height: MediaQuery.of(context).size.height * 0.4,
-                              textActionButton: 'Time'.tr(),
-                              onTapActionButton: () async {
-                                var pickedTime = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                  initialEntryMode: TimePickerEntryMode.dial,
-                                  cancelText: 'CANCEL'.tr(),
-                                );
-                                time = pickedTime == null ? time : pickedTime;
-                              }).whenComplete(() {
-                            setState(() {});
-                          });
-                          date = pickedDate ?? date;
-                        },
-                        child: Container(
-                          width: 120,
-                          padding: EdgeInsets.all(8),
-                          child: FittedBox(
+                          SizedBox(
+                            //height: 5,
+                            width: 200,
                             child: Row(
                               children: [
-                                SizedBox(
-                                  width: 3,
+                                PopupMenuButton(
+                                  offset: Offset(30, -150),
+                                  //initialValue: _selectedValue ?? 2,
+                                  itemBuilder: (ctx) => [
+                                    PopupMenuItem(
+                                      child: Text('Urgent'.tr()),
+                                      value: 0,
+                                    ),
+                                    PopupMenuItem(
+                                      child: Text('Important'.tr()),
+                                      value: 1,
+                                    ),
+                                    PopupMenuItem(
+                                      child: Text('Normal'.tr()),
+                                      value: 2,
+                                    ),
+                                  ],
+                                  //initialValue: 0,
+                                  icon: Icon(
+                                    (Icons.lightbulb_outline),
+                                    color: Colors.deepOrange[300],
+                                    size: 30,
+                                  ),
+                                  onSelected: (value) {
+                                    if (value != null) {
+                                      // _selectedValue = value;
+                                      switch (value) {
+                                        case 0:
+                                          _importance = Importance.Urgent;
+                                          break;
+                                        case 1:
+                                          _importance =
+                                              Importance.ImportantButNotUrgent;
+                                          break;
+                                        case 2:
+                                          _importance = Importance.RoutineTask;
+                                          break;
+                                        default:
+                                          print('default');
+                                      }
+                                    }
+                                  },
                                 ),
-                                Icon(
-                                  Icons.date_range,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  'Set Date'.tr(),
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
+                                FittedBox(
+                                  child: Text(
+                                    'Set Importance'.tr(),
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                )
                               ],
                             ),
                           ),
-                          decoration: BoxDecoration(
-                              // color: Theme.of(context).primaryColor,
-                              color: Colors.deepOrange[300],
-                              borderRadius: BorderRadius.circular(20)),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: () async {
+                                var pickedDate = await showRoundedDatePicker(
+                                    context: context,
+                                    firstDate: DateTime.now(),
+                                    initialDate: DateTime.now(),
+                                    theme: ThemeData.dark(),
+                                    imageHeader:
+                                        AssetImage('assets/images/night.jpg'),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
+                                    textActionButton: 'Time'.tr(),
+                                    onTapActionButton: () async {
+                                      var pickedTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                        initialEntryMode:
+                                            TimePickerEntryMode.dial,
+                                        cancelText: 'CANCEL'.tr(),
+                                      );
+                                      time = pickedTime == null
+                                          ? time
+                                          : pickedTime;
+                                    }).whenComplete(() {
+                                  setState(() {});
+                                });
+                                date = pickedDate ?? date;
+                              },
+                              child: Container(
+                                width: 120,
+                                padding: EdgeInsets.all(8),
+                                child: FittedBox(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Icon(
+                                        Icons.date_range,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        'Set Date'.tr(),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                    // color: Theme.of(context).primaryColor,
+                                    color: Colors.deepOrange[300],
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(
+                        // width: MediaQuery.of(context).size.width * 0.9,
+                        // height: 50,
+                        // decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //         width: 2, color: Colors.deepOrange[300])),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: Colors.deepOrange[300],
-          icon: Icon(
-            Icons.add,
-            size: 30,
-          ),
-          label: Text(
-            'Add'.tr(),
-            style: TextStyle(fontSize: 20),
-          ),
-          onPressed: () {
-            final task = Provider.of<Tasks>(context, listen: false);
-            final taskid = widget.taskid ?? UniqueKey().toString();
+        floatingActionButton: widget.taskid == null
+            ? _isLoading
+                ? CircularProgressIndicator()
+                : FloatingActionButton.extended(
+                    backgroundColor: Colors.deepOrange[300],
+                    icon: Icon(
+                      Icons.add,
+                      size: 30,
+                    ),
+                    label: Text(
+                      'Add'.tr(),
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () async {
+                      final task = Provider.of<Tasks>(context, listen: false);
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      // final taskid = widget.taskid ?? UniqueKey().toString();
 
-            final taskmodel = Task(
-                taskID: taskid,
-                customerId: customerId,
-                day: date,
-                time: time,
-                task: _taskController.text,
-                importance: _importance ?? Importance.RoutineTask,
-                completed: false);
-            // print(taskmodel);
+                      final taskmodel = Task(
+                          // taskID: taskid,
+                          customerId: customerId,
+                          day: date,
+                          time: time,
+                          task: _taskController.text,
+                          importance: _importance ?? Importance.RoutineTask,
+                          completed: false);
+                      print(taskmodel);
 
-            if (_taskController.text.trim().isNotEmpty) {
-              task.addTask(widget.taskid, taskmodel);
-              if (taskmodel.customerId != null) {
-                final customer = Provider.of<Customers>(context, listen: false)
-                    .findById(taskmodel.customerId);
+                      if (_taskController.text.trim().isNotEmpty) {
+                        if (taskmodel.customerId != null) {
+                          final customer =
+                              Provider.of<Customers>(context, listen: false)
+                                  .findById(taskmodel.customerId);
 
-                customer.tasks == null
-                    ? customer.tasks = [taskmodel]
-                    : customer.tasks.add(taskmodel);
-              }
-              addCard(context, taskmodel);
-              Navigator.of(context).pop();
-            } else {
-              setState(() {
-                _error = true;
-              });
-            }
-          },
-        ),
+                          customer.tasks == null
+                              ? customer.tasks = [taskmodel]
+                              : customer.tasks.add(taskmodel);
+                        }
+                        final id =
+                            await addCard(context, taskmodel).whenComplete(() {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        });
+                        taskmodel.taskID = id;
+                        task.addTask(widget.taskid ?? id, taskmodel);
+                      } else {
+                        setState(() {
+                          _error = true;
+                        });
+                      }
+                    },
+                  )
+            : null,
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterFloat,
       ),

@@ -4,6 +4,8 @@ import 'package:Leader/screens/add_label_screen.dart';
 import 'package:Leader/screens/add_notes_leadscreen.dart';
 import 'package:Leader/screens/add_task_screen.dart';
 import 'package:Leader/screens/selectedCustomers_tasks_screen.dart';
+import 'package:Leader/utilities/api-response.dart';
+import 'package:Leader/utilities/api_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +36,10 @@ class LeadProfileScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
+          title: Text(
+            customer.name,
+            style: Theme.of(context).textTheme.headline2,
+          ),
         ),
         body: Container(
           height: MediaQuery.of(context).size.height,
@@ -53,7 +59,10 @@ class LeadProfileScreen extends StatelessWidget {
                                 bottomLeft: Radius.circular(35),
                                 bottomRight: Radius.circular(35),
                               ),
-                              color: Colors.deepOrange[300],
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/leadgrow.jpeg')),
+                              color: Colors.black,
                             )),
                       )
                     ],
@@ -68,22 +77,24 @@ class LeadProfileScreen extends StatelessWidget {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage('assets/images/user.png')),
-                          border: Border.all(color: Colors.white, width: 6.0)),
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                              width: 6.0)),
                     ),
                   ),
                   ContactButtons(id: customerId),
-                  Positioned(
-                    top: 40,
-                    child: Center(
-                      child: Text(
-                        customer.name,
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Positioned(
+                  //   top: 40,
+                  //   child: Center(
+                  //     child: Text(
+                  //       customer.name,
+                  //       style: TextStyle(
+                  //         fontSize: 30,
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               SingleChildScrollView(
@@ -348,7 +359,7 @@ class LeadProfileScreen extends StatelessWidget {
                                                               .symmetric(
                                                           horizontal: 14.0),
                                                       child: RaisedButton(
-                                                        onPressed: () {
+                                                        onPressed: () async {
                                                           if (_budgetcontroller
                                                               .text
                                                               .trim()
@@ -360,6 +371,29 @@ class LeadProfileScreen extends StatelessWidget {
                                                                 .clear();
                                                             clicked = !clicked;
                                                             value.setState();
+                                                            int myint =
+                                                                int.tryParse(
+                                                                        customer
+                                                                            .budget) ??
+                                                                    0;
+                                                            print(myint);
+                                                            // assert(
+                                                            //     myint is int);
+
+                                                            ApiResponse
+                                                                response =
+                                                                await ApiHelper()
+                                                                    .patchRequest(
+                                                                        'leadgrow/customer/$customerId/',
+                                                                        {
+                                                                  "budget": myint
+                                                                      .toInt()
+                                                                      .toString()
+                                                                });
+                                                            print(
+                                                                "response.error");
+                                                            print(
+                                                                response.data);
                                                           }
                                                         },
                                                         child: Text('Ok'.tr()),
@@ -421,7 +455,7 @@ class _ContactButtonsState extends State<ContactButtons> {
             icon: Icon(
               Icons.call,
               size: 35,
-              color: Colors.white,
+              color: Colors.deepOrange[300],
             ),
             onPressed: () {
               print('x');
@@ -438,7 +472,7 @@ class _ContactButtonsState extends State<ContactButtons> {
             icon: Icon(
               Icons.message,
               size: 35,
-              color: Colors.white,
+              color: Colors.deepOrange[300],
             ),
             onPressed: () {
               print('x');
@@ -449,7 +483,7 @@ class _ContactButtonsState extends State<ContactButtons> {
           ),
         ),
         SizedBox(
-          width: 156,
+          width: 136,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -458,7 +492,7 @@ class _ContactButtonsState extends State<ContactButtons> {
             icon: Icon(
               Icons.email,
               size: 35,
-              color: Colors.white,
+              color: Colors.deepOrange[300],
             ),
             onPressed: () {
               print('x');
@@ -475,7 +509,7 @@ class _ContactButtonsState extends State<ContactButtons> {
             icon: Icon(
               Icons.navigation,
               size: 35,
-              color: Colors.white,
+              color: Colors.deepOrange[300],
             ),
             onPressed: () {
               print('x');

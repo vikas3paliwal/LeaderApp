@@ -16,8 +16,17 @@ class Tasks with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteTask(String taskid) {
-    _tasks.removeWhere((element) => element.taskID == taskid);
+  Future<void> deleteTask(String taskid) async {
+    try {
+      ApiResponse response = await ApiHelper()
+          .deleteRequest(endpoint: 'leadgrow/tasks', id: taskid);
+      if (!response.error) {
+        _tasks.removeWhere((element) => element.taskID == taskid);
+      }
+    } catch (e) {
+      print(e.toString() + 'line 24');
+    }
+
     notifyListeners();
   }
 

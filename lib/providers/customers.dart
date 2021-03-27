@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Leader/models/customer.dart';
 import 'package:Leader/models/label.dart';
 import 'package:Leader/models/task.dart';
@@ -20,6 +22,28 @@ class Customers with ChangeNotifier {
     notifyListeners();
   }
 
+  void addContacts(
+    List<List<String>> contacts,
+  ) async {
+    var data = [];
+    print(contacts);
+    contacts.forEach((element) {
+      data.add({"'name'": "'${element[0]}'", "'contact'": "'${element[1]}'"});
+
+      // _customers.add(Customer(name: element[0], phoneNos: element[1]));
+    });
+    Map<String, dynamic> finaldata = {'customers': data.toString()};
+    // print(finaldata);
+    try {
+      ApiResponse response = await ApiHelper()
+          .postRequest('leadgrow/customer/import_customers/', finaldata);
+      if (!response.error) {}
+    } catch (e) {
+      print(e.toString() + 'line 38');
+    }
+    print(data);
+  }
+
   List<Task> completedTasks(String id, bool status) {
     return _customers
             .firstWhere((element) => element.customerId == id)
@@ -38,6 +62,14 @@ class Customers with ChangeNotifier {
       customer.labels.clear();
       customer.labels.addAll(labels);
     }
+    String temp = '';
+    labels.forEach((element) {
+      temp = temp + element.labelId + ',';
+    });
+    print(temp);
+    if (labels != null || labels.isNotEmpty)
+      ApiHelper().postRequest(
+          'leadgrow/customer/$id/update_customer_label/', {"labels": temp});
     notifyListeners();
   }
 
@@ -56,25 +88,22 @@ class Customers with ChangeNotifier {
         _customers.insert(total, custom);
       }
     }
-    ApiResponse response = await ApiHelper().postRequest(
-        'leadgrow/customer/${customer.customerId}/pin',
-        {"pinned": '${customer.pinned}'});
-    print(response.data);
+    ApiHelper()
+        .getRequest(endpoint: 'leadgrow/customer/${customer.customerId}/pin');
+
     notifyListeners();
   }
 
-  Future<void> removeCustomer(String id) async {
+  void removeCustomer(String id) {
     print(id);
-    _customers.removeWhere((element) => element.customerId == id);
-    customerscpy.removeWhere((element) => element.customerId == id);
-    ApiResponse response;
     try {
-      response = await ApiHelper()
-          .deleteRequest(endpoint: '/leadgrow/customer', id: id);
-      print(response.data);
+      ApiHelper().deleteRequest(endpoint: '/leadgrow/customer', id: id);
     } catch (e) {
       print(e.toString() + 'line 71');
     }
+    _customers.removeWhere((element) => element.customerId == id);
+    customerscpy.removeWhere((element) => element.customerId == id);
+
     notifyListeners();
   }
 
@@ -88,23 +117,19 @@ class Customers with ChangeNotifier {
     _customers
         .map((e) => e.labels.removeWhere((element) => element.labelId == id))
         .toList();
+    notifyListeners();
   }
 
   void onSearch(String val) {
     _customers = [];
     customerscpy.forEach((element) {
       if (element.name.toLowerCase().contains(val.toLowerCase()) ||
-          element.addresses.toLowerCase().contains(val.toLowerCase()) ||
-          element.phoneNos
-              .toString()
-              .toLowerCase()
-              .contains(val.toLowerCase()) ||
-          element.emails.toLowerCase().contains(val.toLowerCase())) {
+          element.location.toLowerCase().contains(val.toLowerCase())) {
         _customers.add(element);
       }
-      if (element.labels != null) {
-        element.labels.contains(val.toUpperCase());
-      }
+      // if (element.labels != null) {
+      //   element.labels.contains(val.toUpperCase());
+      // }
       // if (element.tasks != null) {
       //   element.tasks.contains(val);
       // }
@@ -136,10 +161,13 @@ class Customers with ChangeNotifier {
     return _customers.firstWhere((element) => element.customerId == id);
   }
 
-  Future<ApiResponse> fetchData() async {
+  Future<ApiResponse> fetchData([Map<String, String> query]) async {
     ApiResponse response;
     try {
-      response = await ApiHelper().getRequest(endpoint: '/leadgrow/customer');
+      response = query == null
+          ? await ApiHelper().getRequest(endpoint: '/leadgrow/customer')
+          : await ApiHelper()
+              .getRequest(endpoint: '/leadgrow/customer', query: query);
     } catch (e) {
       print(e);
     }
@@ -154,6 +182,7 @@ class Customers with ChangeNotifier {
       // print(cust.name);
       _customers.add(cust);
     }
+    notifyListeners();
     return response;
   }
 }

@@ -18,7 +18,9 @@ import 'package:easy_localization/easy_localization.dart';
 class LabelScreen extends StatefulWidget {
   static const routeName = '/label';
   final Key key;
-  LabelScreen(this.key) : super(key: key);
+  final GlobalKey<ScaffoldState> ctx;
+
+  LabelScreen(this.key, {this.ctx}) : super(key: key);
   @override
   _LabelScreenState createState() => _LabelScreenState();
 }
@@ -85,10 +87,8 @@ class _LabelScreenState extends State<LabelScreen> {
                   final label = lb.Label();
                   label.color = currentColor;
                   label.labelName = _controller.text.toUpperCase();
-                  label.labelId = UniqueKey().toString();
-                  Provider.of<Labels>(ctx, listen: false).addLabel(label);
-                  Navigator.of(context).pop();
 
+                  Navigator.of(context).pop();
                   Map<String, dynamic> data = {
                     'name': label.labelName,
                     'color': label.color.value.toString(),
@@ -102,23 +102,31 @@ class _LabelScreenState extends State<LabelScreen> {
                     );
                     if (!response.error) {
                       Flushbar(
-                        message: 'Message Sent successfully!',
+                        message: 'Added successfully!',
                         duration: Duration(seconds: 3),
-                      )..show(context);
+                      )..show(ctx);
+                      label.labelId = response.data["id"].toString();
+                      Provider.of<Labels>(ctx, listen: false).addLabel(label);
+                      print('line 107');
+                      print(response.data);
                     } else {
+                      print('obj');
+                      print(response.data);
+
                       Flushbar(
                         message: response.errorMessage ??
                             'Unable to add, Please try again later',
                         duration: Duration(seconds: 3),
-                      )..show(context);
+                      )..show(ctx);
                     }
                   } on HttpException catch (error) {
                     throw HttpException(message: error.toString());
                   } catch (error) {
+                    print(error.toString());
                     Flushbar(
                       message: 'Unable to add, Please try again later',
                       duration: Duration(seconds: 3),
-                    )..show(context);
+                    )..show(ctx);
                   }
                 }
                 setState(() {
@@ -128,9 +136,7 @@ class _LabelScreenState extends State<LabelScreen> {
               child: Text('Ok'.tr())),
         ],
       ),
-    ).whenComplete(() {
-      setState(() {});
-    });
+    );
   }
 
   @override
@@ -150,29 +156,29 @@ class _LabelScreenState extends State<LabelScreen> {
               offset: Offset(3, 4)),
         ],
       ),
-      drawer: SideDrawer(),
+      drawer: SideDrawer(widget.ctx),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListView.separated(
-                separatorBuilder: (ctx, i) => Divider(
-                  thickness: 2,
+          : Consumer<Labels>(
+              builder: (ctx, label, _) => Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ListView.separated(
+                  separatorBuilder: (ctx, i) => Divider(
+                    thickness: 2,
+                  ),
+                  itemBuilder: (ctx, i) => label.labels
+                      .map((e) => Column(children: [
+                            Label(
+                              labelColor: e.color,
+                              labelName: e.labelName,
+                              id: e.labelId,
+                              custmcount: e.customcounts,
+                              customids: e.customers,
+                            ),
+                          ]))
+                      .toList()[i],
+                  itemCount: label.labels.length,
                 ),
-                itemBuilder: (ctx, i) => label.labels
-                    .map((e) => Column(children: [
-                          Label(
-                            customers:
-                                e.label == null ? null : e.label.keys.length,
-                            labelColor: e.color,
-                            labelName: e.labelName,
-                            id: e.labelId,
-                            customids:
-                                e.label == null ? null : e.label.keys.toList(),
-                          ),
-                        ]))
-                    .toList()[i],
-                itemCount: label.labels.length,
               ),
             ),
       floatingActionButton: GestureDetector(

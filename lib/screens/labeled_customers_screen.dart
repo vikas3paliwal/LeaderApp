@@ -16,23 +16,20 @@ class LabeledCustomerScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(label.labelName),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ListView.builder(
-            itemCount: customers.length,
-            itemBuilder: (ctx, i) => customers
-                .map((e) => InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: LeadTile(
-                        id: e.customerId,
-                        labels: e.labels,
-                        name: e.name,
-                      ),
-                    ))
-                .toList()[i]),
-      ),
+      body: ListView.builder(
+          itemCount: customers.length,
+          itemBuilder: (ctx, i) => customers
+              .map((e) => InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: LeadTile(
+                      id: e.customerId,
+                      labels: e.labels,
+                      name: e.name,
+                    ),
+                  ))
+              .toList()[i]),
     );
   }
 }

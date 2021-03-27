@@ -31,13 +31,17 @@ dependencies:
   provider: ^4.3.2+3
   flutter_rounded_date_picker: ^1.0.5+1
   intl: ^0.17.0
-  flutter_login: ^1.0.14
   url_launcher: ^5.7.10
   shared_preferences: ^2.0.4
   http: ^0.12.0
   flutter_svg: ^0.19.3
   easy_localization: ^3.0.0 
   image_picker: ^0.6.7+11
+  flutter_contact: ^0.8.1+2
+  share: ^2.0.1
+  path_provider: ^2.0.1
+  permission_handler: ^5.1.0+1
+  flutter_platform_widgets: ^1.1.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
@@ -73,6 +77,12 @@ flutter:
     - assets/images/main_bottom.png
     - assets/images/icons/signup.svg
     - assets/images/leadgrow.jpeg
+    - assets/images/export.png
+    - assets/images/import.png
+    - assets/images/conversion.png
+    - assets/images/calculator.png
+    - assets/images/language.jpg
+    - assets/images/logout.png
     - assets/translation/
 #    - assets/images/icons/
 
@@ -87,6 +97,28 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Thin.ttf
+          weight: 100
+        - asset: fonts/Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Poppins-Bold.ttf
+          weight: 700
+        - asset: fonts/Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Poppins-Black.ttf
+          weight: 900
+
   # fonts:
   #   - family: Schyler
   #     fonts:
