@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:Leader/models/label.dart';
 import 'package:Leader/models/task.dart';
@@ -37,15 +37,15 @@ class Customer {
       this.notes,
       this.createDate});
   Map<String, dynamic> toJson() {
-    List<Map> labels = this.labels == null
-        ? null
-        : this.labels.map((e) => e.toJson()).toList();
-    List<Map> tasks =
-        this.tasks == null ? null : this.tasks.map((e) => e.toJson()).toList();
+    // List<Map> labels = this.labels == null
+    //     ? null
+    //     : this.labels.map((e) => e.toJson()).toList();
+    // List<Map> tasks =
+    //     this.tasks == null ? null : this.tasks.map((e) => e.toJson()).toList();
     Map<String, dynamic> data = {
       'name': name,
       'location': location,
-      'mobile': "+91" + phoneNos.toString(),
+      'mobile': phoneNos.toString(),
       'email': emails,
       'address': addresses,
       'budget': budget,

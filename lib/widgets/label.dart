@@ -1,8 +1,11 @@
 import 'package:Leader/customs/label_painter.dart';
+import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/screens/all_leads_screen.dart';
 import 'package:Leader/screens/labeled_customers_screen.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +14,7 @@ import 'package:easy_localization/easy_localization.dart';
 class Label extends StatelessWidget {
   final String labelName;
   final Color labelColor;
+  final BuildContext ctx;
   // final int customers;
   final String id;
   final int custmcount;
@@ -18,6 +22,7 @@ class Label extends StatelessWidget {
   Label(
       {
       // this.customers,
+      this.ctx,
       this.labelColor,
       this.labelName,
       this.id,
@@ -67,9 +72,19 @@ class Label extends StatelessWidget {
             ], begin: Alignment.topLeft, end: Alignment.topRight)),
           ),
           onDismissed: (_) {
-            Provider.of<Labels>(context, listen: false).deleteLabel(id);
+            if (int.parse(id) >= 56 && int.parse(id) <= 61) {
+              Flushbar(
+                message: "App Labels can't be deleted",
+                backgroundColor: Colors.red,
+                duration: Duration(milliseconds: 1500),
+                flushbarPosition: FlushbarPosition.BOTTOM,
+              )..show(ctx);
+              
+            } else {
+              Provider.of<Labels>(context, listen: false).deleteLabel(id);
 
-            Provider.of<Customers>(context, listen: false).deleteLabel(id);
+              Provider.of<Customers>(context, listen: false).deleteLabel(id);
+            }
           },
           child: ListTile(
             dense: true,

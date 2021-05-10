@@ -1,19 +1,19 @@
-import 'package:Leader/localization/app_localization.dart';
+// import 'package:Leader/localization/app_localization.dart';
 import 'package:Leader/models/business.dart';
 import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/OnBoarding/on_boarding.dart';
-import 'package:Leader/screens/Signup/signup_screen.dart';
+// import 'package:Leader/screens/Signup/signup_screen.dart';
 import 'package:Leader/screens/home_screen.dart';
-import 'package:Leader/screens/leads_screen.dart';
+// import 'package:Leader/screens/leads_screen.dart';
 import 'package:Leader/screens/splashScreen.dart';
 // import 'package:Leader/screens/login_screen.dart';
 import 'package:Leader/utilities/api_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

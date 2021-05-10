@@ -23,9 +23,7 @@ class EMIScreenState extends State<EMIScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("EMI Calculator".tr()), elevation: 0.0),
-        body: Center(
-            child: Container(
-                child: Column(
+        body: Column(
           children: <Widget>[
             Container(
                 padding: EdgeInsets.all(20.0),
@@ -95,16 +93,17 @@ class EMIScreenState extends State<EMIScreen> {
                         top: 15.0, bottom: 15.0, left: 30.0, right: 30.0))),
             emiResultsWidget(_emiResult)
           ],
-        ))));
+        ));
   }
 
-  void _handleCalculation() {
+  void _handleCalculation() async {
     //  Amortization
     //  A = Payemtn amount per period
     //  P = Initial Printical (loan amount)
     //  r = interest rate
     //  n = total number of payments or periods
-
+    await Future.delayed(Duration(milliseconds: 500));
+    FocusScope.of(context).unfocus();
     double A = 0.0;
     int P = int.parse(_principalAmount.text);
     double r = int.parse(_interestRate.text) / 12 / 100;

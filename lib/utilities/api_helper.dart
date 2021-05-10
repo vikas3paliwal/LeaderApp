@@ -143,6 +143,41 @@ class ApiHelper {
     }
   }
 
+  Future<void> googleLogIn(Map data, String endpoint) async {
+    var responseBody = json.decode('{"data": "", "status": "NOK"}');
+
+    try {
+//      final url = '$_baseUrl$eLogIn';
+      final uri = Uri.https(_baseUrl, endpoint);
+      print(uri);
+      final response = await http.post(uri, body: data);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        // print('200 ran');
+        responseBody = jsonDecode(response.body);
+        //print(responseBody);
+        await _setAuthToken(responseBody['key']);
+        await _setUID(responseBody['user'].toString());
+        //print('uID is: $_userID');
+      } else {
+        Map<String, dynamic> data = jsonDecode(response.body);
+
+        String error = 'Error occurred';
+        data.keys.forEach((String key) {
+          if (key.contains('error')) {
+            error = data[key][0];
+            print(error);
+          }
+        });
+        throw HttpException(message: error);
+      }
+    } on SocketException catch (error) {
+      throw HttpException(message: 'No Internet Connection');
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<void> logOut() async {
     final SharedPreferences prefs = await _prefs;
     prefs.clear();
@@ -234,6 +269,43 @@ class ApiHelper {
     } on SocketException catch (error) {
       throw HttpException(message: 'No Internet Connection');
     } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<ApiResponse> forgotpass(
+      String endpoint, Map<String, dynamic> data) async {
+    try {
+//      final url = '$_baseUrl$endpoint';
+      final uri = Uri.https(_baseUrl, endpoint);
+      print(jsonEncode(data));
+      final response = await http.post(uri, body: data);
+      print('code is ${response.statusCode}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('++++');
+        print(response.body);
+        return ApiResponse(data: jsonDecode(response.body));
+      } else {
+        print(response.body);
+        print(response.statusCode);
+        Map<String, dynamic> data = jsonDecode(response.body);
+        String error = 'Error occurred';
+        data.keys.forEach((String key) {
+          if (key.contains('error')) {
+            error = data[key][0];
+            print(error);
+          } else {
+            error = data[key][0];
+          }
+        });
+        return ApiResponse(error: true, errorMessage: error);
+      }
+    } on SocketException catch (error) {
+      print('socket');
+      throw HttpException(message: 'No Internet Connection');
+    } catch (e) {
+      print('***********');
+      print(e);
       throw e;
     }
   }

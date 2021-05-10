@@ -86,21 +86,24 @@ class _LeadTileState extends State<LeadTile> {
                       SizedBox(
                         width: 4,
                       ),
-                      Container(
-                        width: 60,
-                        height: 15,
-                        child: FittedBox(
-                            child: Text(customer.createDate.split(' ')[0] +
-                                ' ' +
-                                customer.createDate.split(' ')[1] +
-                                ' ' +
-                                customer.createDate.split(' ')[2])),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1,
-                                color: Theme.of(context).primaryColor),
-                            borderRadius: BorderRadius.circular(4)),
-                      )
+                      customer == null
+                          ? Container()
+                          : Container(
+                              width: 60,
+                              height: 15,
+                              child: FittedBox(
+                                  child: Text(
+                                      customer.createDate.split(' ')[0] +
+                                          ' ' +
+                                          customer.createDate.split(' ')[1] +
+                                          ' ' +
+                                          customer.createDate.split(' ')[2])),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context).primaryColor),
+                                  borderRadius: BorderRadius.circular(4)),
+                            )
                     ],
                   ),
                 ),

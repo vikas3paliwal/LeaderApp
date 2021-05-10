@@ -39,6 +39,46 @@ class _SideDrawerState extends State<SideDrawer> {
           _handleInvalidPermissions(permissionStatus);
         } else {
           print('success');
+          Map<Contact, bool> contacts = {};
+          await Contacts.streamContacts().forEach((contact) {
+            contacts[contact] = false;
+          });
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: Text('Cancel'.tr())),
+                TextButton(
+                    onPressed: () {
+                      List<List<String>> contact = [];
+                      contacts.forEach((key, value) {
+                        if (value) {
+                          contact.add([key.displayName, key.phones[0].value]);
+                          print(value);
+                        }
+                      });
+                      Provider.of<Customers>(context, listen: false)
+                          .addContacts(contact);
+                      Navigator.of(ctx).pop();
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ok'.tr()))
+              ],
+              content: Container(
+                height: 350,
+                child: ListView.builder(
+                    itemCount: contacts.length,
+                    itemBuilder: (ctx, i) => contacts.keys
+                        .map((e) => ContactTile(e, contacts))
+                        .toList()[i]),
+              ),
+            ),
+            useSafeArea: true,
+          ).whenComplete(() {
+            Provider.of<Customers>(context, listen: false).fetchData();
+          });
           // _hasPermission = true;
         }
       } catch (e) {
@@ -167,56 +207,10 @@ class _SideDrawerState extends State<SideDrawer> {
               setState(() {
                 _loading = true;
               });
-              Map<Contact, bool> contacts = {};
-
               await _askPermissions(context);
-              await Contacts.streamContacts().forEach((contact) {
-                contacts[contact] = false;
-                print("${contact.displayName}");
-                print("${contact.phones}");
-              });
               setState(() {
                 _loading = false;
               });
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  actions: [
-                    TextButton(
-                        onPressed: () => Navigator.of(ctx).pop(),
-                        child: Text('Cancel'.tr())),
-                    TextButton(
-                        onPressed: () {
-                          List<List<String>> contact = [];
-                          contacts.forEach((key, value) {
-                            if (value) {
-                              contact
-                                  .add([key.displayName, key.phones[0].value]);
-                              print(value);
-                            }
-                          });
-                          Provider.of<Customers>(context, listen: false)
-                              .addContacts(contact);
-                          Navigator.of(ctx).pop();
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('Ok'.tr()))
-                  ],
-                  content: Container(
-                    height: 350,
-                    child: ListView.builder(
-                        itemCount: contacts.length,
-                        itemBuilder: (ctx, i) => contacts.keys
-                            .map((e) => ContactTile(e, contacts))
-                            .toList()[i]),
-                  ),
-                ),
-                useSafeArea: true,
-              ).whenComplete(() {
-                Provider.of<Customers>(context, listen: false).fetchData();
-              });
-
-              print(flutterContactLog.name);
             },
           ),
           ListTile(
@@ -226,10 +220,17 @@ class _SideDrawerState extends State<SideDrawer> {
               height: 27,
               scale: 2,
             ),
-            onTap: () {},
+            onTap: () {
+              Provider.of<Customers>(context, listen: false)
+                  .exportData()
+                  .then((value) => Flushbar(
+                        message: 'Exported successfully to path: $value',
+                        duration: Duration(seconds: 3),
+                      )..show(context));
+            },
           ),
           ListTile(
-            title: Text('Log Out'.tr()),
+            title: Text('Log out'.tr()),
             leading: Image.asset(
               'assets/images/logout.png',
               height: 25,

@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/screens/labeled_customers_screen.dart';
+import 'package:Leader/widgets/app_label.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:Leader/utilities/api-response.dart';
 import 'package:Leader/utilities/api_helper.dart';
@@ -84,6 +86,9 @@ class _LabelScreenState extends State<LabelScreen> {
           FlatButton(
               onPressed: () async {
                 if (_controller.text.trim().isNotEmpty) {
+                  // setState(() {
+                  //   _isLoading = true;
+                  // });
                   final label = lb.Label();
                   label.color = currentColor;
                   label.labelName = _controller.text.toUpperCase();
@@ -107,6 +112,7 @@ class _LabelScreenState extends State<LabelScreen> {
                       )..show(ctx);
                       label.labelId = response.data["id"].toString();
                       Provider.of<Labels>(ctx, listen: false).addLabel(label);
+                      Provider.of<Labels>(ctx, listen: false).fetchData();
                       print('line 107');
                       print(response.data);
                     } else {
@@ -129,9 +135,9 @@ class _LabelScreenState extends State<LabelScreen> {
                     )..show(ctx);
                   }
                 }
-                setState(() {
-                  _isLoading = false;
-                });
+                // setState(() {
+                //   _isLoading = false;
+                // });
               },
               child: Text('Ok'.tr())),
         ],
@@ -141,6 +147,7 @@ class _LabelScreenState extends State<LabelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('build');
     final label = Provider.of<Labels>(context);
     return Scaffold(
       appBar: AppBar(
@@ -162,22 +169,70 @@ class _LabelScreenState extends State<LabelScreen> {
           : Consumer<Labels>(
               builder: (ctx, label, _) => Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: ListView.separated(
-                  separatorBuilder: (ctx, i) => Divider(
-                    thickness: 2,
-                  ),
-                  itemBuilder: (ctx, i) => label.labels
-                      .map((e) => Column(children: [
-                            Label(
-                              labelColor: e.color,
-                              labelName: e.labelName,
-                              id: e.labelId,
-                              custmcount: e.customcounts,
-                              customids: e.customers,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('App Labels'),
+                        Expanded(
+                          child: ListView.separated(
+                            separatorBuilder: (ctx, i) => Divider(
+                              thickness: 2,
                             ),
-                          ]))
-                      .toList()[i],
-                  itemCount: label.labels.length,
+                            itemBuilder: (ctx, i) {
+                              return label
+                                  .appLabels()
+                                  .map((e) => Column(children: [
+                                        AppLabel(
+                                          labelColor: e.color,
+                                          labelName: e.labelName,
+                                          id: e.labelId,
+                                          custmcount: e.customcounts,
+                                          customids: e.customers,
+                                        ),
+                                      ]))
+                                  .toList()[i];
+                            },
+                            itemCount: label.appLabels().length,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('User Labels'),
+                        Expanded(
+                          child: ListView.separated(
+                            separatorBuilder: (ctx, i) => Divider(
+                              thickness: 2,
+                            ),
+                            itemBuilder: (ctx, i) {
+                              return label.labels.map((e) {
+                                if (e.labelId != '56' &&
+                                    e.labelId != '57' &&
+                                    e.labelId != '58' &&
+                                    e.labelId != '59' &&
+                                    e.labelId != '60' &&
+                                    e.labelId != '61') {
+                                  return Column(children: [
+                                    Label(
+                                      ctx: context,
+                                      labelColor: e.color,
+                                      labelName: e.labelName,
+                                      id: e.labelId,
+                                      custmcount: e.customcounts,
+                                      customids: e.customers,
+                                    ),
+                                  ]);
+                                } else {
+                                  return Container();
+                                }
+                              }).toList()[i];
+                            },
+                            itemCount: label.labels.length - 6,
+                          ),
+                        ),
+                      ]),
                 ),
               ),
             ),

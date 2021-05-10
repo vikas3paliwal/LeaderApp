@@ -19,10 +19,14 @@ class _AddLabelScreenState extends State<AddLabelScreen> {
   void didChangeDependencies() {
     if (_initial) {
       final labels = Provider.of<Labels>(context, listen: false);
+
       final customer = Provider.of<Customers>(context, listen: false)
           .findById(widget.customerId);
-      customer.labels.forEach((element) {
-        labels.findById(element.labelId).label = {widget.customerId: true};
+      Future.delayed(Duration.zero).whenComplete(() async {
+        await labels.fetchData();
+        customer.labels.forEach((element) {
+          labels.findById(element.labelId).label = {widget.customerId: true};
+        });
       });
     }
     _initial = false;

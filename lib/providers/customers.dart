@@ -1,9 +1,12 @@
-import 'dart:convert';
+// import 'dart:convert';
+import 'dart:io';
 
 import 'package:Leader/models/customer.dart';
 import 'package:Leader/models/label.dart';
 import 'package:Leader/models/task.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 import '../utilities/api_helper.dart';
 import '../utilities/api-response.dart';
 
@@ -159,6 +162,34 @@ class Customers with ChangeNotifier {
   Customer findById(String id) {
     customers.map((e) => print(e.customerId));
     return _customers.firstWhere((element) => element.customerId == id);
+  }
+
+  Future<String> exportData() async {
+    List<List<dynamic>> data = [
+      ["Name", "Phone no."]
+    ];
+    _customers.forEach((element) {
+      data.add([
+        element.name,
+        element.phoneNos,
+      ]);
+    });
+    // print(data);
+    final csv = ListToCsvConverter().convert(data);
+    print(csv);
+
+    final directory = await getExternalStorageDirectory();
+
+    final path = "${directory.path}/csv-user${DateTime.now()}.csv";
+    print(path);
+    try {
+      final File file = File(path);
+      await file.writeAsString(csv);
+      return directory.path;
+    } catch (e) {
+      print(e.toString());
+    }
+    return directory.path;
   }
 
   Future<ApiResponse> fetchData([Map<String, String> query]) async {

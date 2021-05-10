@@ -46,13 +46,13 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
             _isLoading = false;
           },
         );
-        if (val.business == null) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => EditBusinessDetailsScreen()),
-              (route) => false);
-        }
+        // if (val.business == null) {
+        //   Navigator.pushAndRemoveUntil(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => EditBusinessDetailsScreen()),
+        //       (route) => false);
+        // }
       });
     }
     _initial = false;
