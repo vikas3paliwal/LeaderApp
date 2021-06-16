@@ -36,7 +36,9 @@ class _AddLabelScreenState extends State<AddLabelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final label = Provider.of<Labels>(context, listen: false);
+    final label = Provider.of<Labels>(
+      context,
+    );
 
     return Scaffold(
       appBar: AppBar(

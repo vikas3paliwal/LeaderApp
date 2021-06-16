@@ -30,11 +30,13 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final _formKey = GlobalKey<FormState>();
   final GoogleSignIn _googleSignIn = new GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+      // signInOption: SignInOption.standard,
+      // scopes: [
+      //   'email',
+      //   'https://www.googleapis.com/auth/contacts.readonly',
+      // ],
+      );
+
   bool _isLoading = false;
   bool _isPasswordHidden = true;
   bool _forgotpass = false;
@@ -49,10 +51,11 @@ class _BodyState extends State<Body> {
           await _googleSignIn.signIn();
       print('line 43');
       if (googleSignInAccount != null) {
+        print(googleSignInAccount.email);
         print('line 45');
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
-        print('line 48');
+        print('line 48:' + googleSignInAuthentication.accessToken);
 
         final response = await ApiHelper().googleLogIn(
           {
@@ -61,6 +64,8 @@ class _BodyState extends State<Body> {
           },
           'rest-auth/google/',
         );
+        Navigator.of(context).pushNamed(MyHomePage.routeName);
+        // print(response);
         print('line 53');
       }
     } on PlatformException catch (e) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'api-response.dart';
 import 'http_exception.dart';
@@ -16,6 +17,8 @@ class ApiHelper {
 
   static String _authToken;
   static String _userID;
+  // bool _googlelogin = false;
+  final GoogleSignIn _googleSignIn = new GoogleSignIn();
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -155,10 +158,11 @@ class ApiHelper {
       if (response.statusCode == 200) {
         // print('200 ran');
         responseBody = jsonDecode(response.body);
-        //print(responseBody);
+        // print(responseBody);
         await _setAuthToken(responseBody['key']);
         await _setUID(responseBody['user'].toString());
-        //print('uID is: $_userID');
+
+        // print('uID is: $_userID');
       } else {
         Map<String, dynamic> data = jsonDecode(response.body);
 
@@ -181,8 +185,15 @@ class ApiHelper {
   Future<void> logOut() async {
     final SharedPreferences prefs = await _prefs;
     prefs.clear();
+    final googleLogin = await _googleSignIn.isSignedIn();
+
     try {
-      ApiResponse response = await postRequest('/rest-auth/logout/', {});
+      if (googleLogin) {
+        print('yes its true');
+        await _googleSignIn.signOut();
+      } else {
+        ApiResponse response = await postRequest('/rest-auth/logout/', {});
+      }
     } catch (e) {
       print(e.toString() + 'line 152');
     }

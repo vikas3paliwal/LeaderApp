@@ -23,7 +23,7 @@ class EMIScreenState extends State<EMIScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("EMI Calculator".tr()), elevation: 0.0),
-        body: Column(
+        body: ListView(
           children: <Widget>[
             Container(
                 padding: EdgeInsets.all(20.0),
@@ -79,18 +79,16 @@ class EMIScreenState extends State<EMIScreen> {
                     // )
                   ],
                 )),
-            Flexible(
-                fit: FlexFit.loose,
-                child: FlatButton(
-                    onPressed: _handleCalculation,
-                    child: Text(
-                      "Calculate".tr(),
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                    color: Color.fromRGBO(89, 87, 117, 1.0),
-                    textColor: Colors.white,
-                    padding: EdgeInsets.only(
-                        top: 15.0, bottom: 15.0, left: 30.0, right: 30.0))),
+            FlatButton(
+                onPressed: _handleCalculation,
+                child: Text(
+                  "Calculate".tr(),
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                color: Color.fromRGBO(89, 87, 117, 1.0),
+                textColor: Colors.white,
+                padding: EdgeInsets.only(
+                    top: 15.0, bottom: 15.0, left: 30.0, right: 30.0)),
             emiResultsWidget(_emiResult)
           ],
         ));

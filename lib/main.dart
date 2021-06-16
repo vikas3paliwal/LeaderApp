@@ -5,10 +5,12 @@ import 'package:Leader/providers/customers.dart';
 import 'package:Leader/providers/labels.dart';
 import 'package:Leader/providers/tasks.dart';
 import 'package:Leader/screens/OnBoarding/on_boarding.dart';
+import 'package:Leader/screens/add_business_screen.dart';
 // import 'package:Leader/screens/Signup/signup_screen.dart';
 import 'package:Leader/screens/home_screen.dart';
 // import 'package:Leader/screens/leads_screen.dart';
 import 'package:Leader/screens/splashScreen.dart';
+import 'package:Leader/utilities/api-response.dart';
 // import 'package:Leader/screens/login_screen.dart';
 import 'package:Leader/utilities/api_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -120,12 +122,30 @@ class MyApp extends StatelessWidget {
         locale: context.locale,
         home: FutureBuilder(
             future: ApiHelper().isLoggedIn(),
-            builder: (ctx, snapshot) =>
-                snapshot.connectionState == ConnectionState.waiting
-                    ? SplashScreen()
-                    : snapshot.data == true
-                        ? MyHomePage()
-                        : OnBoardingScreen()),
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return SplashScreen();
+              else {
+                if (snapshot.data == true) {
+                  ApiResponse response;
+                  return FutureBuilder(
+                      future:
+                          Future.delayed(Duration.zero).whenComplete(() async {
+                        response = await ApiHelper()
+                            .getRequest(endpoint: 'leadgrow/business');
+                        print(response.data);
+                        print(response.data.length);
+                      }),
+                      builder: (ctx, snap) =>
+                          snap.connectionState == ConnectionState.waiting
+                              ? SplashScreen()
+                              : (response.data.length != 0
+                                  ? MyHomePage()
+                                  : AddBusinessDetailsScreen()));
+                } else
+                  return OnBoardingScreen();
+              }
+            }),
       ),
     );
   }

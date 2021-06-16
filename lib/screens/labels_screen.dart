@@ -207,6 +207,7 @@ class _LabelScreenState extends State<LabelScreen> {
                               thickness: 2,
                             ),
                             itemBuilder: (ctx, i) {
+                              print(label.labels.length);
                               return label.labels.map((e) {
                                 if (e.labelId != '56' &&
                                     e.labelId != '57' &&
@@ -229,7 +230,7 @@ class _LabelScreenState extends State<LabelScreen> {
                                 }
                               }).toList()[i];
                             },
-                            itemCount: label.labels.length - 6,
+                            itemCount: label.labels.length - 5,
                           ),
                         ),
                       ]),

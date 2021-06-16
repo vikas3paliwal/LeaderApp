@@ -124,10 +124,10 @@ class Customers with ChangeNotifier {
   }
 
   void onSearch(String val) {
+    print(val);
     _customers = [];
     customerscpy.forEach((element) {
-      if (element.name.toLowerCase().contains(val.toLowerCase()) ||
-          element.location.toLowerCase().contains(val.toLowerCase())) {
+      if (element.name.toLowerCase().contains(val.toLowerCase())) {
         _customers.add(element);
       }
       // if (element.labels != null) {

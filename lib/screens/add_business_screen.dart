@@ -207,6 +207,7 @@ class _AddBusinessDetailsScreenState extends State<AddBusinessDetailsScreen> {
                       controller: webController,
                       keyboardType: TextInputType.url,
                       decoration: InputDecoration(
+                        hintText: 'e.g. https://mywebsite.com',
                         labelText: 'Website'.tr(),
                         filled: true,
                         fillColor: Colors.white,
