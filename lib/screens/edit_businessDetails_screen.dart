@@ -38,6 +38,8 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
   FocusNode emailnode = FocusNode();
   FocusNode addressnode = FocusNode();
 
+  bool _isLoading = false;
+
   Future<File> getImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: source);
@@ -51,17 +53,21 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
   }
 
   void updateData(data) async {
+    final id = Provider.of<Business>(context, listen: false).business.id;
     try {
-      final ApiResponse response = await ApiHelper().postWithFileRequest(
-          endpoint: '/leadgrow/business/',
-          data: data,
-          file: _imageFile,
-          fileFieldName: 'image');
+      final ApiResponse response = await ApiHelper()
+          .patchRequestwithFile(
+              endpoint: '/leadgrow/business/$id/',
+              data: data,
+              file: _imageFile,
+              fileFieldName: 'image')
+          .whenComplete(() => Navigator.of(context).pop());
       if (!response.error) {
         Flushbar(
           message: 'Added successfully!',
           duration: Duration(seconds: 3),
         )..show(context);
+        await Provider.of<Business>(context, listen: false).fetchData();
       } else {
         Flushbar(
           message:
@@ -72,6 +78,7 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
     } on HttpException catch (error) {
       throw HttpException(error.toString());
     } catch (error) {
+      print(error);
       Flushbar(
         message: 'Unable to Add, please try again later',
         duration: Duration(seconds: 3),
@@ -82,28 +89,17 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
   void editBusiness() {
     try {
       if (_formKey.currentState.validate()) {
-        Provider.of<Business>(context, listen: false).editBusiness(
-            address: addressController.text,
-            name: businessNameController.text,
-            mobileNo: mobileController.text,
-            emailaddress: emailController.text,
-            id: UniqueKey().toString(),
-            webaddress: webController.text,
-            imgurl: imageController.text);
-
         Map<String, dynamic> data = {
           'name': businessNameController.text,
           'email': emailController.text,
           'mobile': "+91" + mobileController.text,
           'address': addressController.text,
           // 'image': base64Image,
-          'website': 'https://' + webController.text
+          'website': webController.text
         };
         print(data);
 
         updateData(data);
-
-        Navigator.of(context).pop();
       }
     } on FormatException catch (e) {
       print('hello');
@@ -118,7 +114,9 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
       final business = Provider.of<Business>(context).business;
       addressController.text = business?.address ?? '';
       businessNameController.text = business?.name ?? '';
-      mobileController.text = business?.mobileNo ?? '';
+      mobileController.text = business?.mobileNo == null
+          ? null
+          : business?.mobileNo?.split('+91')[1] ?? '';
       webController.text = business?.webaddress ?? '';
       emailController.text = business?.emailaddress ?? '';
       imageController.text = business?.imgurl ?? '';
@@ -470,7 +468,9 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
                               width: 5.0, color: Theme.of(context).accentColor),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: NetworkImage(imageController.text),
+                            image: imageController.text.isEmpty
+                                ? AssetImage('assets/images/noImage.jpg')
+                                : NetworkImage(imageController.text),
                           ),
                         ),
                       ),
@@ -479,17 +479,26 @@ class _EditBusinessDetailsScreenState extends State<EditBusinessDetailsScreen> {
               ),
             )),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => editBusiness(),
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Text(
-            'Edit'.tr(),
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
-          ),
-        ),
-      ),
+      floatingActionButton: _isLoading
+          ? CircularProgressIndicator()
+          : FloatingActionButton.extended(
+              onPressed: () {
+                setState(() {
+                  _isLoading = true;
+                });
+                editBusiness();
+              },
+              label: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Text(
+                  'Edit'.tr(),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }

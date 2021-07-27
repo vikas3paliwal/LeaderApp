@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/image_bottom_sheet.dart';
 
 class AddBusinessDetailsScreen extends StatefulWidget {
@@ -25,6 +26,8 @@ class _AddBusinessDetailsScreenState extends State<AddBusinessDetailsScreen> {
   bool _initial = true;
   File _imageFile;
   bool _noImageError = false;
+
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   TextEditingController businessNameController = TextEditingController();
   TextEditingController webController = TextEditingController();
@@ -59,11 +62,18 @@ class _AddBusinessDetailsScreenState extends State<AddBusinessDetailsScreen> {
           file: _imageFile,
           fileFieldName: 'image');
       if (!response.error) {
+        print('data: ' + response.data.toString());
         Flushbar(
           message: 'Message Sent successfully!',
           duration: Duration(seconds: 3),
         )..show(context);
+        if (response != null) {
+          final SharedPreferences prefs = await _prefs;
 
+          prefs.setString('businessId', response.data['id']);
+        }
+
+        // Provider.of<Business>(context, listen: false).id = response.data['id'];
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

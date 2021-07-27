@@ -131,10 +131,13 @@ class MyApp extends StatelessWidget {
                   return FutureBuilder(
                       future:
                           Future.delayed(Duration.zero).whenComplete(() async {
-                        response = await ApiHelper()
-                            .getRequest(endpoint: 'leadgrow/business');
-                        print(response.data);
-                        print(response.data.length);
+                        try {
+                          response = await ApiHelper()
+                              .getRequest(endpoint: 'leadgrow/business/');
+                        } catch (e) {
+                          
+                          print(e);
+                        }
                       }),
                       builder: (ctx, snap) =>
                           snap.connectionState == ConnectionState.waiting

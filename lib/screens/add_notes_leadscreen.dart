@@ -127,9 +127,9 @@ class _AddNotesLeadScreenState extends State<AddNotesLeadScreen> {
               }
               try {
                 final ApiResponse response = await ApiHelper().postRequest(
-                    'leadgrow/notes/${customer.customerId}/', {
+                    'leadgrow/notes/', {
                   "note": _controller.text,
-                  "customer": '${customer.customerId}'
+                  "customer": customer.customerId
                 }).whenComplete(() async {
                   FocusScope.of(context).unfocus();
                   await Future.delayed(Duration(milliseconds: 150))

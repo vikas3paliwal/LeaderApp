@@ -377,7 +377,7 @@ class ApiHelper {
     try {
       final url = '$_baseUrl$endpoint';
       final uri = Uri.https(_baseUrl, endpoint);
-
+      print(_authToken);
       final response = await http.patch(uri,
           headers: {
             HttpHeaders.authorizationHeader: 'Token $_authToken',

@@ -24,6 +24,7 @@ class _LeadTileState extends State<LeadTile> {
   Widget build(BuildContext context) {
     final customers = Provider.of<Customers>(context);
     final customer = widget.id == null ? null : customers.findById(widget.id);
+    // print(customer.createDate);
     return Container(
       key: ValueKey(widget.id),
       decoration: BoxDecoration(shape: BoxShape.rectangle, boxShadow: [
@@ -92,12 +93,8 @@ class _LeadTileState extends State<LeadTile> {
                               width: 60,
                               height: 15,
                               child: FittedBox(
-                                  child: Text(
-                                      customer.createDate.split(' ')[0] +
-                                          ' ' +
-                                          customer.createDate.split(' ')[1] +
-                                          ' ' +
-                                          customer.createDate.split(' ')[2])),
+                                  child:
+                                      Text(customer.createDate.split(' ')[0])),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 1,

@@ -16,7 +16,8 @@ import 'package:intl/intl.dart';
 
 class AddLeadScreen extends StatefulWidget {
   final Function callback;
-  AddLeadScreen(this.callback);
+  final String customId;
+  AddLeadScreen(this.callback, {this.customId});
   @override
   _AddLeadScreenState createState() => _AddLeadScreenState();
 }
@@ -56,58 +57,122 @@ class _AddLeadScreenState extends State<AddLeadScreen>
 
   Future<ApiResponse> addLead(BuildContext ctx) async {
     Map<String, dynamic> data;
-    try {
-      if (_formKey.currentState.validate()) {
-        final customer = Provider.of<Customers>(ctx, listen: false);
-        Customer cust = new Customer(
-            name: leadNameController.text,
-            location: locationController.text,
-            phoneNos: mobileController.text,
-            emails: emailController.text,
-            addresses: addressController.text,
-            proptype: _custmprop ?? '',
-            pinned: false,
-            events: Event(day: eventDate, eventName: eventController.text));
-        data = cust.toJson();
-        try {
-          final ApiResponse response = await ApiHelper()
-              .postRequest(
-                'leadgrow/customer/',
-                data,
-              )
-              .whenComplete(() => Navigator.of(ctx).pop());
-          if (!response.error) {
+    if (widget.customId != null) {
+      final custmr =
+          Provider.of<Customers>(ctx, listen: false).findById(widget.customId);
+      try {
+        if (_formKey.currentState.validate()) {
+          final customer = Provider.of<Customers>(ctx, listen: false);
+          Customer cust = new Customer(
+              name: leadNameController.text,
+              location: locationController.text,
+              phoneNos: mobileController.text,
+              emails: emailController.text,
+              addresses: addressController.text,
+              proptype: _custmprop ?? '',
+              pinned: custmr.pinned,
+              budget: custmr.budget,
+              notes: custmr.notes,
+              events: Event(day: eventDate, eventName: eventController.text));
+          data = cust.toJson();
+          try {
+            final ApiResponse response = await ApiHelper()
+                .patchRequest(
+                  'leadgrow/customer/${widget.customId}/',
+                  data,
+                )
+                .whenComplete(() => Navigator.of(ctx).pop());
+            if (!response.error) {
+              Flushbar(
+                message: 'Added successfully!',
+                duration: Duration(seconds: 3),
+              )..show(ctx);
+
+              cust.customerId = response.data["id"].toString();
+              await customer.fetchData();
+              // customer.addLead(cust);
+            } else {
+              Flushbar(
+                message: response.errorMessage ??
+                    'Unable to add, Please try again later',
+                duration: Duration(seconds: 3),
+              )..show(ctx);
+            }
+            return response;
+          } on HttpException catch (error) {
+            throw HttpException(message: error.toString());
+          } catch (error) {
             Flushbar(
-              message: 'Added successfully!',
-              duration: Duration(seconds: 3),
-            )..show(ctx);
-            cust.customerId = response.data["id"].toString();
-            customer.addLead(cust);
-          } else {
-            Flushbar(
-              message: response.errorMessage ??
-                  'Unable to add, Please try again later',
+              message: 'Unable to add, Please try again later',
               duration: Duration(seconds: 3),
             )..show(ctx);
           }
-          return response;
-        } on HttpException catch (error) {
-          throw HttpException(message: error.toString());
-        } catch (error) {
-          Flushbar(
-            message: 'Unable to add, Please try again later',
-            duration: Duration(seconds: 3),
-          )..show(ctx);
+
+          print('================');
+          print(data);
+          print('================');
+          // widget.callback();
+
         }
-
-        print('================');
-        print(data);
-        print('================');
-        // widget.callback();
-
+      } catch (e) {
+        print(e.toString());
       }
-    } catch (e) {
-      print(e.toString());
+    } else {
+      try {
+        if (_formKey.currentState.validate()) {
+          final customer = Provider.of<Customers>(ctx, listen: false);
+          Customer cust = new Customer(
+              name: leadNameController.text,
+              location: locationController.text,
+              phoneNos: mobileController.text,
+              emails: emailController.text,
+              addresses: addressController.text,
+              proptype: _custmprop ?? '',
+              pinned: false,
+              events: Event(day: eventDate, eventName: eventController.text));
+          data = cust.toJson();
+          try {
+            final ApiResponse response = await ApiHelper()
+                .postRequest(
+                  'leadgrow/customer/',
+                  data,
+                )
+                .whenComplete(() => Navigator.of(ctx).pop());
+            if (!response.error) {
+              Flushbar(
+                message: 'Added successfully!',
+                duration: Duration(seconds: 3),
+              )..show(ctx);
+
+              cust.customerId = response.data["id"].toString();
+              await customer.fetchData();
+              // customer.addLead(cust);
+            } else {
+              Flushbar(
+                message: response.errorMessage ??
+                    'Unable to add, Please try again later',
+                duration: Duration(seconds: 3),
+              )..show(ctx);
+            }
+            return response;
+          } on HttpException catch (error) {
+            throw HttpException(message: error.toString());
+          } catch (error) {
+            Flushbar(
+              message: 'Unable to add, Please try again later',
+              duration: Duration(seconds: 3),
+            )..show(ctx);
+          }
+
+          print('================');
+          print(data);
+          print('================');
+          // widget.callback();
+
+        }
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 
@@ -115,6 +180,19 @@ class _AddLeadScreenState extends State<AddLeadScreen>
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     if (_init) {
+      if (widget.customId != null) {
+        final customer = Provider.of<Customers>(context, listen: false)
+            .findById(widget.customId);
+        leadNameController.text = customer.name ?? '';
+        locationController.text = customer.location ?? '';
+        mobileController.text = customer.phoneNos.replaceAll('-', '') ?? '';
+        emailController.text = customer.emails ?? '';
+        addressController.text = customer.addresses ?? '';
+        eventController.text = customer.events?.eventName ?? '';
+        eventDate = customer.events?.day ?? null;
+        _custmprop = customer.proptype;
+      }
+
       _propwidth = MediaQuery.of(context).size.width;
       _leftcontainwidth = _propwidth * 0.42;
       _rightcontainwidth = _propwidth * 0.42;
@@ -592,8 +670,13 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                                     InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _custmprop =
-                                              _property.commercial['sho'];
+                                          try {
+                                            print('error aayi hai');
+                                            _custmprop =
+                                                _property.commercial['sho'];
+                                          } catch (e) {
+                                            print('error : ' + e.toString());
+                                          }
                                         });
                                       },
                                       child: Container(
@@ -1032,11 +1115,7 @@ class _AddLeadScreenState extends State<AddLeadScreen>
                       child: Center(
                           child: FittedBox(
                         child: Text(
-                          _custmprop == null
-                              ? ''
-                              : _custmprop.split(' ')[0].tr() +
-                                      _custmprop.substring(4) ??
-                                  '',
+                          _custmprop == null ? '' : _custmprop,
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       )),
@@ -1054,29 +1133,45 @@ class _AddLeadScreenState extends State<AddLeadScreen>
       ),
       floatingActionButton: _isLoading
           ? CircularProgressIndicator()
-          : FloatingActionButton.extended(
-              onPressed: () {
-                setState(() {
-                  _isLoading = true;
-                });
-                addLead(context).then((_) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                });
-              },
-              label: Text(
-                'Add'.tr(),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500),
-              ),
-              icon: Icon(
-                Icons.add,
-                size: 30,
-              ),
-            ),
+          : widget.customId == null
+              ? FloatingActionButton.extended(
+                  onPressed: () {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    addLead(context).then((_) {});
+                  },
+                  label: Text(
+                    'Add'.tr(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  icon: Icon(
+                    Icons.add,
+                    size: 30,
+                  ),
+                )
+              : FloatingActionButton.extended(
+                  onPressed: () {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    addLead(context).then((_) {});
+                  },
+                  label: Text(
+                    'Edit'.tr(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  icon: Icon(
+                    Icons.add,
+                    size: 30,
+                  ),
+                ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

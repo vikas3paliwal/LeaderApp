@@ -1,6 +1,7 @@
 import 'package:Leader/providers/budget_provider.dart';
 import 'package:Leader/providers/customers.dart';
 import 'package:Leader/screens/add_label_screen.dart';
+import 'package:Leader/screens/add_lead_screen.dart';
 import 'package:Leader/screens/add_notes_leadscreen.dart';
 import 'package:Leader/screens/add_task_screen.dart';
 import 'package:Leader/screens/selectedCustomers_tasks_screen.dart';
@@ -40,6 +41,18 @@ class LeadProfileScreen extends StatelessWidget {
             customer.name,
             style: Theme.of(context).textTheme.headline2,
           ),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () => pushNewScreen(context,
+                    screen: AddLeadScreen(
+                      () {},
+                      customId: customerId,
+                    ),
+                    withNavBar: false,
+                    pageTransitionAnimation:
+                        PageTransitionAnimation.slideRight))
+          ],
         ),
         body: Container(
           height: MediaQuery.of(context).size.height,

@@ -85,6 +85,7 @@ flutter:
     - assets/images/calculator.png
     - assets/images/language.jpg
     - assets/images/logout.png
+    - assets/images/noImage.jpg
     - assets/translation/
 #    - assets/images/icons/
 

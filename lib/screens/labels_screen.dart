@@ -152,16 +152,16 @@ class _LabelScreenState extends State<LabelScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Labels'.tr()),
-        actions: [
-          PopupMenuButton(
-              itemBuilder: (context) => [
-                    PopupMenuItem(child: Text('Settings'.tr())),
-                    PopupMenuItem(child: Text('Log out'.tr()))
-                  ],
-              icon: Icon(Icons.more_vert),
-              onSelected: null,
-              offset: Offset(3, 4)),
-        ],
+        // actions: [
+        //   PopupMenuButton(
+        //       itemBuilder: (context) => [
+        //             PopupMenuItem(child: Text('Settings'.tr())),
+        //             PopupMenuItem(child: Text('Log out'.tr()))
+        //           ],
+        //       icon: Icon(Icons.more_vert),
+        //       onSelected: null,
+        //       offset: Offset(3, 4)),
+        // ],
       ),
       drawer: SideDrawer(widget.ctx),
       body: _isLoading

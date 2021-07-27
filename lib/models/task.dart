@@ -55,7 +55,7 @@ class Task {
     completed = res['completed'];
 
     String d = res['datetime'];
-    var dt = new DateFormat('MMM dd yyyy HH:mm:ss').parse(d);
+    var dt = new DateFormat('yyyy-MM-dd HH:mm:ss').parse(d);
     TimeOfDay tm = new TimeOfDay(hour: dt.hour, minute: dt.minute);
 
     day = dt;

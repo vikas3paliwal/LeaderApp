@@ -20,7 +20,7 @@ class Customer {
   String proptype;
   bool pinned;
   // Property proptype;
-  DateFormat format = DateFormat.yMMMd();
+  DateFormat format = DateFormat('yyyy-MM-dd HH:mm:ss');
   Customer(
       {this.name,
       this.location,
@@ -54,6 +54,7 @@ class Customer {
       'event_name': events?.eventName ?? '',
       'event_date': events?.day == null ? '' : format.format(events?.day) ?? '',
     };
+    print('day: ' + data['event_date']);
     return data;
   }
 

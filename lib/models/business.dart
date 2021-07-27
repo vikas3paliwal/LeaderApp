@@ -25,27 +25,26 @@ class Business extends ChangeNotifier {
     return _business;
   }
 
-  void editBusiness({
-    String address,
-    String emailaddress,
-    String id,
-    String imgurl,
-    String mobileNo,
-    String name,
-    String webaddress,
-  }) {
-    _business = Business(
-      address: address,
-      emailaddress: emailaddress,
-      id: _business?.id ?? id,
-      imgurl: imgurl,
-      mobileNo: mobileNo,
-      name: name,
-      webaddress: webaddress,
-    );
+  // void editBusiness({
+  //   String address,
+  //   String emailaddress,
+  //   String imgurl,
+  //   String mobileNo,
+  //   String name,
+  //   String webaddress,
+  // }) {
+  //   _business = Business(
+  //     address: address,
+  //     emailaddress: emailaddress,
+  //     id: _business.id,
+  //     imgurl: imgurl,
+  //     mobileNo: mobileNo,
+  //     name: name,
+  //     webaddress: webaddress,
+  //   );
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   Future<ApiResponse> fetchData() async {
     ApiResponse response;
@@ -65,17 +64,18 @@ class Business extends ChangeNotifier {
     // print('ouy');
     final data = response.data[0];
     // print('**************');
-    Business b = new Business();
-    b.mobileNo = data['mobile'];
-    b.address = data['address'];
-    b.webaddress = data['website'];
-    b.emailaddress = data['email'];
-    b.imgurl = data['image'];
-    b.name = data['name'];
-    _business = b;
+    // Business b = new Business();
+    _business.mobileNo = data['mobile'];
+    _business.address = data['address'];
+    _business.webaddress = data['website'];
+    _business.emailaddress = data['email'];
+    _business.imgurl = data['image'];
+    _business.name = data['name'];
+    _business.id = data['id'].toString();
+    // _business = b;
     // _business.mobileNo = data['mobile'].toString();
 
-    // notifyListeners();
+    notifyListeners();
     // print('y');
     return response;
   }
